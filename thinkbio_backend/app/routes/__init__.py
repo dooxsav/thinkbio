@@ -4,3 +4,4 @@
 # vous pouvez les placer ici.
 
 from .hello_routes import hello_bp
+from .GRC_routes import GRC_bp
