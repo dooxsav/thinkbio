@@ -3,7 +3,7 @@
 import os
 from flask import jsonify
 from datetime import datetime
-from app.services import titi
+from app.services import extract_text_from_pdf, search_patterns, create_excel_file
 
 
 
@@ -21,7 +21,12 @@ def extraction_GRC(pdf_file):
     pdf_file.save(file_path)
     
     # Extraire les informtions du pdf
+    extracted_text = extract_text_from_pdf(file_path)
     
-    #
+    # Appelez la fonction de recherche de motifs avec le texte extrait
+    pattern_results = search_patterns(extracted_text)
+    
+    # Créez un fichier Excel temporaire en utilisant la fonction du module excel_export
+    excel_file = create_excel_file(pattern_results)
 
     return jsonify({"message" : "job done"})
