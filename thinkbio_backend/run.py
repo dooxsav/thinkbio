@@ -1,8 +1,10 @@
-from app import create_app
+from app import create_app, db
 
-# Créer une instance de l'application Flask
 app = create_app()
 
+# Lié les modèles à l'instance SQLAlchemy
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    # Démarrer le serveur Flask
-    app.run(debug=True)  # Mettez debug=False pour un déploiement en production
+    app.run(debug=True)
