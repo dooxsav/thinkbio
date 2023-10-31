@@ -1,6 +1,7 @@
 # GRC_Route.py
+
 from flask import Blueprint, jsonify, request
-from app.controllers import toto
+from app.controllers import extraction_GRC
 
 GRC_bp = Blueprint('GRC', __name__)
 
@@ -17,13 +18,15 @@ def GRC_extraire_information():
     if request.method == 'POST':
         # attribution du fichier
         file = request.files.get('file') # le fichier devra s'appeler file !
+        
         # Vérification présence d'un fichier
         if not (file and file.filename and file.filename.endswith('.pdf')):
             return jsonify({"error": "Fichier incorrect dans la requête"}), 400 # Bad Request
         
-        
-        return toto(), 200
+        # Envoi du fichier vers le controller GRC
+        result = extraction_GRC(file)
+        return result, 200
     else:
         return jsonify({"error": "Méthode non autorisée"}), 405 # Not Allowed
-    return toto()
+
 
