@@ -334,6 +334,6 @@ def create_excel_file(data):
         
         
     # Sauvegarde du fichier
-    wb.save('./ressources/ouput/output.xlsx')
+    wb.save('./ressources/ouput/GRC/output.xlsx')
 
     return None

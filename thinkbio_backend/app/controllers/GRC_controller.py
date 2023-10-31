@@ -10,7 +10,7 @@ from app.services import extract_text_from_pdf, search_patterns, create_excel_fi
 def extraction_GRC(pdf_file):
     # Gestion des chemins des fichiers :
     current_directory = os.path.dirname(os.path.abspath(__file__))  # Récupérer le répertoire du fichier actuel (GRC_controller.py)
-    path_to_input = os.path.join(current_directory, '..', '..', 'ressources', 'input')  # Chemin vers le répertoire "ressources/input"
+    path_to_input = os.path.join(current_directory, '..', '..', 'ressources', 'input', 'GRC')  # Chemin vers le répertoire "ressources/input"
     
     # Gestion du nommage : 
     datefichier = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  # Formater la date
