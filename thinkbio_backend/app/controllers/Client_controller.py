@@ -1,6 +1,6 @@
 # controller/client_controller
 
-from app.services import testFonctionnel, lire_ecrire_fichier_csv
+from app.services import testFonctionnel, lire_ecrire_mettre_a_jour_fichier_csv, lire_base_de_donnes_client
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
@@ -18,5 +18,10 @@ def populate_DB_Client(file):
     # Sauvegarder le fichier avec un nom spécifique dans le dossier spécifié
     file.save(file_path)
     
-    result = lire_ecrire_fichier_csv(file_path)
+    result = lire_ecrire_mettre_a_jour_fichier_csv(file_path)
+    return result
+
+def lireBaseCLient():
+    #Lecture de la base client
+    result = lire_base_de_donnes_client()
     return result

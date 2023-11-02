@@ -1,7 +1,7 @@
 # Routes/clients
 
 from flask import Blueprint, jsonify, request
-from app.controllers import populate_DB_Client
+from app.controllers import populate_DB_Client, lireBaseCLient
 
 Client_bp = Blueprint('clients', __name__)
 
@@ -21,3 +21,8 @@ def PopulateDB():
     result = populate_DB_Client(file)
     
     return result, 200
+
+@Client_bp.route('/client/lireclients', methods=['GET'])
+def lireDonnesClient():
+    result = lireBaseCLient()
+    return result
