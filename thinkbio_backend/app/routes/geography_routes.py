@@ -1,7 +1,7 @@
 # routes/geography_routes.py
 
 from flask import Blueprint, request, jsonify
-from app.controllers import HelloGeography, PopulateDB_geography
+from app.controllers import HelloGeography, PopulateDB_geography, lireDB_geography
 
 Geography_bp = Blueprint('Geography', __name__)
 
@@ -21,3 +21,7 @@ def populateDB():
     result = PopulateDB_geography(file)
     
     return result
+
+@Geography_bp.route('/geography/lireBD', methods = ['GET'])
+def lire_BD_Georgpahy():
+    return lireDB_geography()

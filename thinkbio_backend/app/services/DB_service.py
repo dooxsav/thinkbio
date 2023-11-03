@@ -6,6 +6,7 @@ from flask import jsonify
 from app.models import Client, Geography	
 from app import db
 from tqdm import tqdm
+from sqlalchemy.exc import IntegrityError
 
 import pandas as pd
 
@@ -110,7 +111,53 @@ def lire_ercrire_mettre_a_jour_table_geography(file_path):
     try:
         # Ouvre le fichier Excel
         df = pd.read_excel(file_path)
-        print(df)
-        return 'ok', 200
+        lignes_ajoutees = 0
+        lignes_modifiees = 0
+        
+        # Itération sur le DF (DataFrame)
+        for index, row in df.iterrows():
+            numero_departement = row['numero_departement']
+            nom_departement = row['nom_departement']
+            region_departement = row['region_departement']
+            pays = row['pays']
+
+            # Vérifie s'il existe déjà une entrée pour ce numéro de département
+            existing_departement = Geography.query.filter_by(numero_departement=numero_departement).first()
+
+            if existing_departement:
+                # Mettre à jour les valeurs de l'entrée existante
+                existing_departement.nom_departement = nom_departement
+                existing_departement.region_departement = region_departement
+                existing_departement.pays = pays
+                lignes_modifiees += 1
+            else:
+                # Création d'une nouvelle instance de la classe Departement
+                new_departement = Geography(numero_departement=numero_departement, nom_departement=nom_departement, region_departement=region_departement, pays=pays)
+                db.session.add(new_departement)
+                lignes_ajoutees += 1
+
+        # Enregistrer les modifications dans la base de données
+        db.session.commit()
+
+        return jsonify({
+            "message": f"Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."
+        })
     except Exception as e:
-        return  f"Une erreur s'est produite : {str(e)}", 405  
+        return jsonify({"error": f"Une erreur s'est produite : {str(e)}"}), 405
+    
+def lire_donnees_BD_geography():
+    departement = Geography.query.all()
+
+    # Convertir les données en format JSON
+    data_json = [
+        {
+            'numero_departement': str(entry.numero_departement),
+            "nom_departement": entry.nom_departement,
+            "region_departement": entry.region_departement
+        }
+        for entry in departement
+    ]
+
+    return jsonify(data_json)
+
+
