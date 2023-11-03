@@ -7,8 +7,8 @@ from app.models import Client
 from app import db
 from tqdm import tqdm
 
-def testFonctionnel():
-    return "titi"
+def testServiceDB():
+    return "DBService Work !"
 
 def lire_base_de_donnes_client():
 

@@ -14,7 +14,7 @@ def create_app():
 
     # Configuration de la base de données pour SQLAlchemy
     basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, '../../DB/Clients.db')
+    db_path = os.path.join(basedir, '../../DB/bionest.db')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

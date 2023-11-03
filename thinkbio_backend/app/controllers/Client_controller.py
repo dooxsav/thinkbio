@@ -1,7 +1,6 @@
 # controller/client_controller
 
 from app.services import testFonctionnel, lire_ecrire_mettre_a_jour_fichier_csv, lire_base_de_donnes_client
-from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 
@@ -12,7 +11,7 @@ def populate_DB_Client(file):
     
     # Gestion du nommage : 
     datefichier = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  # Formater la date
-    nom_fichier = f"clients_{datefichier}.pdf"  # Créer un nom de fichier pour sauvegarder le fichier PDF
+    nom_fichier = f"clients_{datefichier}.xlsx"  # Créer un nom de fichier pour sauvegarder le fichier PDF
     file_path = os.path.join(path_to_input, nom_fichier)  # Chemin complet du fichier à enregistrer
     
     # Sauvegarder le fichier avec un nom spécifique dans le dossier spécifié
