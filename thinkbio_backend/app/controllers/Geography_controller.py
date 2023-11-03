@@ -1,6 +1,6 @@
 # Controller/Geogaphy.py
 import os 
-import datetime
+from datetime import datetime
 from app.services import lire_ercrire_mettre_a_jour_table_geography
 
 def HelloGeography():
@@ -22,4 +22,4 @@ def PopulateDB_geography(file):
     
     result = lire_ercrire_mettre_a_jour_table_geography(file_path)
     
-    return "Populate geography WORK", 200
+    return result, 200
