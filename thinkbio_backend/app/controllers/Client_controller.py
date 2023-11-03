@@ -1,6 +1,6 @@
 # controller/client_controller
 
-from app.services import testFonctionnel, lire_ecrire_mettre_a_jour_fichier_csv, lire_base_de_donnes_client
+from app.services import lire_ecrire_mettre_a_jour_fichier_csv, lire_base_de_donnes_client
 import os
 from datetime import datetime
 
@@ -18,6 +18,7 @@ def populate_DB_Client(file):
     file.save(file_path)
     
     result = lire_ecrire_mettre_a_jour_fichier_csv(file_path)
+    
     return result
 
 def lireBaseCLient():

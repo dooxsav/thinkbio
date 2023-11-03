@@ -21,9 +21,10 @@ def create_app():
     db.init_app(app)  # Liez l'instance SQLAlchemy à votre application Flask
 
     # Importer les blueprints (routes) ici
-    from app.routes import hello_bp, GRC_bp, Client_bp
+    from app.routes import hello_bp, GRC_bp, Client_bp, Geography_bp
     app.register_blueprint(hello_bp)
     app.register_blueprint(GRC_bp)
     app.register_blueprint(Client_bp)
+    app.register_blueprint(Geography_bp)
 
     return app

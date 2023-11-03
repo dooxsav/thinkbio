@@ -1,9 +1,9 @@
-# geography.py
+# models/geography.py
 
 from app import db
 
 class Geography(db.Model):
-    numero_departement = db.Column(db.Integer, primary_key=True)
+    numero_departement = db.Column(db.String(2), primary_key=True)
     pays = db.Column(db.String(50))
     region_departement = db.Column(db.String(50))
     nom_departement = db.Column(db.String(100))

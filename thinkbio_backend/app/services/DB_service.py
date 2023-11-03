@@ -3,30 +3,19 @@ import csv
 import re
 
 from flask import jsonify
-from app.models import Client
+from app.models import Client, Geography	
 from app import db
 from tqdm import tqdm
 
+import pandas as pd
+
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+## ------------------------------------------------------------** Methods **----------------------------------------------------------------------- ##
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+
 def testServiceDB():
     return "DBService Work !"
-
-def lire_base_de_donnes_client():
-
-    clients = Client.query.all()
-            # Convertir les données en format JSON
-    data_json = [
-        {
-            'id': entry.id,
-            'code': entry.code,
-            'email': entry.courriel,
-            'nom': entry.nom,
-            'prenom': entry.prenom
-        }
-        for entry in clients
-        ]
-
-    return jsonify(data_json)
-
 
 def remove_special_characters(text):
     if text is None:  # Vérifier si la valeur est nulle
@@ -50,6 +39,27 @@ def check_email(email):
         return ', '.join(valid_emails)  # Retourne les adresses valides séparées par une virgule
     else:
         return "email non communiqué"
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+## ---------------------------------------------------------** Table Client **--------------------------------------------------------------------- ##
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+
+def lire_base_de_donnes_client():
+
+    clients = Client.query.all()
+            # Convertir les données en format JSON
+    data_json = [
+        {
+            'id': entry.id,
+            'code': entry.code,
+            'email': entry.courriel,
+            'nom': entry.nom,
+            'prenom': entry.prenom
+        }
+        for entry in clients
+        ]
+
+    return jsonify(data_json)
  
 def lire_ecrire_mettre_a_jour_fichier_csv(file):
     with open(file, 'r', encoding='utf-8') as fichier_csv:
@@ -91,3 +101,16 @@ def lire_ecrire_mettre_a_jour_fichier_csv(file):
         db.session.commit()
 
     return jsonify({"message": f"Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."})
+
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+## -------------------------------------------------------** Table GEOGRAPHY **-------------------------------------------------------------------- ##
+## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
+
+def lire_ercrire_mettre_a_jour_table_geography(file_path):
+    try:
+        # Ouvre le fichier Excel
+        df = pd.read_excel(file_path)
+        print(df)
+        return 'ok', 200
+    except Exception as e:
+        return  f"Une erreur s'est produite : {str(e)}", 405  
