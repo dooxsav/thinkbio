@@ -3,6 +3,7 @@
 from app import db
 
 class Client_ISFACT(db.Model):
+    
     id = db.Column(db.Integer, primary_key=True)
     CodeClient = db.Column(db.String(7))
     FamilleTIERS = db.Column(db.String(30))
@@ -26,6 +27,8 @@ class Client_ISFACT(db.Model):
     TelSITE2 = db.Column(db.String(17))
     TelSITE3 = db.Column(db.String(17))
     Livrer_adresse_facturation = db.Column(db.String(4))  # Correction ici
+    CodeTVA = db.Column(db.String(4))
+    TVA = db.Column(db.String(30))
     CodeCONTRAT = db.Column(db.String(5))
     CategTARIF = db.Column(db.String(30))
     Mode_rglt = db.Column(db.String(30))  # Correction ici
@@ -45,10 +48,13 @@ class Client_ISFACT(db.Model):
     DateProchaineIntervention = db.Column(db.String(30))  # Correction ici
     DateMEPContrat = db.Column(db.String(30))
     CreatedAt = db.Column(db.Date())
+    UpdatedAt = db.Column(db.Date())
+    CreatedBy = db.Column(db.String(30))
+    LastUpdatedBy = db.Column(db.String(30))
     
 # __repr__: Cette méthode spéciale permet de définir une représentation en chaîne de caractères de l'objet. Dans cet exemple, il affiche l'identifiant de l'objet Client_ISFACT suivi du nom et prénom de la personne.
     def __repr__(self):
-        return f"<Client_ISFACT {self.id}: {self.CodeClient} {self.NomFACT} {self.PrenomFACT}>"
+        return f"<Client_ISFACT {self.id}: {self.CodeClient} {self.NomFACT} {self.PrenomFACT} {self.CreatedBy}>"
 
 # to_dict(): Cette méthode convertit l'objet Client_ISFACT en un dictionnaire. Elle facilite la conversion de l'objet en un format plus facilement sérialisable, par exemple, pour le convertir en JSON.
     def to_dict(self):
@@ -76,6 +82,8 @@ class Client_ISFACT(db.Model):
             'TelSITE2': self.TelSITE2,
             'TelSITE3': self.TelSITE3,
             'Livrer_adresse_facturation': self.Livrer_adresse_facturation,
+            'CodeTVA': self.CodeTVA,
+            'TVA': self.TVA,
             'CodeCONTRAT': self.CodeCONTRAT,
             'CategTARIF': self.CategTARIF,
             'Mode_rglt': self.Mode_rglt,
@@ -93,7 +101,11 @@ class Client_ISFACT(db.Model):
             'TP_nom': self.TP_nom,
             'TP_tel': self.TP_tel,
             'DateProchaineIntervention': self.DateProchaineIntervention,
-            'DateMEPContrat': self.DateMEPContrat
+            'DateMEPContrat': self.DateMEPContrat,
+            'CreatedAt': self.CreatedAt,
+            'UpdatedAt': self.UpdatedAt,
+            'CreatedBy': self.CreatedBy,
+            'LastUpdatedBy': self.LastUpdatedBy
         }
 
 # from_dict(): Cette méthode statique crée une instance de Client_ISFACT à partir d'un dictionnaire. Elle permet de reconstruire un objet Client_ISFACT à partir d'un dictionnaire, ce qui peut être utile lors de la réception de données, par exemple d'un formulaire ou d'une requête JSON.
@@ -123,6 +135,8 @@ class Client_ISFACT(db.Model):
             TelSITE2=data.get('TelSITE2'),
             TelSITE3=data.get('TelSITE3'),
             Livrer_adresse_facturation=data.get('Livrer_adresse_facturation'),
+            CodeTVA=data.get('CodeTVA'),
+            TVA=data.get('TVA'),
             CodeCONTRAT=data.get('CodeCONTRAT'),
             CategTARIF=data.get('CategTARIF'),
             Mode_rglt=data.get('Mode_rglt'),
@@ -140,6 +154,10 @@ class Client_ISFACT(db.Model):
             TP_nom=data.get('TP_nom'),
             TP_tel=data.get('TP_tel'),
             DateProchaineIntervention=data.get('DateProchaineIntervention'),
-            DateMEPContrat=data.get('DateMEPContrat')
+            DateMEPContrat=data.get('DateMEPContrat'),
+            CreatedAt=data.get('CreatedAt'),
+            UpdatedAt=data.get('UpdatedAt'),
+            CreatedBy=data.get('CreatedBy'),
+            LastUpdatedBy=data.get('LastUpdatedBy')
         )
-    
+        
