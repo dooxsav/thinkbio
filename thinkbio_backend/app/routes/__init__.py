@@ -9,3 +9,4 @@ from .hello_routes import hello_bp
 from .GRC_routes import GRC_bp
 from .client_routes import Client_bp
 from .geography_routes import Geography_bp
+from .client_ISAFACT_routes import Client_ISAFACT_bp
