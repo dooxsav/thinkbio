@@ -2,9 +2,10 @@
 import csv
 import re
 
-from flask import jsonify
-from app.models import Client, Geography, Client_ISFACT	
+from flask import jsonify	
 from app import db
+from app.models import Client, Geography, Client_ISAFACT
+from app.utils import sanitarise_donnes_niveau1
 from tqdm import tqdm
 from sqlalchemy.exc import IntegrityError
 
@@ -52,173 +53,186 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
     # Initialisation
     try:
         dataFrame = pd.read_excel(file_path)
+        total_rows = len(dataFrame)
         lignes_ajoutees = 0
         ligne_modifies = 0
-    
+        date_now = str(datetime.now())
     # Itération sur le DF
     
-        for index, row in dataFrame.iterrows():
-            CodeClient = row['CodeClient']
-            FamilleTIERS = row['FamilleTIERS']
-            NomFACT = row['NomFACT']
-            PrenomFACT = row['PrenomFACT']
-            AdresseFACT = row['AdresseFACT']
-            CPFACT = row['CPFACT']
-            VilleFACT = row['VilleFACT']
-            PaysFACT = row['PaysFACT']
-            EmailTIERS = row['EmailTIERS']
-            TelFACT1 = row['TelFACT1']
-            TelFACT2 = row['TelFACT2']
-            TelFACT3 = row['TelFACT3']
-            NomLOC = row['NomLOC']
-            PrenomLOC = row['PrenomLOC']
-            AdresseSITE = row['AdresseSITE']
-            CPSITE = row['CPSITE']
-            VilleSITE = row['VilleSITE']
-            PaysSITE = row['PaysSITE']
-            TelSITE1 = row['TelSITE1']
-            TelSITE2 = row['TelSITE2']
-            TelSITE3 = row['TelSITE3']
-            Livrer_adresse_facturation = row['Livrer_adresse_facturation    ']
-            CodeTVA = row['CodeTVA']
-            TVA = row['LibelleTVA']
-            CodeCONTRAT = row['CodeCONTRAT']
-            CategTARIF = row['CategTARIF']
-            Mode_rglt = row['Mode_rglt']
-            Delai_rglt = row['Delai_rglt']
-            Date_creation_tiers = row['Date_creation_tiers']
-            StatusTiers = row['StatusTiers']
-            NivRelanceTiers = row['NivRelanceTiers']
-            Nom_representant = row['Nom_representant']
-            RIB_Domic = row['RIB_Domic']
-            RIB_Etabl = row['RIB_Etabl']
-            RIB_IBAN = row['RIB_IBAN']
-            RIB_Cle = row['RIB_Cle']
-            RIB_CodeBIC = row['RIB_CodeBIC']
-            NEGOCE = row['NEGOCE']
-            TP_nom = row['TP_nom']
-            TP_tel = row['TP_tel']
-            DateProchaineIntervention = row['DateProchaineIntervention']
-            DateMEPContrat  = row['DateMEPContrat']
+        # Utilisation de tqdm pour obtenir une barre de progression
+        with tqdm(total=total_rows, desc="Importation en cours", unit=" lignes") as pbar:
+            
+            for index, row in dataFrame.iterrows():
+                CodeClient = row['CodeClient']
+                FamilleTIERS = row['FamilleTIERS']
+                NomFACT = sanitarise_donnes_niveau1(row['NomFACT']).capitalize()
+                PrenomFACT = sanitarise_donnes_niveau1(row['PrenomFACT']).capitalize()
+                AdresseFACT = (row['AdresseFACT'])
+                CPFACT = row['CPFACT']
+                VilleFACT = row['VilleFACT']
+                PaysFACT = row['PaysFACT']
+                EmailTIERS = row['EmailTIERS']
+                TelFACT1 = row['TelFACT1']
+                TelFACT2 = row['TelFACT2']
+                TelFACT3 = row['TelFACT3']
+                NomLOC = sanitarise_donnes_niveau1(row['NomLOC']).capitalize()
+                PrenomLOC = sanitarise_donnes_niveau1(row['PrenomLOC']).capitalize()
+                AdresseSITE = (row['AdresseSITE'])
+                CPSITE = row['CPSITE']
+                VilleSITE = row['VilleSITE']
+                PaysSITE = row['PaysSITE']
+                TelSITE1 = row['TelSITE1']
+                TelSITE2 = row['TelSITE2']
+                TelSITE3 = row['TelSITE3']
+                Livrer_adresse_facturation = row['Livrer_adresse_facturation']
+                CodeTVA = row['CodeTVA']
+                TVA = row['LibelleTVA']
+                CodeCONTRAT = row['CodeCONTRAT']
+                CategTARIF = row['CategTARIF']
+                Mode_rglt = row['Mode_rglt']
+                Delai_rglt = row['Delai_rglt']
+                Date_creation_tiers = row['Date_creation_tiers']
+                StatusTiers = row['StatusTiers']
+                NivRelanceTiers = row['NivRelanceTiers']
+                Nom_representant = row['Nom_representant']
+                RIB_Domic = row['RIB_Domic']
+                RIB_Etabl = row['RIB_Etabl']
+                RIB_IBAN = row['RIB_IBAN']
+                RIB_Cle = row['RIB_Cle']
+                RIB_CodeBIC = row['RIB_CodeBIC']
+                NEGOCE = (row['NEGOCE'])
+                TP_nom = (row['TP_nom'])
+                TP_tel = (row['TP_tel'])
+                DateProchaineIntervention = row['DateProchaineIntervention']
+                DateMEPContrat  = row['DateMEPContrat']
 
-            
-    # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
-    
-        existing_record = Client_ISFACT.query.filter_by(CodeClient=CodeClient).first()
+                
+                # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
         
-        if existing_record:
-        # Si l'enregistrement existe déjà, mettez à jour ses valeurs
-            existing_record.FamilleTIERS = FamilleTIERS
-            existing_record.NomFACT = NomFACT
-            existing_record.PrenomFACT = PrenomFACT
-            existing_record.AdresseFACT = AdresseFACT
-            existing_record.CPFACT = CPFACT
-            existing_record.VilleFACT = VilleFACT
-            existing_record.PaysFACT = PaysFACT
-            existing_record.EmailTIERS = EmailTIERS
-            existing_record.TelFACT1 = TelFACT1
-            existing_record.TelFACT2 = TelFACT2
-            existing_record.TelFACT3 = TelFACT3
-            existing_record.NomLOC = NomLOC
-            existing_record.PrenomLOC = PrenomLOC
-            existing_record.AdresseSITE = AdresseSITE
-            existing_record.CPSITE = CPSITE
-            existing_record.VilleSITE = VilleSITE
-            existing_record.PaysSITE = PaysSITE
-            existing_record.TelSITE1 = TelSITE1
-            existing_record.TelSITE1 = TelSITE2
-            existing_record.TelSITE1 = TelSITE3
-            existing_record.Livrer_adresse_facturation = Livrer_adresse_facturation
-            existing_record.CodeTVA = CodeTVA
-            existing_record.TVA = TVA
-            existing_record.CodeCONTRAT = CodeCONTRAT
-            existing_record.CategTARIF = CategTARIF
-            existing_record.Mode_rglt = Mode_rglt
-            existing_record.Delai_rglt = Delai_rglt
-            existing_record.Date_creation_tiers = Date_creation_tiers
-            existing_record.StatusTiers = StatusTiers
-            existing_record.NivRelanceTiers = NivRelanceTiers
-            existing_record.Nom_representant = Nom_representant
-            existing_record.RIB_Domic = RIB_Domic
-            existing_record.RIB_Etabl = RIB_Etabl
-            existing_record.RIB_IBAN = RIB_IBAN
-            existing_record.RIB_Cle  = RIB_Cle 
-            existing_record.RIB_CodeBIC = RIB_CodeBIC
-            existing_record.NEGOCE = NEGOCE
-            existing_record.TP_nom = TP_nom
-            existing_record.TP_tel = TP_tel
-            existing_record.DateProchaineIntervention = DateProchaineIntervention
-            existing_record.DateMEPContrat = DateMEPContrat
-            existing_record.UpdatedAt = datetime.now()
-            existing_record.LastUpdatedBy = 'ADMIN2'
-            ligne_modifies += 1
-            # Sauvegarde des modifications dans la base de données
-            db.session.commit()
-        else:
-        # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
-            new_client = Client_ISFACT(
-                CodeClient=CodeClient,
-                FamilleTIERS=FamilleTIERS,
-                NomFACT=NomFACT,
-                PrenomFACT=PrenomFACT,
-                AdresseFACT=AdresseFACT,
-                CPFACT=CPFACT,
-                VilleFACT=VilleFACT,
-                PaysFACT=PaysFACT,
-                EmailTIERS=EmailTIERS,
-                TelFACT1=TelFACT1,
-                TelFACT2=TelFACT2,
-                TelFACT3=TelFACT3,
-                NomLOC=NomLOC,
-                PrenomLOC=PrenomLOC,
-                AdresseSITE=AdresseSITE,
-                CPSITE=CPSITE,
-                VilleSITE=VilleSITE,
-                PaysSITE=PaysSITE,
-                TelSITE1=TelSITE1,
-                TelSITE2=TelSITE2,
-                TelSITE3=TelSITE3,
-                Livrer_adresse_facturation=Livrer_adresse_facturation,
-                CodeTVA=CodeTVA,
-                TVA=TVA,
-                CodeCONTRAT=CodeCONTRAT,
-                CategTARIF=CategTARIF,
-                Mode_rglt=Mode_rglt,
-                Delai_rglt=Delai_rglt,
-                Date_creation_tiers=Date_creation_tiers,
-                StatusTiers=StatusTiers,
-                NivRelanceTiers=NivRelanceTiers,
-                Nom_representant=Nom_representant,
-                RIB_Domic=RIB_Domic,
-                RIB_Etabl=RIB_Etabl,
-                RIB_IBAN=RIB_IBAN,
-                RIB_Cle=RIB_Cle,
-                RIB_CodeBIC=RIB_CodeBIC,
-                NEGOCE=NEGOCE,
-                TP_nom=TP_nom,
-                TP_tel=TP_tel,
-                DateProchaineIntervention=DateProchaineIntervention,
-                DateMEPContrat=DateMEPContrat,
-                CreatedAt= datetime.now(),
-                UpdatedAt= datetime.now(),
-                CreatedBy='ADMIN',
-                LastUpdatedBy='ADMIN'
-            )
-            
-            db.session.add(new_client)
-            lignes_ajoutees += 1
-            # Ajout du nouvel enregistrement dans la base de données
-            db.session.commit()
-        
-        return f"Nombre de lignes ajoutées : {lignes_ajoutees}, Nombre de lignes modifiées : {ligne_modifies}"
+                existing_record = Client_ISAFACT.query.filter_by(CodeClient=CodeClient).first()
+
+                if existing_record:
+                # Si l'enregistrement existe déjà, mettez à jour ses valeurs
+                    existing_record.FamilleTIERS = FamilleTIERS
+                    existing_record.NomFACT = NomFACT
+                    existing_record.PrenomFACT = PrenomFACT
+                    existing_record.AdresseFACT = AdresseFACT
+                    existing_record.CPFACT = CPFACT
+                    existing_record.VilleFACT = VilleFACT
+                    existing_record.PaysFACT = PaysFACT
+                    existing_record.EmailTIERS = EmailTIERS
+                    existing_record.TelFACT1 = TelFACT1
+                    existing_record.TelFACT2 = TelFACT2
+                    existing_record.TelFACT3 = TelFACT3
+                    existing_record.NomLOC = NomLOC
+                    existing_record.PrenomLOC = PrenomLOC
+                    existing_record.AdresseSITE = AdresseSITE
+                    existing_record.CPSITE = CPSITE
+                    existing_record.VilleSITE = VilleSITE
+                    existing_record.PaysSITE = PaysSITE
+                    existing_record.TelSITE1 = TelSITE1
+                    existing_record.TelSITE2 = TelSITE2
+                    existing_record.TelSITE3 = TelSITE3
+                    existing_record.Livrer_adresse_facturation = Livrer_adresse_facturation
+                    existing_record.CodeTVA = CodeTVA
+                    existing_record.TVA = TVA
+                    existing_record.CodeCONTRAT = CodeCONTRAT
+                    existing_record.CategTARIF = CategTARIF
+                    existing_record.Mode_rglt = Mode_rglt
+                    existing_record.Delai_rglt = Delai_rglt
+                    existing_record.Date_creation_tiers = str(Date_creation_tiers)
+                    existing_record.StatusTiers = StatusTiers
+                    existing_record.NivRelanceTiers = NivRelanceTiers
+                    existing_record.Nom_representant = Nom_representant
+                    existing_record.RIB_Domic = RIB_Domic
+                    existing_record.RIB_Etabl = RIB_Etabl
+                    existing_record.RIB_IBAN = RIB_IBAN
+                    existing_record.RIB_Cle  = RIB_Cle 
+                    existing_record.RIB_CodeBIC = RIB_CodeBIC
+                    existing_record.NEGOCE = NEGOCE
+                    existing_record.TP_nom = TP_nom
+                    existing_record.TP_tel = TP_tel
+                    existing_record.DateProchaineIntervention = str(DateProchaineIntervention)
+                    existing_record.DateMEPContrat = str(DateMEPContrat)
+                    existing_record.UpdatedAt = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f')
+                    existing_record.LastUpdatedBy = 'ADMIN2'
+                    ligne_modifies += 1
+                    # Sauvegarde des modifications dans la base de données
+                    db.session.commit()
+                    # Mise à jour de la barre de progression
+                    pbar.update(1)
+                else:
+                # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
+                    new_client = Client_ISAFACT(
+                        CodeClient=CodeClient,
+                        FamilleTIERS=FamilleTIERS,
+                        NomFACT=NomFACT,
+                        PrenomFACT=PrenomFACT,
+                        AdresseFACT=AdresseFACT,
+                        CPFACT=CPFACT,
+                        VilleFACT=VilleFACT,
+                        PaysFACT=PaysFACT,
+                        EmailTIERS=EmailTIERS,
+                        TelFACT1=TelFACT1,
+                        TelFACT2=TelFACT2,
+                        TelFACT3=TelFACT3,
+                        NomLOC=NomLOC,
+                        PrenomLOC=PrenomLOC,
+                        AdresseSITE=AdresseSITE,
+                        CPSITE=CPSITE,
+                        VilleSITE=VilleSITE,
+                        PaysSITE=PaysSITE,
+                        TelSITE1=TelSITE1,
+                        TelSITE2=TelSITE2,
+                        TelSITE3=TelSITE3,
+                        Livrer_adresse_facturation=Livrer_adresse_facturation,
+                        CodeTVA=CodeTVA,
+                        TVA=TVA,
+                        CodeCONTRAT=CodeCONTRAT,
+                        CategTARIF=CategTARIF,
+                        Mode_rglt=Mode_rglt,
+                        Delai_rglt=Delai_rglt,
+                        Date_creation_tiers=str(Date_creation_tiers),
+                        StatusTiers=StatusTiers,
+                        NivRelanceTiers=NivRelanceTiers,
+                        Nom_representant=Nom_representant,
+                        RIB_Domic=RIB_Domic,
+                        RIB_Etabl=RIB_Etabl,
+                        RIB_IBAN=RIB_IBAN,
+                        RIB_Cle=RIB_Cle,
+                        RIB_CodeBIC=RIB_CodeBIC,
+                        NEGOCE=NEGOCE,
+                        TP_nom=TP_nom,
+                        TP_tel=TP_tel,
+                        DateProchaineIntervention=str(DateProchaineIntervention),
+                        DateMEPContrat=str(DateMEPContrat),
+                        CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                        UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                        CreatedBy='ADMIN',
+                        LastUpdatedBy='ADMIN'
+                    )
+                    
+                    db.session.add(new_client)
+                    lignes_ajoutees += 1
+                    # Ajout du nouvel enregistrement dans la base de données
+                    db.session.commit()
+                    # Mise à jour de la barre de progression
+                    pbar.update(1)
+                
+        return jsonify({
+            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {ligne_modifies} lignes ont été mises à jour."
+        })
  
     
     except Exception as e:
         return jsonify({"error": f"Une erreur s'est produite : {str(e)}"}), 405
     
-        
-    
-    return 'toto'
+def lire_donnees_ISAFACT():
+    clients = Client_ISAFACT.query.all()  # Récupérer tous les clients depuis la base de données
+    clients_json = [client.to_dict() for client in clients]  # Convertir les objets clients en dictionnaires
+
+    return jsonify(clients_json)  # Retourner les données au format JSON
+      
 
 ## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
 ## ---------------------------------------------------------** Table Client **--------------------------------------------------------------------- ##

@@ -1,7 +1,7 @@
 # routes/client_ISAFACT.py
 
 from flask import Blueprint, request, jsonify
-from app.controllers import importISAFACTDataFromExcel
+from app.controllers import importISAFACTDataFromExcel,lireDonnesClientISAFACT
 
 Client_ISAFACT_bp = Blueprint('Client_ISAFACT', __name__)
 
@@ -18,4 +18,10 @@ def GetISAFACTDataFromExcelFile():
     if not (file and file.filename and file.filename.endswith('.xlsx')):
         return jsonify({"error": "Fichier incorrect dans la requête"}), 400 # Bad Request
     
-    return importISAFACTDataFromExcel(), 200
+    result = importISAFACTDataFromExcel(file)
+    
+    return result
+
+@Client_ISAFACT_bp.route('/clientISAFACT/lireclients', methods=['GET'])
+def lireclientBDDISFACT():
+    return lireDonnesClientISAFACT()

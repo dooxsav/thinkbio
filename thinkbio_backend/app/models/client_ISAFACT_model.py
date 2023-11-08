@@ -2,7 +2,7 @@
 
 from app import db
 
-class Client_ISFACT(db.Model):
+class Client_ISAFACT(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     CodeClient = db.Column(db.String(7))
@@ -111,7 +111,7 @@ class Client_ISFACT(db.Model):
 # from_dict(): Cette méthode statique crée une instance de Client_ISFACT à partir d'un dictionnaire. Elle permet de reconstruire un objet Client_ISFACT à partir d'un dictionnaire, ce qui peut être utile lors de la réception de données, par exemple d'un formulaire ou d'une requête JSON.
     @staticmethod
     def from_dict(data):
-        return Client_ISFACT(
+        return Client_ISAFACT(
             id=data.get('id'),
             CodeClient=data.get('CodeClient'),
             FamilleTIERS=data.get('FamilleTIERS'),
