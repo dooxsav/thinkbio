@@ -29,6 +29,7 @@ class Client_ISAFACT(db.Model):
     Livrer_adresse_facturation = db.Column(db.String(4))  # Correction ici
     CodeTVA = db.Column(db.String(4))
     TVA = db.Column(db.String(30))
+    CodeTypeCONTRAT = db.Column(db.String(5))
     CodeCONTRAT = db.Column(db.String(5))
     CategTARIF = db.Column(db.String(30))
     Mode_rglt = db.Column(db.String(30))  # Correction ici
@@ -47,8 +48,9 @@ class Client_ISAFACT(db.Model):
     TP_tel = db.Column(db.String(30))
     DateProchaineIntervention = db.Column(db.String(30))  # Correction ici
     DateMEPContrat = db.Column(db.String(30))
-    CreatedAt = db.Column(db.Date())
-    UpdatedAt = db.Column(db.Date())
+    Date_derniere_facture = db.Column(db.Date())
+    CreatedAt = db.Column(db.DateTime())
+    UpdatedAt = db.Column(db.DateTime())
     CreatedBy = db.Column(db.String(30))
     LastUpdatedBy = db.Column(db.String(30))
     
@@ -84,6 +86,7 @@ class Client_ISAFACT(db.Model):
             'Livrer_adresse_facturation': self.Livrer_adresse_facturation,
             'CodeTVA': self.CodeTVA,
             'TVA': self.TVA,
+            'CodeTypeCONTRAT' : self.CodeTypeCONTRAT,
             'CodeCONTRAT': self.CodeCONTRAT,
             'CategTARIF': self.CategTARIF,
             'Mode_rglt': self.Mode_rglt,
@@ -102,6 +105,7 @@ class Client_ISAFACT(db.Model):
             'TP_tel': self.TP_tel,
             'DateProchaineIntervention': self.DateProchaineIntervention,
             'DateMEPContrat': self.DateMEPContrat,
+            'Date_derniere_facture': self.Date_derniere_facture,
             'CreatedAt': self.CreatedAt,
             'UpdatedAt': self.UpdatedAt,
             'CreatedBy': self.CreatedBy,
@@ -137,6 +141,7 @@ class Client_ISAFACT(db.Model):
             Livrer_adresse_facturation=data.get('Livrer_adresse_facturation'),
             CodeTVA=data.get('CodeTVA'),
             TVA=data.get('TVA'),
+            CodeTypeCONTRAT= data.get('CodeTypeCONTRAT'),
             CodeCONTRAT=data.get('CodeCONTRAT'),
             CategTARIF=data.get('CategTARIF'),
             Mode_rglt=data.get('Mode_rglt'),
@@ -155,6 +160,7 @@ class Client_ISAFACT(db.Model):
             TP_tel=data.get('TP_tel'),
             DateProchaineIntervention=data.get('DateProchaineIntervention'),
             DateMEPContrat=data.get('DateMEPContrat'),
+            Date_derniere_facture= data.Date_derniere_facture,
             CreatedAt=data.get('CreatedAt'),
             UpdatedAt=data.get('UpdatedAt'),
             CreatedBy=data.get('CreatedBy'),

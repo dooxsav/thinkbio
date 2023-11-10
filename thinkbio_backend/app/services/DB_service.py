@@ -5,7 +5,7 @@ import re
 from flask import jsonify	
 from app import db
 from app.models import Client, Geography, Client_ISAFACT
-from app.utils import sanitarise_donnes_niveau1
+from app.utils import sanitarise_donnes_niveau1, convert_specific_to_date, clean_phone_number, extract_email
 from tqdm import tqdm
 from sqlalchemy.exc import IntegrityError
 
@@ -52,7 +52,9 @@ def enregistrerFichier():
 def Ecrire_MAJ_Clients_ISFACT(file_path):
     # Initialisation
     try:
+        # Lire le fichier Excel dans un DataFrame
         dataFrame = pd.read_excel(file_path)
+        longueur_dataFrame_avant_suppression = len(dataFrame) # longueur initiale du DF
         total_rows = len(dataFrame)
         lignes_ajoutees = 0
         ligne_modifies = 0
@@ -62,36 +64,36 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
         # Utilisation de tqdm pour obtenir une barre de progression
         with tqdm(total=total_rows, desc="Importation en cours", unit=" lignes") as pbar:
             
+            # Avant de commencer l'itération sur le DataFrame, supprimez les doublons basés sur la colonne 'CodeClient'
+            dataFrame.drop_duplicates(subset='CodeClient', keep='first', inplace=True)
+            longueur_dataFrame_apres_suppression = len(dataFrame)
+            nombre_doublons_supprimes = longueur_dataFrame_avant_suppression - longueur_dataFrame_apres_suppression
+            
+            # Itération sur le DataFrame
             for index, row in dataFrame.iterrows():
                 CodeClient = row['CodeClient']
                 FamilleTIERS = row['FamilleTIERS']
-                NomFACT = sanitarise_donnes_niveau1(row['NomFACT']).capitalize()
-                PrenomFACT = sanitarise_donnes_niveau1(row['PrenomFACT']).capitalize()
-                AdresseFACT = (row['AdresseFACT'])
+                NomFACT = sanitarise_donnes_niveau1(row['NomFACT'])
+                PrenomFACT = sanitarise_donnes_niveau1(row['PrenomFACT'])
+                AdresseFACT = sanitarise_donnes_niveau1(row['AdresseFACT'])
                 CPFACT = row['CPFACT']
                 VilleFACT = row['VilleFACT']
                 PaysFACT = row['PaysFACT']
-                EmailTIERS = row['EmailTIERS']
-                TelFACT1 = row['TelFACT1']
-                TelFACT2 = row['TelFACT2']
-                TelFACT3 = row['TelFACT3']
-                NomLOC = sanitarise_donnes_niveau1(row['NomLOC']).capitalize()
-                PrenomLOC = sanitarise_donnes_niveau1(row['PrenomLOC']).capitalize()
-                AdresseSITE = (row['AdresseSITE'])
+                EmailTIERS = extract_email(row['EmailTIERS'])
+                NomLOC = sanitarise_donnes_niveau1(row['NomLOC'])
+                PrenomLOC = sanitarise_donnes_niveau1(row['PrenomLOC'])
+                AdresseSITE = sanitarise_donnes_niveau1(row['AdresseSITE'])
                 CPSITE = row['CPSITE']
                 VilleSITE = row['VilleSITE']
                 PaysSITE = row['PaysSITE']
-                TelSITE1 = row['TelSITE1']
-                TelSITE2 = row['TelSITE2']
-                TelSITE3 = row['TelSITE3']
                 Livrer_adresse_facturation = row['Livrer_adresse_facturation']
                 CodeTVA = row['CodeTVA']
                 TVA = row['LibelleTVA']
+                CodeTypeCONTRAT = row['CodeTypeCONTRAT']
                 CodeCONTRAT = row['CodeCONTRAT']
                 CategTARIF = row['CategTARIF']
                 Mode_rglt = row['Mode_rglt']
                 Delai_rglt = row['Delai_rglt']
-                Date_creation_tiers = row['Date_creation_tiers']
                 StatusTiers = row['StatusTiers']
                 NivRelanceTiers = row['NivRelanceTiers']
                 Nom_representant = row['Nom_representant']
@@ -102,10 +104,19 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 RIB_CodeBIC = row['RIB_CodeBIC']
                 NEGOCE = (row['NEGOCE'])
                 TP_nom = (row['TP_nom'])
-                TP_tel = (row['TP_tel'])
-                DateProchaineIntervention = row['DateProchaineIntervention']
-                DateMEPContrat  = row['DateMEPContrat']
-
+                # Gestion des tels
+                TP_tel = clean_phone_number(row['TP_tel'])
+                TelSITE1 = clean_phone_number(row['TelSITE1'])
+                TelSITE2 = clean_phone_number(row['TelSITE2'])
+                TelSITE3 = clean_phone_number(row['TelSITE3'])
+                TelFACT1 = clean_phone_number(row['TelFACT1'])
+                TelFACT2 = clean_phone_number(row['TelFACT2'])
+                TelFACT3 = clean_phone_number(row['TelFACT3'])
+                # Convertir les dates au format correct
+                Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%d/%m/%Y').date() if pd.notna(row['Date_creation_tiers']) else None
+                DateProchaineIntervention = datetime.strptime(str(row['DateProchaineIntervention']), '%d/%m/%Y').date() if pd.notna(row['DateProchaineIntervention']) else None
+                DateMEPContrat = datetime.strptime(str(row['DateMEPContrat']), '%d/%m/%Y').date() if pd.notna(row['DateMEPContrat']) else None
+                Date_derniere_facture = convert_specific_to_date(row['DateMEPContrat'])
                 
                 # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
         
@@ -136,11 +147,11 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     existing_record.Livrer_adresse_facturation = Livrer_adresse_facturation
                     existing_record.CodeTVA = CodeTVA
                     existing_record.TVA = TVA
+                    existing_record.CodeTypeCONTRAT = CodeTypeCONTRAT
                     existing_record.CodeCONTRAT = CodeCONTRAT
                     existing_record.CategTARIF = CategTARIF
                     existing_record.Mode_rglt = Mode_rglt
                     existing_record.Delai_rglt = Delai_rglt
-                    existing_record.Date_creation_tiers = str(Date_creation_tiers)
                     existing_record.StatusTiers = StatusTiers
                     existing_record.NivRelanceTiers = NivRelanceTiers
                     existing_record.Nom_representant = Nom_representant
@@ -152,9 +163,11 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     existing_record.NEGOCE = NEGOCE
                     existing_record.TP_nom = TP_nom
                     existing_record.TP_tel = TP_tel
-                    existing_record.DateProchaineIntervention = str(DateProchaineIntervention)
-                    existing_record.DateMEPContrat = str(DateMEPContrat)
-                    existing_record.UpdatedAt = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f')
+                    existing_record.Date_creation_tiers = Date_creation_tiers
+                    existing_record.DateProchaineIntervention = DateProchaineIntervention
+                    existing_record.DateMEPContrat = DateMEPContrat
+                    existing_record.Date_derniere_facture = Date_derniere_facture
+                    existing_record.UpdatedAt = datetime.now()  # Mettez à jour le champ UpdatedAt
                     existing_record.LastUpdatedBy = 'ADMIN2'
                     ligne_modifies += 1
                     # Sauvegarde des modifications dans la base de données
@@ -188,11 +201,11 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                         Livrer_adresse_facturation=Livrer_adresse_facturation,
                         CodeTVA=CodeTVA,
                         TVA=TVA,
+                        CodeTypeCONTRAT = CodeTypeCONTRAT,
                         CodeCONTRAT=CodeCONTRAT,
                         CategTARIF=CategTARIF,
                         Mode_rglt=Mode_rglt,
                         Delai_rglt=Delai_rglt,
-                        Date_creation_tiers=str(Date_creation_tiers),
                         StatusTiers=StatusTiers,
                         NivRelanceTiers=NivRelanceTiers,
                         Nom_representant=Nom_representant,
@@ -204,8 +217,10 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                         NEGOCE=NEGOCE,
                         TP_nom=TP_nom,
                         TP_tel=TP_tel,
-                        DateProchaineIntervention=str(DateProchaineIntervention),
-                        DateMEPContrat=str(DateMEPContrat),
+                        Date_creation_tiers=Date_creation_tiers,
+                        DateProchaineIntervention=DateProchaineIntervention,
+                        DateMEPContrat=DateMEPContrat,
+                        Date_derniere_facture=Date_derniere_facture,
                         CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
                         UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
                         CreatedBy='ADMIN',
@@ -220,12 +235,12 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     pbar.update(1)
                 
         return jsonify({
-            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {ligne_modifies} lignes ont été mises à jour."
+            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {ligne_modifies} lignes ont été mises à jour. {nombre_doublons_supprimes} doublons ont été supprimée pendant l'import"
         })
  
     
     except Exception as e:
-        return jsonify({"error": f"Une erreur s'est produite : {str(e)}"}), 405
+        return jsonify({"error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405
     
 def lire_donnees_ISAFACT():
     clients = Client_ISAFACT.query.all()  # Récupérer tous les clients depuis la base de données
