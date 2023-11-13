@@ -1,5 +1,5 @@
 # models/client_isafact_model.py
-
+# Table ISAFACT
 from app import db
 
 class Client_ISAFACT(db.Model):
