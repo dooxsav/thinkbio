@@ -7,4 +7,4 @@ from .GRC_controller import extraction_GRC
 from .Client_controller import populate_DB_Client, lireBaseCLient
 from .Geography_controller import HelloGeography, PopulateDB_geography, lireDB_geography
 from .Client_ISAFACT_controller import importISAFACTDataFromExcel, lireDonnesClientISAFACT
-from .Client_DIVALTO_controller import process_and_store_data
+from .Client_DIVALTO_controller import process_and_store_data, importDIVALTODataFromExcel, lireBDDDIVALTO
