@@ -43,5 +43,5 @@ class CLI_ISFACT(db.Model):
             'createdAt': self.createdAt,
             'createdBy': self.createdBy,
             'updatedAt': self.updatedAt,
-            'lastUpdatedBy': self.lastUpadatedBy,
+            'lastUpdatedBy': self.lastUpdatedBy,
         }

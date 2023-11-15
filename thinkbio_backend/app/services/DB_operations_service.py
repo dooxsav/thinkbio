@@ -11,6 +11,7 @@
 
 from app import db
 from app.models import Geography, Client_ISAFACT, Client_DIVALTO, CLI_ISFACT
+from app.services import exporter_cli_isfact_excel
 from flask import jsonify
 from datetime import datetime
 from tqdm import tqdm
@@ -43,14 +44,15 @@ def lire_donnees_CLI_ISAFACT():
 def MaJ_Table_CLI_BY_ISAFACT():
     lignes_ajoutees = 0
     lignes_modifiees = 0
-    dateNow = datetime.now()
-    clientsRAW = Client_ISAFACT.query.all()
+    ligne_supprimé = 0
     
-    for client in clientsRAW:
+    clientsRAW = Client_ISAFACT.query.all()
+
+    # Créer une barre de progression pour itérer sur les clients
+    for client in tqdm(clientsRAW, desc="Processing clients", unit="client"):
         TelRAW = [client.TelFACT1, client.TelFACT2, client.TelFACT3]
         TelRAW.sort(reverse=True)
-        
-        # Créer ou mettre à jour un enregistrement dans la table CLI_ISAFACT
+
         try:
             # MaJ
             cli_isafact_entry = CLI_ISFACT.query.filter_by(CodeClient=client.CodeClient).one()
@@ -59,10 +61,11 @@ def MaJ_Table_CLI_BY_ISAFACT():
             cli_isafact_entry.PrenomFACT = client.PrenomFACT
             cli_isafact_entry.AdresseFACT = client.AdresseFACT
             cli_isafact_entry.CPFACT = client.CPFACT
-            cli_isafact_entry.PaysFACT = client.VilleFACT  # Corrigé ici
+            cli_isafact_entry.VilleFACT = client.VilleFACT
+            cli_isafact_entry.PaysFACT = client.PaysFACT
             cli_isafact_entry.EmailTIERS = client.EmailTIERS
-            cli_isafact_entry.TEL1 = TelRAW[0]
-            cli_isafact_entry.TEL2 = TelRAW[-1]
+            cli_isafact_entry.Tel1 = TelRAW[0]
+            cli_isafact_entry.Tel2 = TelRAW[1]
             cli_isafact_entry.updatedAt = datetime.now()
             cli_isafact_entry.lastUpdatedBy = 'USER'
             lignes_modifiees += 1
@@ -75,12 +78,12 @@ def MaJ_Table_CLI_BY_ISAFACT():
                 PrenomFACT=client.PrenomFACT,
                 AdresseFACT=client.AdresseFACT,
                 CPFACT=client.CPFACT,
-                VilleFACT=client.VilleFACT,  # Corrigé ici
+                VilleFACT=client.VilleFACT,
                 PaysFACT=client.PaysFACT,
                 EmailTIERS=client.EmailTIERS,
-                TEL1=TelRAW[0],
-                TEL2=TelRAW[-1],
-                TEL3=None,  # Ajouté ici
+                Tel1=TelRAW[0],
+                Tel2=TelRAW[-1],
+                Tel3=None,
                 createdAt=datetime.now(),
                 createdBy='USER',
                 updatedAt=datetime.now(),
@@ -90,10 +93,38 @@ def MaJ_Table_CLI_BY_ISAFACT():
             lignes_ajoutees += 1
             
     db.session.commit()
+    ligne_supprimé = supprimer_doublons_tel1()
+    exporter_cli_isfact_excel()
 
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
-        "message": f"Migration effectué avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."
+        "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
     })
 
-        
+def supprimer_doublons_tel1():
+    doublons_supprimes = 0
+
+    clients_tel1 = (
+        db.session.query(CLI_ISFACT.Tel1)
+        .group_by(CLI_ISFACT.Tel1)
+        .having(db.func.count(CLI_ISFACT.Tel1) > 1)
+        .all()
+    )
+
+    for tel1, in tqdm(clients_tel1, desc="Processing Tel1 duplicates", unit="Tel1"):
+        try:
+            doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel1).all()
+
+            # Conserver le premier enregistrement, supprimer les doublons
+            premier_enregistrement = doublon_entries[0]
+
+            for doublon in doublon_entries[1:]:
+                db.session.delete(doublon)
+                doublons_supprimes += 1
+
+            db.session.commit()
+
+        except NoResultFound:
+            pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
+
+    return doublons_supprimes
