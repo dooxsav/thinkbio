@@ -104,6 +104,7 @@ def MaJ_Table_CLI_BY_ISAFACT():
 def supprimer_doublons_tel1():
     doublons_supprimes = 0
 
+    # Récupérer les numéros de téléphone avec des doublons
     clients_tel1 = (
         db.session.query(CLI_ISFACT.Tel1)
         .group_by(CLI_ISFACT.Tel1)
@@ -111,18 +112,22 @@ def supprimer_doublons_tel1():
         .all()
     )
 
+    # Parcourir les numéros de téléphone avec doublons
     for tel1, in tqdm(clients_tel1, desc="Processing Tel1 duplicates", unit="Tel1"):
         try:
+            # Récupérer tous les enregistrements avec le numéro de téléphone donné
             doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel1).all()
 
-            # Conserver le premier enregistrement, supprimer les doublons
-            premier_enregistrement = doublon_entries[0]
+            # Vérifier la condition pour supprimer les doublons
+            if all(entry.FamilleTIERS == 'PARTICULIER pour le SAV' for entry in doublon_entries):
+                # Conserver le premier enregistrement, supprimer les doublons
+                premier_enregistrement = doublon_entries[0]
 
-            for doublon in doublon_entries[1:]:
-                db.session.delete(doublon)
-                doublons_supprimes += 1
+                for doublon in doublon_entries[1:]:
+                    db.session.delete(doublon)
+                    doublons_supprimes += 1
 
-            db.session.commit()
+                db.session.commit()
 
         except NoResultFound:
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
