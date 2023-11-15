@@ -3,7 +3,6 @@
 from app import db
 
 class Client_ISAFACT(db.Model):
-    
     id = db.Column(db.Integer, primary_key=True)
     CodeClient = db.Column(db.String(7))
     FamilleTIERS = db.Column(db.String(30))
@@ -48,7 +47,7 @@ class Client_ISAFACT(db.Model):
     TP_tel = db.Column(db.String(30))
     DateProchaineIntervention = db.Column(db.String(30))  # Correction ici
     DateMEPContrat = db.Column(db.String(30))
-    Date_derniere_facture = db.Column(db.Date())
+    Date_derniere_facture = db.Column(db.Date(), nullable=True) 
     CreatedAt = db.Column(db.DateTime())
     UpdatedAt = db.Column(db.DateTime())
     CreatedBy = db.Column(db.String(30))

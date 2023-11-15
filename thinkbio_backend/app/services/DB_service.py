@@ -847,11 +847,14 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 TelFACT2 = clean_phone_number(row['TelFACT2'])
                 TelFACT3 = clean_phone_number(row['TelFACT3'])
                 # Convertir les dates au format correct
-                Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%d/%m/%Y').date() if pd.notna(row['Date_creation_tiers']) else None
-                DateProchaineIntervention = datetime.strptime(str(row['DateProchaineIntervention']), '%d/%m/%Y').date() if pd.notna(row['DateProchaineIntervention']) else None
-                DateMEPContrat = datetime.strptime(str(row['DateMEPContrat']), '%d/%m/%Y').date() if pd.notna(row['DateMEPContrat']) else None
-                Date_derniere_facture = convert_specific_to_date(row['DateMEPContrat'])
-                
+                Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['Date_creation_tiers']) else None
+                DateProchaineIntervention = datetime.strptime(str(row['DateProchaineIntervention']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['DateProchaineIntervention']) else None
+                DateMEPContrat = datetime.strptime(str(row['DateMEPContrat']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['DateMEPContrat']) else None
+                # Date_creation_tiers= convert_specific_to_date(row['Date_creation_tiers'])
+                # DateProchaineIntervention= convert_specific_to_date(row['DateProchaineIntervention'])
+                # DateMEPContrat= convert_specific_to_date(row['DateMEPContrat'])
+                Date_derniere_facture = convert_specific_to_date(row['Date_derniere_facture'])
+                # Date_derniere_facture = datetime.strptime(str(row['Date_derniere_facture']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['Date_derniere_facture']) else None
                 # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
         
                 existing_record = Client_ISAFACT.query.filter_by(CodeClient=CodeClient).first()

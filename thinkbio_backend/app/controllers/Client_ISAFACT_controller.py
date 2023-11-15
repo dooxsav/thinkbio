@@ -1,7 +1,7 @@
 # controller/Client_ISAFACT_controller.py
 import os
 from datetime import datetime
-from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT
+from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT, MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT
 
 def importISAFACTDataFromExcel(file):
     # Enregistrer le fichier source
@@ -20,8 +20,15 @@ def importISAFACTDataFromExcel(file):
     # Traitement du fichier excel
     result = Ecrire_MAJ_Clients_ISFACT(file_path)
     
-    
     return result
 
 def lireDonnesClientISAFACT():
     return lire_donnees_ISAFACT()
+
+def extraire_CLI_from_DATA_brut_ISFACT():
+    result = MaJ_Table_CLI_BY_ISAFACT()
+    return result
+
+def lire_BD_CLI_ISFACT():
+    result = lire_donnees_CLI_ISAFACT()
+    return result

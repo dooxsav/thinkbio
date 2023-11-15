@@ -1,7 +1,7 @@
 # routes/client_ISAFACT.py
 
 from flask import Blueprint, request, jsonify
-from app.controllers import importISAFACTDataFromExcel,lireDonnesClientISAFACT
+from app.controllers import importISAFACTDataFromExcel,lireDonnesClientISAFACT, extraire_CLI_from_DATA_brut_ISFACT, lire_BD_CLI_ISFACT
 
 Client_ISAFACT_bp = Blueprint('Client_ISAFACT', __name__)
 
@@ -25,3 +25,11 @@ def GetISAFACTDataFromExcelFile():
 @Client_ISAFACT_bp.route('/clientISAFACT/lireclients', methods=['GET'])
 def lireclientBDDISFACT():
     return lireDonnesClientISAFACT()
+
+@Client_ISAFACT_bp.route('/clientISAFACT/MaJCLIISFACT', methods=['GET'])
+def MaJ_CLI_CLIISAFACT():
+    return extraire_CLI_from_DATA_brut_ISFACT()
+
+@Client_ISAFACT_bp.route('/clientISAFACT/lire_CLI_by_ISFACT', methods=['GET'])
+def lire_CLI_ISFACT():
+    return lire_BD_CLI_ISFACT()

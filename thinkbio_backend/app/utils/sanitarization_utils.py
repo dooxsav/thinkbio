@@ -31,7 +31,7 @@ def retirer_blancs(chaine):
 
 def convert_specific_to_date(date_str):
     if pd.notna(date_str) and date_str != '00:00:00':
-        return datetime.strptime(str(date_str), '%d/%m/%Y').date()
+        return datetime.strptime(str(date_str), '%Y-%m-%d %H:%M:%S').date()
     else:
         return None
     
