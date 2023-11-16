@@ -20,6 +20,7 @@ def exporter_cli_isfact_excel():
     df = pd.DataFrame([
         {
             'CodeClient': entry.CodeClient,
+            'Client_id': entry.Client_id,
             'FamilleTIERS': entry.FamilleTIERS,
             'NomFACT': entry.NomFACT,
             'PrenomFACT': entry.PrenomFACT,

@@ -8,6 +8,7 @@ from app import db
 
 class CLI_ISFACT(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    Client_id = db.Column(db.String(20))
     CodeClient = db.Column(db.String(7))
     FamilleTIERS = db.Column(db.String(30))
     NomFACT = db.Column(db.String(30))
@@ -28,6 +29,7 @@ class CLI_ISFACT(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'Client_id': self.Client_id,
             'CodeClient': self.CodeClient,
             'FamilleTIERS': self.FamilleTIERS,
             'NomFACT': self.NomFACT,

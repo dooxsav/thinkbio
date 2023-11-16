@@ -10,7 +10,7 @@
 #
 
 from app import db
-from app.models import Geography, Client_ISAFACT, Client_DIVALTO, CLI_ISFACT
+from app.models import Geography, Client_ISAFACT, Client_DIVALTO, CLI_ISFACT, SITE_ISAFACT
 from app.services import exporter_cli_isfact_excel
 from flask import jsonify
 from datetime import datetime
@@ -40,11 +40,11 @@ def lire_donnees_CLI_ISAFACT():
 
     return jsonify(clients_json)  # Retourner les données au format JSON
 
-
 def MaJ_Table_CLI_BY_ISAFACT():
     lignes_ajoutees = 0
     lignes_modifiees = 0
     ligne_supprimé = 0
+    Compteur_Client = 0
     
     clientsRAW = Client_ISAFACT.query.all()
 
@@ -65,7 +65,7 @@ def MaJ_Table_CLI_BY_ISAFACT():
             cli_isafact_entry.PaysFACT = client.PaysFACT
             cli_isafact_entry.EmailTIERS = client.EmailTIERS
             cli_isafact_entry.Tel1 = TelRAW[0]
-            cli_isafact_entry.Tel2 = TelRAW[1]
+            cli_isafact_entry.Tel2 = TelRAW[-1]
             cli_isafact_entry.updatedAt = datetime.now()
             cli_isafact_entry.lastUpdatedBy = 'USER'
             lignes_modifiees += 1
@@ -73,6 +73,7 @@ def MaJ_Table_CLI_BY_ISAFACT():
             # Création
             new_entry = CLI_ISFACT(
                 CodeClient=client.CodeClient,
+                Client_id=f'C{Compteur_Client:010d}',
                 FamilleTIERS=client.FamilleTIERS,
                 NomFACT=client.NomFACT,
                 PrenomFACT=client.PrenomFACT,
@@ -91,19 +92,50 @@ def MaJ_Table_CLI_BY_ISAFACT():
             )
             db.session.add(new_entry)
             lignes_ajoutees += 1
+            Compteur_Client+=1
             
     db.session.commit()
-    ligne_supprimé = supprimer_doublons_tel1()
+    ligne_supprimé = supprimer_doublons_tel1() 
+    ligne_supprimé += supprimer_doublons_courriel()
     exporter_cli_isfact_excel()
+    mettre_a_jour_compteur_cli()
 
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
         "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
     })
 
+def MaJ_table_STATION_BY_ISAFACT():
+    # Initialisation des compteurs
+    lignes_ajoutees = 0
+    lignes_modifiees = 0
+    ligne_supprimé = 0
+    Compteur_Station = 0
+    
+    # récupération des données dans la base brut. Les données sont filtrées par la famille pour n'impacter que les particuliers
+    clientsRAW = Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV')
+    
+    # Créer une barre de progression pour itérer sur les clients
+    for client in tqdm(clientsRAW, desc="Processing STATION", unit="client"):
+        TelRAW = [client.TelFACT1, client.TelFACT2, client.TelFACT3]
+        try:
+            # MaJ des données
+            cli_isafact_entry = CLI_ISFACT.query.filter_by(CodeClient=client.CodeClient).one()
+        except NoResultFound:
+            # Création de l'entrée dans la table 
+            new_entry = SITE_ISAFACT(
+                CodeClient = client.CodeClient,
+                FamilleTIERS = client.FamilleTIERS,
+                AdresseSite = client.AdresseSite,
+                VilleSite = client.VilleSite,
+                CPSite = client.CPSite
+            )
+    
+    
+    return None
+
 def supprimer_doublons_tel1():
     doublons_supprimes = 0
-
     # Récupérer les numéros de téléphone avec des doublons
     clients_tel1 = (
         db.session.query(CLI_ISFACT.Tel1)
@@ -133,3 +165,47 @@ def supprimer_doublons_tel1():
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
 
     return doublons_supprimes
+
+def supprimer_doublons_courriel():
+    doublons_supprimes = 0
+    # Récupérer les numéros de téléphone avec des doublons
+    clients_courriel = (
+        db.session.query(CLI_ISFACT.EmailTIERS)
+        .group_by(CLI_ISFACT.EmailTIERS)
+        .having(db.func.count(CLI_ISFACT.EmailTIERS) > 1)
+        .all()
+    )
+
+    # Parcourir les numéros de téléphone avec doublons
+    for EmailTIERS, in tqdm(clients_courriel, desc="Processing EmailTIERS duplicates", unit="Tel1"):
+        try:
+            # Récupérer tous les enregistrements avec le numéro de téléphone donné
+            doublon_entries = CLI_ISFACT.query.filter_by(EmailTIERS=EmailTIERS).all()
+
+            # Vérifier la condition pour supprimer les doublons
+            if all(entry.FamilleTIERS == 'PARTICULIER pour le SAV' for entry in doublon_entries):
+                # Conserver le premier enregistrement, supprimer les doublons
+                premier_enregistrement = doublon_entries[0]
+
+                for doublon in doublon_entries[1:]:
+                    db.session.delete(doublon)
+                    doublons_supprimes += 1
+
+                db.session.commit()
+
+        except NoResultFound:
+            pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
+
+    return doublons_supprimes
+
+def mettre_a_jour_compteur_cli():
+    compteur_client = 1
+    clients = db.session.query(CLI_ISFACT).all()
+
+    # Utilisation de tqdm pour la barre de progression
+    for client in tqdm(clients, desc="Numérotation des clients", unit="client"):
+        client.Client_id = f'C{compteur_client:010d}'
+        compteur_client += 1
+    
+    db.session.commit()
+
