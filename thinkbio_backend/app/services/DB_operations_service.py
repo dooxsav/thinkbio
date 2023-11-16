@@ -24,6 +24,7 @@ def Etat_des_lieux_difference_ISAFACT_DIVALTO():
     
     return nbre_client_isafact
 
+
 def MaJ_Table_DIVALTO_Par_ISAFACT():
     # récupération de tous les n° de client ISAFACT
     clients_isafact = Client_ISAFACT.query.all()
@@ -33,6 +34,7 @@ def MaJ_Table_DIVALTO_Par_ISAFACT():
         client_divalto = Client_DIVALTO.query.filter_by(TIERSEXTERNE=client_ISAFACT)
     
     return 'Mise à jour !'
+
 
 def lire_donnees_CLI_ISAFACT():
     clients = CLI_ISFACT.query.all()  # Récupérer tous les clients depuis la base de données
@@ -105,6 +107,7 @@ def MaJ_Table_CLI_BY_ISAFACT():
         "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
     })
 
+
 def MaJ_table_STATION_BY_ISAFACT():
     # Initialisation des compteurs
     lignes_ajoutees = 0
@@ -116,23 +119,53 @@ def MaJ_table_STATION_BY_ISAFACT():
     clientsRAW = Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV')
     
     # Créer une barre de progression pour itérer sur les clients
-    for client in tqdm(clientsRAW, desc="Processing STATION", unit="client"):
-        TelRAW = [client.TelFACT1, client.TelFACT2, client.TelFACT3]
+    for station in tqdm(clientsRAW, desc="Processing STATION", unit="client"):
         try:
             # MaJ des données
-            cli_isafact_entry = CLI_ISFACT.query.filter_by(CodeClient=client.CodeClient).one()
+            cli_isafact_entry = SITE_ISAFACT.query.filter_by(CodeClient=station.CodeClient).one()
+            cli_isafact_entry.AdresseSite = station.AdresseSite
+            cli_isafact_entry.VilleSite = station.VilleSite
+            cli_isafact_entry.CPSite = station.CPSite
+            cli_isafact_entry.updatedAt = datetime.now(),
+            cli_isafact_entry.lastUpdatedBy = 'USER'
+
+            lignes_modifiees += 1
         except NoResultFound:
             # Création de l'entrée dans la table 
             new_entry = SITE_ISAFACT(
-                CodeClient = client.CodeClient,
-                FamilleTIERS = client.FamilleTIERS,
-                AdresseSite = client.AdresseSite,
-                VilleSite = client.VilleSite,
-                CPSite = client.CPSite
+                CodeClient = station.CodeClient,
+                FamilleTIERS = station.FamilleTIERS,
+                AdresseSite = station.AdresseSite,
+                VilleSite = station.VilleSite,
+                CPSite = station.CPSite,
+                createdAt = datetime.now(),
+                createdBy ='USER',
+                updatedAt = datetime.now(),
+                lastUpdatedBy ='USER'
             )
+            db.session.add(new_entry)
+            lignes_ajoutees += 1
+            Compteur_Client+=1
     
+        db.session.commit()
     
+    # Attribution du numéro de site
+    attribuer_numero_site()
+    
+    # Correlation numéro site, numéro client
+    
+    # Afficher le nombre de lignes ajoutées et modifiées
+    return jsonify({
+        "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
+    })
+    
+
+    
+
+
+def attribuer_correspondance_site_client():
     return None
+
 
 def supprimer_doublons_tel1():
     doublons_supprimes = 0
@@ -209,3 +242,13 @@ def mettre_a_jour_compteur_cli():
     
     db.session.commit()
 
+def attribuer_numero_site():
+    compteur_site = 0
+    sites = db.session.query(SITE_ISAFACT).all()
+    
+    # Utilisation de TQDM pour la barre de progression
+    for site in tqdm(sites, desc="Numérotation des sites", unit="site"):
+        site.Site_id = f'{compteur_site:01d}'
+        compteur_site +=1
+        
+    db.session.commit()

@@ -14,6 +14,10 @@ class SITE_ISAFACT(db.Models):
     AdresseSite = db.Column(db.String(30))
     VilleSite = db.Column(db.String(30))
     CPSite = db.Column(db.String(5))
+    CreatedAt = db.Column(db.DateTime())
+    UpdatedAt = db.Column(db.DateTime())
+    CreatedBy = db.Column(db.String(30))
+    LastUpdatedBy = db.Column(db.String(30))
     
     def to_dict(self):
         return {
@@ -23,6 +27,10 @@ class SITE_ISAFACT(db.Models):
             'FamilleTIERS' : self.FamilleTIERS,
             'AdresseSite' : self.AdresseSite,
             'VilleSite' : self.VilleSite,
-            'CPSite' : self.CPSite
+            'CPSite' : self.CPSite,
+            'CreatedAt' : self.CreatedAt,
+            'UpdatedAt' : self.UpdatedAt,
+            'CreatedBy' : self.CreatedBy,
+            'LastUpdatedBy': self.LastUpdatedBy
         }
     
