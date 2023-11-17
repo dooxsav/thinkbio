@@ -17,14 +17,6 @@ from datetime import datetime
 from tqdm import tqdm
 from sqlalchemy.orm.exc import NoResultFound
 
-def Etat_des_lieux_difference_ISAFACT_DIVALTO():
-    # récupération de tous les n° de client ISAFACT
-    clients_isafact = Client_ISAFACT.query.all()
-    nbre_client_isafact = len(clients_isafact)
-    
-    return nbre_client_isafact
-
-
 def MaJ_Table_DIVALTO_Par_ISAFACT():
     # récupération de tous les n° de client ISAFACT
     clients_isafact = Client_ISAFACT.query.all()
@@ -35,12 +27,17 @@ def MaJ_Table_DIVALTO_Par_ISAFACT():
     
     return 'Mise à jour !'
 
-
 def lire_donnees_CLI_ISAFACT():
     clients = CLI_ISFACT.query.all()  # Récupérer tous les clients depuis la base de données
     clients_json = [client.to_dict() for client in clients]  # Convertir les objets clients en dictionnaires
 
     return jsonify(clients_json)  # Retourner les données au format JSON
+
+def lire_donnes_SITE_ISFACT():
+    sites = SITE_ISAFACT.query.all()  # Récupérer tous les clients depuis la base de données
+    sites_json = [site.to_dict() for site in sites]  # Convertir les objets clients en dictionnaires
+
+    return jsonify(sites_json)  # Retourner les données au format JSON
 
 def MaJ_Table_CLI_BY_ISAFACT():
     lignes_ajoutees = 0
@@ -101,51 +98,75 @@ def MaJ_Table_CLI_BY_ISAFACT():
     ligne_supprimé += supprimer_doublons_courriel()
     exporter_cli_isfact_excel()
     mettre_a_jour_compteur_cli()
+    MaJ_table_STATION_BY_ISAFACT()
 
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
         "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
     })
 
-
 def MaJ_table_STATION_BY_ISAFACT():
     # Initialisation des compteurs
     lignes_ajoutees = 0
     lignes_modifiees = 0
-    ligne_supprimé = 0
-    Compteur_Station = 0
+    ligne_supprimee = 0
+    Compteur_Client = 0
+    station_non_attribué = 0
     
     # récupération des données dans la base brut. Les données sont filtrées par la famille pour n'impacter que les particuliers
-    clientsRAW = Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV')
+    clientsRAW = Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV').all()
     
     # Créer une barre de progression pour itérer sur les clients
     for station in tqdm(clientsRAW, desc="Processing STATION", unit="client"):
+        # Réinitialiser client_id pour chaque itération
+        client_id = None
+        
+        # Recherche dans CLI_ISFACT avec CodeClient
+        client = CLI_ISFACT.query.filter_by(CodeClient=station.CodeClient).first()
+        if client:
+            client_id = client.Client_id
+        else:
+            # Recherche dans CLI_ISFACT avec Tel1
+            client = CLI_ISFACT.query.filter_by(Tel1=station.TelFACT1).first()
+            if client:
+                client_id = client.Client_id
+            else:
+                # Recherche dans CLI_ISFACT avec EmailTIERS
+                client = CLI_ISFACT.query.filter_by(EmailTIERS=station.EmailTIERS).first()
+                if client:
+                    client_id = client.Client_id
+                else:
+                    # Définir une valeur par défaut si aucun client n'est trouvé
+                    client_id = None  # ou une autre valeur par défaut selon votre logique
+                    station_non_attribué +=1
+
         try:
-            # MaJ des données
-            cli_isafact_entry = SITE_ISAFACT.query.filter_by(CodeClient=station.CodeClient).one()
-            cli_isafact_entry.AdresseSite = station.AdresseSite
-            cli_isafact_entry.VilleSite = station.VilleSite
-            cli_isafact_entry.CPSite = station.CPSite
-            cli_isafact_entry.updatedAt = datetime.now(),
-            cli_isafact_entry.lastUpdatedBy = 'USER'
+            # MaJ des données dans SITE_ISAFACT
+            site_entry = SITE_ISAFACT.query.filter_by(CodeClient=station.CodeClient).one()
+            site_entry.AdresseSite = station.AdresseSITE
+            site_entry.VilleSite = station.VilleSITE
+            site_entry.CPSite = station.CPSITE
+            site_entry.UpdatedAt = datetime.now()
+            site_entry.LastUpdatedBy = 'USER'
 
             lignes_modifiees += 1
         except NoResultFound:
-            # Création de l'entrée dans la table 
+            # Création d'une nouvelle entrée dans SITE_ISAFACT
             new_entry = SITE_ISAFACT(
-                CodeClient = station.CodeClient,
-                FamilleTIERS = station.FamilleTIERS,
-                AdresseSite = station.AdresseSite,
-                VilleSite = station.VilleSite,
-                CPSite = station.CPSite,
-                createdAt = datetime.now(),
-                createdBy ='USER',
-                updatedAt = datetime.now(),
-                lastUpdatedBy ='USER'
+                CodeClient=station.CodeClient,
+                FamilleTIERS=station.FamilleTIERS,
+                AdresseSite=station.AdresseSITE,
+                VilleSite=station.VilleSITE,
+                CPSite=station.CPSITE,
+                CreatedAt=datetime.now(),
+                CreatedBy='USER',
+                UpdatedAt=datetime.now(),
+                LastUpdatedBy='USER',
+                Client_id=client_id  # Utilisation de client_id obtenu dans votre logique de recherche
             )
             db.session.add(new_entry)
             lignes_ajoutees += 1
-            Compteur_Client+=1
+            Compteur_Client += 1
     
         db.session.commit()
     
@@ -156,16 +177,11 @@ def MaJ_table_STATION_BY_ISAFACT():
     
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
-        "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimé} ont été supprimés"
+        "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimee} ont été supprimées. {station_non_attribué} stations sont non attribuées"
     })
     
-
-    
-
-
 def attribuer_correspondance_site_client():
     return None
-
 
 def supprimer_doublons_tel1():
     doublons_supprimes = 0
@@ -252,3 +268,10 @@ def attribuer_numero_site():
         compteur_site +=1
         
     db.session.commit()
+    
+def Etat_des_lieux_difference_ISAFACT_DIVALTO():
+    # récupération de tous les n° de client ISAFACT
+    clients_isafact = Client_ISAFACT.query.all()
+    nbre_client_isafact = len(clients_isafact)
+    
+    return nbre_client_isafact
