@@ -5,7 +5,7 @@
 #
 from app import db
 
-class SITE_ISAFACT(db.Models): 
+class SITE_ISAFACT(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
     Site_id = db.Column(db.String(20))
     Client_id = db.Column(db.String(20))
