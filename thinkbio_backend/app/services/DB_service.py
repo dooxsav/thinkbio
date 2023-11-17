@@ -847,7 +847,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 TelFACT2 = clean_phone_number(row['TelFACT2'])
                 TelFACT3 = clean_phone_number(row['TelFACT3'])
                 # Convertir les dates au format correct
-                Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['Date_creation_tiers']) else None
+                Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%d/%m/%Y').date() if pd.notna(row['Date_creation_tiers']) else None
                 DateProchaineIntervention = datetime.strptime(str(row['DateProchaineIntervention']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['DateProchaineIntervention']) else None
                 DateMEPContrat = datetime.strptime(str(row['DateMEPContrat']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['DateMEPContrat']) else None
                 # Date_creation_tiers= convert_specific_to_date(row['Date_creation_tiers'])

@@ -95,10 +95,11 @@ def MaJ_Table_CLI_BY_ISAFACT():
             
     db.session.commit()
     ligne_supprimé = supprimer_doublons_tel1() 
+    ligne_supprimé = supprimer_doublons_tel2() 
     ligne_supprimé += supprimer_doublons_courriel()
-    exporter_cli_isfact_excel()
     mettre_a_jour_compteur_cli()
     MaJ_table_STATION_BY_ISAFACT()
+    exporter_cli_isfact_excel()
 
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
@@ -112,33 +113,12 @@ def MaJ_table_STATION_BY_ISAFACT():
     ligne_supprimee = 0
     Compteur_Client = 0
     station_non_attribué = 0
-    
+    client_par_tel = 0
     # récupération des données dans la base brut. Les données sont filtrées par la famille pour n'impacter que les particuliers
     clientsRAW = Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV').all()
     
     # Créer une barre de progression pour itérer sur les clients
     for station in tqdm(clientsRAW, desc="Processing STATION", unit="client"):
-        # Réinitialiser client_id pour chaque itération
-        client_id = None
-        
-        # Recherche dans CLI_ISFACT avec CodeClient
-        client = CLI_ISFACT.query.filter_by(CodeClient=station.CodeClient).first()
-        if client:
-            client_id = client.Client_id
-        else:
-            # Recherche dans CLI_ISFACT avec Tel1
-            client = CLI_ISFACT.query.filter_by(Tel1=station.TelFACT1).first()
-            if client:
-                client_id = client.Client_id
-            else:
-                # Recherche dans CLI_ISFACT avec EmailTIERS
-                client = CLI_ISFACT.query.filter_by(EmailTIERS=station.EmailTIERS).first()
-                if client:
-                    client_id = client.Client_id
-                else:
-                    # Définir une valeur par défaut si aucun client n'est trouvé
-                    client_id = None  # ou une autre valeur par défaut selon votre logique
-                    station_non_attribué +=1
 
         try:
             # MaJ des données dans SITE_ISAFACT
@@ -162,7 +142,6 @@ def MaJ_table_STATION_BY_ISAFACT():
                 CreatedBy='USER',
                 UpdatedAt=datetime.now(),
                 LastUpdatedBy='USER',
-                Client_id=client_id  # Utilisation de client_id obtenu dans votre logique de recherche
             )
             db.session.add(new_entry)
             lignes_ajoutees += 1
@@ -212,6 +191,38 @@ def supprimer_doublons_tel1():
 
         except NoResultFound:
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
+
+    return doublons_supprimes
+
+def supprimer_doublons_tel2():
+    doublons_supprimes = 0
+    # Récupérer les numéros de téléphone avec des doublons
+    clients_tel2 = (
+        db.session.query(CLI_ISFACT.Tel2)
+        .group_by(CLI_ISFACT.Tel2)
+        .having(db.func.count(CLI_ISFACT.Tel2) > 1)
+        .all()
+    )
+
+    # Parcourir les numéros de téléphone avec doublons
+    for tel2, in tqdm(clients_tel2, desc="Processing Tel2 duplicates", unit="Tel"):
+        try:
+            # Récupérer tous les enregistrements avec le numéro de téléphone donné
+            doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel2).all()
+
+            # Vérifier la condition pour supprimer les doublons
+            if all(entry.FamilleTIERS == 'PARTICULIER pour le SAV' for entry in doublon_entries):
+                # Conserver le premier enregistrement, supprimer les doublons
+                premier_enregistrement = doublon_entries[0]
+
+                for doublon in doublon_entries[1:]:
+                    db.session.delete(doublon)
+                    doublons_supprimes += 1
+
+                db.session.commit()
+
+        except NoResultFound:
+            pass  # Aucun enregistrement avec Tel2 trouvé, ignorer
 
     return doublons_supprimes
 
