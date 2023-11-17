@@ -264,7 +264,7 @@ def attribuer_numero_site():
     
     # Utilisation de TQDM pour la barre de progression
     for site in tqdm(sites, desc="Numérotation des sites", unit="site"):
-        site.Site_id = f'{compteur_site:01d}'
+        site.Site_id = f'S{compteur_site:010d}'
         compteur_site +=1
         
     db.session.commit()
