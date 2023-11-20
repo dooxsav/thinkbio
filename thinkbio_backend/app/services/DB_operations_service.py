@@ -17,6 +17,15 @@ from datetime import datetime
 from tqdm import tqdm
 from sqlalchemy.orm.exc import NoResultFound
 
+def KillAllTable():
+    try:
+        db.reflect()
+        db.drop_all()
+        return "Toutes les tables ont été supprimées avec succès.", 200
+    except Exception as e:
+        return f"Une erreur s'est produite : {e}", 400
+    
+
 def MaJ_Table_DIVALTO_Par_ISAFACT():
     # récupération de tous les n° de client ISAFACT
     clients_isafact = Client_ISAFACT.query.all()
@@ -40,6 +49,7 @@ def lire_donnes_SITE_ISFACT():
     return jsonify(sites_json)  # Retourner les données au format JSON
 
 def MaJ_Table_CLI_BY_ISAFACT():
+
     lignes_ajoutees = 0
     lignes_modifiees = 0
     ligne_supprimé = 0
@@ -98,7 +108,9 @@ def MaJ_Table_CLI_BY_ISAFACT():
     ligne_supprimé = supprimer_doublons_tel2() 
     ligne_supprimé += supprimer_doublons_courriel()
     mettre_a_jour_compteur_cli()
-    MaJ_table_STATION_BY_ISAFACT()
+    attribuer_numero_site()
+    attribuer_correspondance_site_client()
+    #MaJ_table_STATION_BY_ISAFACT()
     exporter_cli_isfact_excel()
 
     # Afficher le nombre de lignes ajoutées et modifiées
@@ -146,20 +158,51 @@ def MaJ_table_STATION_BY_ISAFACT():
             db.session.add(new_entry)
             lignes_ajoutees += 1
             Compteur_Client += 1
-    
+     
         db.session.commit()
     
     # Attribution du numéro de site
+    print('Attribution du numéro de site...')
     attribuer_numero_site()
     
     # Correlation numéro site, numéro client
+    print('Correspondance entre les sites et la clients...')
+    attribuer_correspondance_site_client()
     
     # Afficher le nombre de lignes ajoutées et modifiées
     return jsonify({
-        "message": f"Migration effectuée avec succès. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour. {ligne_supprimee} ont été supprimées. {station_non_attribué} stations sont non attribuées"
+        "message": f"Migration effectuée avec succès. {lignes_ajoutees} ligne(s) ont été ajoutées, {lignes_modifiees} ligne(s) ont été mise(s) à jour. {ligne_supprimee} ont été supprimée(s). {station_non_attribué} stations sont non attribuées"
     })
     
 def attribuer_correspondance_site_client():
+    sites = SITE_ISAFACT.query.all()
+    site_inconnu = 0
+    correspondance_trouvee = 0
+    
+    for site in tqdm(sites, desc="Correspondance sites/clients", unit="enregistrements"):
+        
+        Client = CLI_ISFACT.query.filter_by(CodeClient=site.CodeClient).first()
+        if Client:
+            Client_id = Client.Client_id
+        else:
+            # Si pas de correspondance directe, recherche par numéro de téléphone :
+            numTelClient_1 = Client_ISAFACT.query.filter_by(CodeClient=site.CodeClient).first().TelFACT1
+            equiv_cli = CLI_ISFACT.query.filter_by(Tel1 = numTelClient_1).first()
+            if not equiv_cli:
+                numTelClient_2 = Client_ISAFACT.query.filter_by(CodeClient=site.CodeClient).first().TelFACT2
+                equiv_cli = CLI_ISFACT.query.filter_by(Tel1 = numTelClient_2).first()
+                if not numTelClient_2: 
+                    EmailTIERS = Client_ISAFACT.query.filter_by(CodeClient=site.CodeClient).first().EmailTIERS
+                    equiv_cli = CLI_ISFACT.query.filter_by(EmailTIERS = EmailTIERS).first()
+            if equiv_cli:
+                Client_id = equiv_cli.Client_id
+                site.Client_id = Client_id
+                db.session.add(site)  
+            else: 
+                print('Pas de correspondance trouvé pour ' + site.CodeClient)
+
+    db.session.commit()
+        
     return None
 
 def supprimer_doublons_tel1():

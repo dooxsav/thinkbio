@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.controllers import HelloOperationDB
+from app.controllers import HelloOperationDB, KillSwitch
 
 # Création du Blueprint 'OperationDB_bp'
 OperationDB_bp = Blueprint('OperationDB_bp', __name__)
@@ -16,3 +16,8 @@ def MAJ_TableDivalto_données_ISFACT():
 @OperationDB_bp.route('/OperationDB/etatdesdifference', methods=['GET'])
 def EtatDesDifferenceISAFACTDIVALTO():
     return None
+
+@OperationDB_bp.route('/OperationDB/killswitch', methods = ['GET'])
+def KillSwitch_route():
+    # kill toutes la base de données
+    return KillSwitch()

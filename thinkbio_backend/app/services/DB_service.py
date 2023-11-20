@@ -792,6 +792,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
         total_rows = len(dataFrame)
         lignes_ajoutees = 0
         ligne_modifies = 0
+        ligne_ignores = 0
         date_now = str(datetime.now())
     # Itération sur le DF
     
@@ -856,113 +857,119 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 Date_derniere_facture = convert_specific_to_date(row['Date_derniere_facture'])
                 # Date_derniere_facture = datetime.strptime(str(row['Date_derniere_facture']), '%Y-%m-%d %H:%M:%S').date() if pd.notna(row['Date_derniere_facture']) else None
                 # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
-        
-                existing_record = Client_ISAFACT.query.filter_by(CodeClient=CodeClient).first()
 
-                if existing_record:
-                # Si l'enregistrement existe déjà, mettez à jour ses valeurs
-                    existing_record.FamilleTIERS = FamilleTIERS
-                    existing_record.NomFACT = NomFACT
-                    existing_record.PrenomFACT = PrenomFACT
-                    existing_record.AdresseFACT = AdresseFACT
-                    existing_record.CPFACT = CPFACT
-                    existing_record.VilleFACT = VilleFACT
-                    existing_record.PaysFACT = PaysFACT
-                    existing_record.EmailTIERS = EmailTIERS
-                    existing_record.TelFACT1 = TelFACT1
-                    existing_record.TelFACT2 = TelFACT2
-                    existing_record.TelFACT3 = TelFACT3
-                    existing_record.NomLOC = NomLOC
-                    existing_record.PrenomLOC = PrenomLOC
-                    existing_record.AdresseSITE = AdresseSITE
-                    existing_record.CPSITE = CPSITE
-                    existing_record.VilleSITE = VilleSITE
-                    existing_record.PaysSITE = PaysSITE
-                    existing_record.TelSITE1 = TelSITE1
-                    existing_record.TelSITE2 = TelSITE2
-                    existing_record.TelSITE3 = TelSITE3
-                    existing_record.Livrer_adresse_facturation = Livrer_adresse_facturation
-                    existing_record.CodeTVA = CodeTVA
-                    existing_record.TVA = TVA
-                    existing_record.CodeTypeCONTRAT = CodeTypeCONTRAT
-                    existing_record.CodeCONTRAT = CodeCONTRAT
-                    existing_record.CategTARIF = CategTARIF
-                    existing_record.Mode_rglt = Mode_rglt
-                    existing_record.Delai_rglt = Delai_rglt
-                    existing_record.StatusTiers = StatusTiers
-                    existing_record.NivRelanceTiers = NivRelanceTiers
-                    existing_record.Nom_representant = Nom_representant
-                    existing_record.RIB_Domic = RIB_Domic
-                    existing_record.RIB_Etabl = RIB_Etabl
-                    existing_record.RIB_IBAN = RIB_IBAN
-                    existing_record.RIB_Cle  = RIB_Cle 
-                    existing_record.RIB_CodeBIC = RIB_CodeBIC
-                    existing_record.NEGOCE = NEGOCE
-                    existing_record.TP_nom = TP_nom
-                    existing_record.TP_tel = TP_tel
-                    existing_record.Date_creation_tiers = Date_creation_tiers
-                    existing_record.DateProchaineIntervention = DateProchaineIntervention
-                    existing_record.DateMEPContrat = DateMEPContrat
-                    existing_record.Date_derniere_facture = Date_derniere_facture
-                    existing_record.UpdatedAt = datetime.now()  # Mettez à jour le champ UpdatedAt
-                    existing_record.LastUpdatedBy = 'ADMIN2'
-                    ligne_modifies += 1
-                    # Sauvegarde des modifications dans la base de données
-                    db.session.commit()
-                    # Mise à jour de la barre de progression
-                    pbar.update(1)
-                else:
-                # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
-                    new_client = Client_ISAFACT(
-                        CodeClient=CodeClient,
-                        FamilleTIERS=FamilleTIERS,
-                        NomFACT=NomFACT,
-                        PrenomFACT=PrenomFACT,
-                        AdresseFACT=AdresseFACT,
-                        CPFACT=CPFACT,
-                        VilleFACT=VilleFACT,
-                        PaysFACT=PaysFACT,
-                        EmailTIERS=EmailTIERS,
-                        TelFACT1=TelFACT1,
-                        TelFACT2=TelFACT2,
-                        TelFACT3=TelFACT3,
-                        NomLOC=NomLOC,
-                        PrenomLOC=PrenomLOC,
-                        AdresseSITE=AdresseSITE,
-                        CPSITE=CPSITE,
-                        VilleSITE=VilleSITE,
-                        PaysSITE=PaysSITE,
-                        TelSITE1=TelSITE1,
-                        TelSITE2=TelSITE2,
-                        TelSITE3=TelSITE3,
-                        Livrer_adresse_facturation=Livrer_adresse_facturation,
-                        CodeTVA=CodeTVA,
-                        TVA=TVA,
-                        CodeTypeCONTRAT = CodeTypeCONTRAT,
-                        CodeCONTRAT=CodeCONTRAT,
-                        CategTARIF=CategTARIF,
-                        Mode_rglt=Mode_rglt,
-                        Delai_rglt=Delai_rglt,
-                        StatusTiers=StatusTiers,
-                        NivRelanceTiers=NivRelanceTiers,
-                        Nom_representant=Nom_representant,
-                        RIB_Domic=RIB_Domic,
-                        RIB_Etabl=RIB_Etabl,
-                        RIB_IBAN=RIB_IBAN,
-                        RIB_Cle=RIB_Cle,
-                        RIB_CodeBIC=RIB_CodeBIC,
-                        NEGOCE=NEGOCE,
-                        TP_nom=TP_nom,
-                        TP_tel=TP_tel,
-                        Date_creation_tiers=Date_creation_tiers,
-                        DateProchaineIntervention=DateProchaineIntervention,
-                        DateMEPContrat=DateMEPContrat,
-                        Date_derniere_facture=Date_derniere_facture,
-                        CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
-                        UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
-                        CreatedBy='ADMIN',
-                        LastUpdatedBy='ADMIN'
-                    )
+                # Vérification de la présence d'une adresse de facturation
+
+                if not (str(row['CPFACT']).isdigit() and str(row['CPFACT']) != ''):
+                    ligne_ignores += 1
+                    pass
+                else:                
+                    existing_record = Client_ISAFACT.query.filter_by(CodeClient=CodeClient).first()
+
+                    if existing_record:
+                    # Si l'enregistrement existe déjà, mettez à jour ses valeurs
+                        existing_record.FamilleTIERS = FamilleTIERS
+                        existing_record.NomFACT = NomFACT
+                        existing_record.PrenomFACT = PrenomFACT
+                        existing_record.AdresseFACT = AdresseFACT
+                        existing_record.CPFACT = CPFACT
+                        existing_record.VilleFACT = VilleFACT
+                        existing_record.PaysFACT = PaysFACT
+                        existing_record.EmailTIERS = EmailTIERS
+                        existing_record.TelFACT1 = TelFACT1
+                        existing_record.TelFACT2 = TelFACT2
+                        existing_record.TelFACT3 = TelFACT3
+                        existing_record.NomLOC = NomLOC
+                        existing_record.PrenomLOC = PrenomLOC
+                        existing_record.AdresseSITE = AdresseSITE
+                        existing_record.CPSITE = CPSITE
+                        existing_record.VilleSITE = VilleSITE
+                        existing_record.PaysSITE = PaysSITE
+                        existing_record.TelSITE1 = TelSITE1
+                        existing_record.TelSITE2 = TelSITE2
+                        existing_record.TelSITE3 = TelSITE3
+                        existing_record.Livrer_adresse_facturation = Livrer_adresse_facturation
+                        existing_record.CodeTVA = CodeTVA
+                        existing_record.TVA = TVA
+                        existing_record.CodeTypeCONTRAT = CodeTypeCONTRAT
+                        existing_record.CodeCONTRAT = CodeCONTRAT
+                        existing_record.CategTARIF = CategTARIF
+                        existing_record.Mode_rglt = Mode_rglt
+                        existing_record.Delai_rglt = Delai_rglt
+                        existing_record.StatusTiers = StatusTiers
+                        existing_record.NivRelanceTiers = NivRelanceTiers
+                        existing_record.Nom_representant = Nom_representant
+                        existing_record.RIB_Domic = RIB_Domic
+                        existing_record.RIB_Etabl = RIB_Etabl
+                        existing_record.RIB_IBAN = RIB_IBAN
+                        existing_record.RIB_Cle  = RIB_Cle 
+                        existing_record.RIB_CodeBIC = RIB_CodeBIC
+                        existing_record.NEGOCE = NEGOCE
+                        existing_record.TP_nom = TP_nom
+                        existing_record.TP_tel = TP_tel
+                        existing_record.Date_creation_tiers = Date_creation_tiers
+                        existing_record.DateProchaineIntervention = DateProchaineIntervention
+                        existing_record.DateMEPContrat = DateMEPContrat
+                        existing_record.Date_derniere_facture = Date_derniere_facture
+                        existing_record.UpdatedAt = datetime.now()  # Mettez à jour le champ UpdatedAt
+                        existing_record.LastUpdatedBy = 'ADMIN2'
+                        ligne_modifies += 1
+                        # Sauvegarde des modifications dans la base de données
+                        db.session.commit()
+                        # Mise à jour de la barre de progression
+                        pbar.update(1)
+                    else:
+                    # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
+                        new_client = Client_ISAFACT(
+                            CodeClient=CodeClient,
+                            FamilleTIERS=FamilleTIERS,
+                            NomFACT=NomFACT,
+                            PrenomFACT=PrenomFACT,
+                            AdresseFACT=AdresseFACT,
+                            CPFACT=CPFACT,
+                            VilleFACT=VilleFACT,
+                            PaysFACT=PaysFACT,
+                            EmailTIERS=EmailTIERS,
+                            TelFACT1=TelFACT1,
+                            TelFACT2=TelFACT2,
+                            TelFACT3=TelFACT3,
+                            NomLOC=NomLOC,
+                            PrenomLOC=PrenomLOC,
+                            AdresseSITE=AdresseSITE,
+                            CPSITE=CPSITE,
+                            VilleSITE=VilleSITE,
+                            PaysSITE=PaysSITE,
+                            TelSITE1=TelSITE1,
+                            TelSITE2=TelSITE2,
+                            TelSITE3=TelSITE3,
+                            Livrer_adresse_facturation=Livrer_adresse_facturation,
+                            CodeTVA=CodeTVA,
+                            TVA=TVA,
+                            CodeTypeCONTRAT = CodeTypeCONTRAT,
+                            CodeCONTRAT=CodeCONTRAT,
+                            CategTARIF=CategTARIF,
+                            Mode_rglt=Mode_rglt,
+                            Delai_rglt=Delai_rglt,
+                            StatusTiers=StatusTiers,
+                            NivRelanceTiers=NivRelanceTiers,
+                            Nom_representant=Nom_representant,
+                            RIB_Domic=RIB_Domic,
+                            RIB_Etabl=RIB_Etabl,
+                            RIB_IBAN=RIB_IBAN,
+                            RIB_Cle=RIB_Cle,
+                            RIB_CodeBIC=RIB_CodeBIC,
+                            NEGOCE=NEGOCE,
+                            TP_nom=TP_nom,
+                            TP_tel=TP_tel,
+                            Date_creation_tiers=Date_creation_tiers,
+                            DateProchaineIntervention=DateProchaineIntervention,
+                            DateMEPContrat=DateMEPContrat,
+                            Date_derniere_facture=Date_derniere_facture,
+                            CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                            UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                            CreatedBy='ADMIN',
+                            LastUpdatedBy='ADMIN'
+                        )
                     
                     db.session.add(new_client)
                     lignes_ajoutees += 1
@@ -972,7 +979,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     pbar.update(1)
                 
         return jsonify({
-            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {ligne_modifies} lignes ont été mises à jour. {nombre_doublons_supprimes} doublons ont été supprimée pendant l'import"
+            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} ligne(s) ont été ajoutée(s), {ligne_modifies} ligne(s) ont été mises à jour. {ligne_ignores} ligne(s) ont été ignorée(s). {nombre_doublons_supprimes} doublon(s) ont été supprimée pendant l'import"
         })
  
     
