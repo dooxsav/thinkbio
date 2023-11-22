@@ -4,10 +4,10 @@
 #
 #
 
-from app.services import MaJ_Table_DIVALTO_Par_ISAFACT, KillAllTable
+from app.services import KillAllTable
 
 def HelloOperationDB():
-    return MaJ_Table_DIVALTO_Par_ISAFACT()
+    return "Hello!", 200
 
 def MaJDIVALTO_table():
     return 'MaJDIVALTO_table'

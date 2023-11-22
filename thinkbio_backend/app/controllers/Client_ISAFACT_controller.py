@@ -1,7 +1,22 @@
 # controller/Client_ISAFACT_controller.py
 import os
 from datetime import datetime
-from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT, MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT, lire_donnes_SITE_ISFACT
+from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT, MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT, lire_donnes_SITE_ISFACT, lire_donnes_RIB_ISFACT, Transfert_donnes_CLIENT_ISAFACT_SITES, numerotation_sites, Transfert_donnes_CLIENT_ISAFACT_CLI, suppression_doublon_by_TEL1
+
+def dosomeMagical(file):
+    # Etape 1 - Récupérer les informations dans le fichier Excel et peupler la base CLIENT_ISAFACT
+    result = importISAFACTDataFromExcel(file)
+    
+    # Etape 2 - Créer un table SITE qui est l'image de la table CLIENT_ISAFACT avec des informations en moins
+    ligne_table_SITE_ajoutes, ligne_table_SITE_mddifiees = Transfert_donnes_CLIENT_ISAFACT_SITES()
+    nombre_site_numeroté = numerotation_sites()
+    
+    # Etape 3 - Créer un table CLI qui est l'image de la table CLIENT_ISFACT avec des informations spécifique aux client
+    ligne_table_CLI_ajoutes, ligne_table_CLI_mddifiees = Transfert_donnes_CLIENT_ISAFACT_CLI()
+    # doublons_supprimes, SITE_Maj = suppression_doublon_by_TEL1()
+    
+    return result
+    
 
 def importISAFACTDataFromExcel(file):
     # Enregistrer le fichier source
@@ -9,7 +24,7 @@ def importISAFACTDataFromExcel(file):
     current_directory = os.path.dirname(os.path.abspath(__file__))  # Récupérer le répertoire du fichier actuel (GRC_controller.py)
     path_to_input = os.path.join(current_directory, '..', '..', 'ressources', 'input', 'ISAFACT')  # Chemin vers le répertoire "ressources/input"
     
-    # Gestion du nommage : 
+    # Gestion du nommage : ssssssss
     datefichier = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  # Formater la date
     nom_fichier = f"ISAFACT_{datefichier}.xlsx"  # Créer un nom de fichier pour sauvegarder le fichier PDF
     file_path = os.path.join(path_to_input, nom_fichier)  # Chemin complet du fichier à enregistrer
@@ -22,9 +37,6 @@ def importISAFACTDataFromExcel(file):
     
     return result
 
-def lireDonnesClientISAFACT():
-    return lire_donnees_ISAFACT()
-
 def extraire_CLI_from_DATA_brut_ISFACT():
     result = MaJ_Table_CLI_BY_ISAFACT()
     return result
@@ -36,3 +48,9 @@ def lire_BD_CLI_ISFACT():
 def lire_BD_SITE_ISAFACT():
     result = lire_donnes_SITE_ISFACT()
     return result
+
+def lireDonnesClientISAFACT():
+    return lire_donnees_ISAFACT()
+
+def lire_Table_RIB_ISAFACT():
+    return lire_donnes_RIB_ISFACT()

@@ -10,6 +10,7 @@ class SITE_ISAFACT(db.Model):
     Site_id = db.Column(db.String(20))
     Client_id = db.Column(db.String(20))
     CodeClient = db.Column(db.String(7))
+    RefExterneISAFACT = db.Column(db.String(7))
     FamilleTIERS = db.Column(db.String(30))
     AdresseSite = db.Column(db.String(30))
     VilleSite = db.Column(db.String(30))
@@ -24,6 +25,7 @@ class SITE_ISAFACT(db.Model):
             'Site_id' : self.Site_id,
             'Client_id' : self.Client_id,
             'CodeClient' :self.CodeClient,
+            'RefExterneISAFACT': self.RefExterneISAFACT,
             'FamilleTIERS' : self.FamilleTIERS,
             'AdresseSite' : self.AdresseSite,
             'VilleSite' : self.VilleSite,
