@@ -58,6 +58,7 @@ def exporter_cli_isfact_excel():
                 'Site_id': entry.Site_id,
                 'Client_id': entry.Client_id,
                 'CodeClient': entry.CodeClient,
+                'RefExterneISAFACT' : entry.RefExterneISAFACT,
                 'FamilleTIERS': entry.FamilleTIERS,
                 'AdresseSite': entry.AdresseSite,
                 'VilleSite': entry.VilleSite,

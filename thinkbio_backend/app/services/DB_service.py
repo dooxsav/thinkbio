@@ -976,9 +976,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     pbar.update(1)
             db.session.commit()
                 
-        return jsonify({
-            "message": f"Fichier .xlsx importé avec succès dans la base de données. {lignes_ajoutees} ligne(s) ont été ajoutée(s), {ligne_modifies} ligne(s) ont été mises à jour. {ligne_ignores} ligne(s) ont été ignorée(s). {nombre_doublons_supprimes} doublon(s) ont été supprimée pendant l'import"
-        })
+        return lignes_ajoutees, ligne_modifies
  
     except Exception as e:
         return jsonify({"error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405

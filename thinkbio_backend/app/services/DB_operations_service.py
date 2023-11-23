@@ -17,12 +17,23 @@ from datetime import datetime
 from tqdm import tqdm
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import or_
+import os
+import signal
+import psutil
 
 def KillAllTable():
     try:
         db.reflect()
         db.drop_all()
-        return "Toutes les tables ont été supprimées avec succès.", 200
+        print("Toutes les tables ont été supprimées avec succès.") 
+            # Trouver le processus associé à l'application Flask
+        for proc in psutil.process_iter(attrs=['pid', 'name']):
+            if 'python.exe' in proc.info['name'] and 'run.py' in ' '.join(proc.cmdline()):
+                pid = proc.info['pid']
+                os.kill(pid, signal.SIGTERM)  # Terminer le processus associé à l'application Flask
+
+        # Relancer l'application Flask
+        os.system('python ../run.py')  # Assurez-vous de fournir le chemin relatif correct vers run.py
     except Exception as e:
         return f"Une erreur s'est produite : {e}", 400
     

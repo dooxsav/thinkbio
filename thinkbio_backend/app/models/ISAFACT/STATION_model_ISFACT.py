@@ -22,17 +22,17 @@ class SITE_ISAFACT(db.Model):
     
     def to_dict(self):
         return {
-            'Site_id' : self.Site_id,
-            'Client_id' : self.Client_id,
-            'CodeClient' :self.CodeClient,
+            'Site_id': self.Site_id,
+            'Client_id': self.Client_id,
+            'CodeClient': self.CodeClient,
             'RefExterneISAFACT': self.RefExterneISAFACT,
-            'FamilleTIERS' : self.FamilleTIERS,
-            'AdresseSite' : self.AdresseSite,
-            'VilleSite' : self.VilleSite,
-            'CPSite' : self.CPSite,
-            'CreatedAt' : self.CreatedAt,
-            'UpdatedAt' : self.UpdatedAt,
-            'CreatedBy' : self.CreatedBy,
+            'FamilleTIERS': self.FamilleTIERS,
+            'AdresseSite': self.AdresseSite,
+            'VilleSite': self.VilleSite,
+            'CPSite': self.CPSite,
+            'CreatedAt': self.CreatedAt.isoformat() if self.CreatedAt else None,
+            'UpdatedAt': self.UpdatedAt.isoformat() if self.UpdatedAt else None,
+            'CreatedBy': self.CreatedBy,
             'LastUpdatedBy': self.LastUpdatedBy
         }
     
