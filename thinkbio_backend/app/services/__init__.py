@@ -6,3 +6,4 @@ from .DB_service import Lire_BD_DIVALTO, Ecrire_MAJ_Clients_DIVALTO, lire_donnee
 from .DB_operations_service import  MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT, lire_donnes_SITE_ISFACT, KillAllTable, lire_donnes_RIB_ISFACT
 from .DB_SITES_service import Transfert_donnes_CLIENT_ISAFACT_SITES, numerotation_sites, correspondance_clientID_siteID
 from .DB_CLI_services import Transfert_donnes_CLIENT_ISAFACT_CLI, suppression_doublon_by_TEL1, suppression_doublon_by_TEL2, suppression_doublon_by_EMAIL, numerotation_client
+from .DB_RIB_service import Ecrire_Table_RIB_from_ISAFACT
