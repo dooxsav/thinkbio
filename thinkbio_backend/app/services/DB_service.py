@@ -785,25 +785,29 @@ def Lire_BD_DIVALTO():
 
 def Ecrire_MAJ_Clients_ISFACT(file_path):
     # Initialisation
+    lignes_ajoutees = 0
+    ligne_modifies = 0
+    ligne_ignores = 0
     try:
         # Lire le fichier Excel dans un DataFrame
         dataFrame = pd.read_excel(file_path)
         longueur_dataFrame_avant_suppression = len(dataFrame) # longueur initiale du DF
+        print("longueur du DF initiale => " + str(longueur_dataFrame_avant_suppression))
+        dataFrame.drop_duplicates(subset='CodeClient', keep='first', inplace=True)
         total_rows = len(dataFrame)
-        lignes_ajoutees = 0
-        ligne_modifies = 0
-        ligne_ignores = 0
+        print("longueur du DF après suppression des doublons  => " + str(total_rows))
         date_now = str(datetime.now())
+        
+        # Gestion sur le DF
+        longueur_dataFrame_apres_suppression = len(dataFrame)
+
+
     # Itération sur le DF
     
         # Utilisation de tqdm pour obtenir une barre de progression
         with tqdm(total=total_rows, desc="Importation en cours", unit=" lignes") as pbar:
             
             # Avant de commencer l'itération sur le DataFrame, supprimez les doublons basés sur la colonne 'CodeClient'
-            dataFrame.drop_duplicates(subset='CodeClient', keep='first', inplace=True)
-            longueur_dataFrame_apres_suppression = len(dataFrame)
-            nombre_doublons_supprimes = longueur_dataFrame_avant_suppression - longueur_dataFrame_apres_suppression
-            
             # Itération sur le DataFrame
             for index, row in dataFrame.iterrows():
                 CodeClient = row['CodeClient']
@@ -976,7 +980,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     pbar.update(1)
             db.session.commit()
                 
-        return lignes_ajoutees, ligne_modifies
+        return lignes_ajoutees, ligne_modifies, 
  
     except Exception as e:
         return jsonify({"error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405
