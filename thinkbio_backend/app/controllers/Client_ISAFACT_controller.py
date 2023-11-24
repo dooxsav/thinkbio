@@ -25,7 +25,7 @@ def dosomeMagical(file):
     ligne_ajoutées_RIB, ligne_modifie_RIB = Ecrire_Table_RIB_from_ISAFACT()
     
     # Etape 6 - Export des informations sous excel
-    Ecrire_base_GEOCODAGE()
+    # Ecrire_base_GEOCODAGE()
     
     
     # Etape 7 - Géocodage
