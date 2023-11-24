@@ -7,3 +7,4 @@ from .DB_operations_service import  MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_I
 from .DB_SITES_service import Transfert_donnes_CLIENT_ISAFACT_SITES, numerotation_sites, correspondance_clientID_siteID
 from .DB_CLI_services import Transfert_donnes_CLIENT_ISAFACT_CLI, suppression_doublon_by_TEL1, suppression_doublon_by_TEL2, suppression_doublon_by_EMAIL, numerotation_client
 from .DB_RIB_service import Ecrire_Table_RIB_from_ISAFACT
+from .DB_GEOCODING_service import Ecrire_base_GEOCODAGE
