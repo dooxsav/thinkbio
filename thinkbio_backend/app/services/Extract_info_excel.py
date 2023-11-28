@@ -13,6 +13,7 @@ from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 def exporter_cli_isfact_excel():
+    print("Exporting data to Excel...")
     current_directory = os.path.dirname(os.path.abspath(__file__))
     path_to_output = os.path.join(current_directory, '..', '..', 'ressources', 'output', 'CLI_ISAFACT')
 
@@ -38,6 +39,7 @@ def exporter_cli_isfact_excel():
             'Tel1': entry.Tel1,
             'Tel2': entry.Tel2,
             'Tel3': entry.Tel3,
+            'Mode_RGLT': entry.Mode_RGLT,
             'createdAt': entry.createdAt,
             'createdBy': entry.createdBy,
             'updatedAt': entry.updatedAt,

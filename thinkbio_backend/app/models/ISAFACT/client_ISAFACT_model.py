@@ -31,6 +31,7 @@ class Client_ISAFACT(db.Model):
     CodeTypeCONTRAT = db.Column(db.String(5))
     CodeCONTRAT = db.Column(db.String(5))
     CategTARIF = db.Column(db.String(30))
+    Code_Rglt = db.Column(db.String(30))
     Mode_rglt = db.Column(db.String(30))  # Correction ici
     Delai_rglt = db.Column(db.String(30))  # Correction ici
     Date_creation_tiers = db.Column(db.String(30))
@@ -88,6 +89,7 @@ class Client_ISAFACT(db.Model):
             'CodeTypeCONTRAT' : self.CodeTypeCONTRAT,
             'CodeCONTRAT': self.CodeCONTRAT,
             'CategTARIF': self.CategTARIF,
+            'Code_Rglt': self.Code_Rglt,
             'Mode_rglt': self.Mode_rglt,
             'Delai_rglt': self.Delai_rglt,
             'Date_creation_tiers': self.Date_creation_tiers,

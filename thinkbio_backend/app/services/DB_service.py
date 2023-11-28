@@ -798,11 +798,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
         print("longueur du DF après suppression des doublons  => " + str(total_rows))
         date_now = str(datetime.now())
         
-        # Gestion sur le DF
-        longueur_dataFrame_apres_suppression = len(dataFrame)
-
-
-    # Itération sur le DF
+        # Itération sur le DF
     
         # Utilisation de tqdm pour obtenir une barre de progression
         with tqdm(total=total_rows, desc="Importation en cours", unit=" lignes") as pbar:
@@ -831,6 +827,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 CodeTypeCONTRAT = row['CodeTypeCONTRAT']
                 CodeCONTRAT = row['CodeCONTRAT']
                 CategTARIF = row['CategTARIF']
+                Code_Rglt = row["Mode_rglt_Code"]
                 Mode_rglt = row['Mode_rglt']
                 Delai_rglt = row['Delai_rglt']
                 StatusTiers = row['StatusTiers']
@@ -851,13 +848,12 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 TelFACT1 = clean_phone_number(row['TelFACT1'])
                 TelFACT2 = clean_phone_number(row['TelFACT2'])
                 TelFACT3 = clean_phone_number(row['TelFACT3'])
+
                 # Convertir les dates au format correct
                 Date_creation_tiers = datetime.strptime(str(row['Date_creation_tiers']), '%d/%m/%Y').date() if pd.notna(row['Date_creation_tiers']) else None
                 DateProchaineIntervention = datetime.strptime(str(row['DateProchaineIntervention']), '%d/%m/%Y').date() if pd.notna(row['DateProchaineIntervention']) else None
                 DateMEPContrat = datetime.strptime(str(row['DateMEPContrat']), '%d/%m/%Y').date() if pd.notna(row['DateMEPContrat']) else None
-
                 Date_derniere_facture = convert_specific_to_date(row['Date_derniere_facture'])
-                # Controle présence de l'enregistrement, si présent => UPDATE sinon CREATE
 
                 # Vérification de la présence d'une adresse de facturation
 
@@ -866,7 +862,6 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                     pass
                 else:                
                     existing_record = Client_ISAFACT.query.filter_by(CodeClient=CodeClient).first()
-
                     if existing_record:
                     # Si l'enregistrement existe déjà, mettez à jour ses valeurs
                         existing_record.FamilleTIERS = FamilleTIERS
@@ -895,6 +890,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                         existing_record.CodeTypeCONTRAT = CodeTypeCONTRAT
                         existing_record.CodeCONTRAT = CodeCONTRAT
                         existing_record.CategTARIF = CategTARIF
+                        existing_record.Code_Rglt = Code_Rglt
                         existing_record.Mode_rglt = Mode_rglt
                         existing_record.Delai_rglt = Delai_rglt
                         existing_record.StatusTiers = StatusTiers
@@ -915,72 +911,69 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                         existing_record.UpdatedAt = datetime.now()  # Mettez à jour le champ UpdatedAt
                         existing_record.LastUpdatedBy = 'ADMIN2'
                         ligne_modifies += 1
-                        # Sauvegarde des modifications dans la base de données
-                        # db.session.commit()
-                        # Mise à jour de la barre de progression
                         pbar.update(1)
                     else:
-                    # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
-                        new_client = Client_ISAFACT(
-                            CodeClient=CodeClient,
-                            FamilleTIERS=FamilleTIERS,
-                            NomFACT=NomFACT,
-                            PrenomFACT=PrenomFACT,
-                            AdresseFACT=AdresseFACT,
-                            CPFACT=CPFACT,
-                            VilleFACT=VilleFACT,
-                            PaysFACT=PaysFACT,
-                            EmailTIERS=EmailTIERS,
-                            TelFACT1=TelFACT1,
-                            TelFACT2=TelFACT2,
-                            TelFACT3=TelFACT3,
-                            NomLOC=NomLOC,
-                            PrenomLOC=PrenomLOC,
-                            AdresseSITE=AdresseSITE,
-                            CPSITE=CPSITE,
-                            VilleSITE=VilleSITE,
-                            PaysSITE=PaysSITE,
-                            TelSITE1=TelSITE1,
-                            TelSITE2=TelSITE2,
-                            TelSITE3=TelSITE3,
-                            Livrer_adresse_facturation=Livrer_adresse_facturation,
-                            CodeTVA=CodeTVA,
-                            TVA=TVA,
-                            CodeTypeCONTRAT = CodeTypeCONTRAT,
-                            CodeCONTRAT=CodeCONTRAT,
-                            CategTARIF=CategTARIF,
-                            Mode_rglt=Mode_rglt,
-                            Delai_rglt=Delai_rglt,
-                            StatusTiers=StatusTiers,
-                            NivRelanceTiers=NivRelanceTiers,
-                            Nom_representant=Nom_representant,
-                            RIB_Domic=RIB_Domic,
-                            RIB_Etabl=RIB_Etabl,
-                            RIB_IBAN=RIB_IBAN,
-                            RIB_Cle=RIB_Cle,
-                            RIB_CodeBIC=RIB_CodeBIC,
-                            NEGOCE=NEGOCE,
-                            TP_nom=TP_nom,
-                            TP_tel=TP_tel,
-                            Date_creation_tiers=Date_creation_tiers,
-                            DateProchaineIntervention=DateProchaineIntervention,
-                            DateMEPContrat=DateMEPContrat,
-                            Date_derniere_facture=Date_derniere_facture,
-                            CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
-                            UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
-                            CreatedBy='ADMIN',
-                            LastUpdatedBy='ADMIN'
-                        )
-                    
-                    db.session.add(new_client)
-                    lignes_ajoutees += 1
-                    # Ajout du nouvel enregistrement dans la base de données
-                    # db.session.commit()
-                    # Mise à jour de la barre de progression
-                    pbar.update(1)
+                        try:
+                        # Si l'enregistrement n'existe pas, créez un nouvel enregistrement
+                            new_client = Client_ISAFACT(
+                                CodeClient=CodeClient,
+                                FamilleTIERS=FamilleTIERS,
+                                NomFACT=NomFACT,
+                                PrenomFACT=PrenomFACT,
+                                AdresseFACT=AdresseFACT,
+                                CPFACT=CPFACT,
+                                VilleFACT=VilleFACT,
+                                PaysFACT=PaysFACT,
+                                EmailTIERS=EmailTIERS,
+                                TelFACT1=TelFACT1,
+                                TelFACT2=TelFACT2,
+                                TelFACT3=TelFACT3,
+                                NomLOC=NomLOC,
+                                PrenomLOC=PrenomLOC,
+                                AdresseSITE=AdresseSITE,
+                                CPSITE=CPSITE,
+                                VilleSITE=VilleSITE,
+                                PaysSITE=PaysSITE,
+                                TelSITE1=TelSITE1,
+                                TelSITE2=TelSITE2,
+                                TelSITE3=TelSITE3,
+                                Livrer_adresse_facturation=Livrer_adresse_facturation,
+                                CodeTVA=CodeTVA,
+                                TVA=TVA,
+                                CodeTypeCONTRAT = CodeTypeCONTRAT,
+                                CodeCONTRAT=CodeCONTRAT,
+                                CategTARIF=CategTARIF,
+                                Code_Rglt = Code_Rglt,
+                                Mode_rglt=Mode_rglt,
+                                Delai_rglt=Delai_rglt,
+                                StatusTiers=StatusTiers,
+                                NivRelanceTiers=NivRelanceTiers,
+                                Nom_representant=Nom_representant,
+                                RIB_Domic=RIB_Domic,
+                                RIB_Etabl=RIB_Etabl,
+                                RIB_IBAN=RIB_IBAN,
+                                RIB_Cle=RIB_Cle,
+                                RIB_CodeBIC=RIB_CodeBIC,
+                                NEGOCE=NEGOCE,
+                                TP_nom=TP_nom,
+                                TP_tel=TP_tel,
+                                Date_creation_tiers=Date_creation_tiers,
+                                DateProchaineIntervention=DateProchaineIntervention,
+                                DateMEPContrat=DateMEPContrat,
+                                Date_derniere_facture=Date_derniere_facture,
+                                CreatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                                UpdatedAt= datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f'),
+                                CreatedBy='ADMIN',
+                                LastUpdatedBy='ADMIN'
+                            )
+                            db.session.add(new_client)
+                            lignes_ajoutees += 1
+                            pbar.update(1)
+                        except Exception as e:
+                            print(f"Erreur lors de la création du nouvel enregistrement : {e}")
+                            
             db.session.commit()
-                
-        return lignes_ajoutees, ligne_modifies, 
+            return lignes_ajoutees, ligne_modifies, 
  
     except Exception as e:
         return jsonify({"error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405

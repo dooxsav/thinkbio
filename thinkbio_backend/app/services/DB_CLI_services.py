@@ -2,20 +2,31 @@
 #
 
 from app import db
-from app.models import Client_ISAFACT, CLI_ISFACT, SITE_ISAFACT
+from app.models import Client_ISAFACT, CLI_ISFACT, SITE_ISAFACT, EQUIV_MODE_RGLT_ISA_DIV
 from tqdm import tqdm
 from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
 
 def Transfert_donnes_CLIENT_ISAFACT_CLI():
-    print('Ecriture de la base CLI...')
+    print(' * Ecriture de la base CLI...')
     Donnes_depuis_CLIENT_ISAFACT = Client_ISAFACT.query.all()
     lignes_ajoutées = 0
     lignes_modifiées = 0
-    
+
     for client in tqdm(Donnes_depuis_CLIENT_ISAFACT, desc='Processing CLI from ISAFACT', unit="CLI/s"):
         # Utilisation de sorted au lieu de sort pour obtenir une nouvelle liste triée
         num_tel = sorted([client.TelFACT1, client.TelFACT2, client.TelFACT3], reverse=True)
+
+        # Initialisation de Mode_rglt_Code pour éviter une erreur de variable non définie
+        Mode_rglt_Code = None
+
+        # Correspondances des moyens de paiement
+        equiv_mde_reglement = EQUIV_MODE_RGLT_ISA_DIV.query.filter_by(code_ISA=client.Code_Rglt).first()
+        if equiv_mde_reglement:
+            Mode_rglt_Code = equiv_mde_reglement.code_Divalto
+        else:
+            Mode_rglt_Code = "N/C"
+
         # Ecriture dans la BD
         try:
             entrée_CLI = CLI_ISFACT.query.filter_by(CodeClient=client.CodeClient).one()
@@ -32,6 +43,7 @@ def Transfert_donnes_CLIENT_ISAFACT_CLI():
             entrée_CLI.Tel1 = num_tel[0]
             entrée_CLI.Tel2 = num_tel[1]
             entrée_CLI.Tel3 = num_tel[2]
+            entrée_CLI.Mode_RGLT = str(Mode_rglt_Code)
             entrée_CLI.updatedAt = datetime.now()
             entrée_CLI.lastUpdatedBy = 'ADMIN'
             lignes_modifiées += 1
@@ -49,6 +61,7 @@ def Transfert_donnes_CLIENT_ISAFACT_CLI():
                 Tel1=num_tel[0],
                 Tel2=num_tel[1],
                 Tel3=num_tel[2],
+                Mode_RGLT= str(Mode_rglt_Code),  # S'assurer que Mode_rglt_Code est défini
                 createdAt=datetime.now(),
                 createdBy='CREATOR',
                 updatedAt=datetime.now(),
@@ -62,7 +75,7 @@ def Transfert_donnes_CLIENT_ISAFACT_CLI():
 
 def numerotation_client():
     # Cette fonction numérote les site avec 10 chiffres NON significatif
-    print('Numérating clients....')
+    print(' * Numérating clients....')
     Données_client = CLI_ISFACT.query.all()
     longueur_table = len(Données_client)
     compteur_site = 0
@@ -71,7 +84,53 @@ def numerotation_client():
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
     return compteur_site
-        
+   
+def suppression_doublon_by_TEL1_ET_TEL2():
+    doublons_supprimes = 0
+    SITE_Maj = 0
+    
+    # Récupérer les doublons pour Tel1 et Tel2 ensemble
+    clients_tel1_tel2 = (
+        db.session.query(CLI_ISFACT.Tel1, CLI_ISFACT.Tel2)
+        .filter(CLI_ISFACT.FamilleTIERS == 'PARTICULIER pour le SAV')
+        .filter(CLI_ISFACT.Tel1 != '')  # Exclure les enregistrements avec Tel1 vide
+        .filter(CLI_ISFACT.Tel2 != '')  # Exclure les enregistrements avec Tel2 vide
+        .group_by(CLI_ISFACT.Tel1, CLI_ISFACT.Tel2)
+        .having(db.func.count().label('count') > 1)
+        .all()
+    )
+
+    # Parcourir les doublons de Tel1 et Tel2 regroupés
+    for tel1, tel2 in tqdm(clients_tel1_tel2, desc="Removing Tel1 and Tel2 duplicates", unit="Tel1 & Tel2"):
+        try:
+            # Récupérer tous les enregistrements avec les numéros de téléphone donnés
+            doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel1, Tel2=tel2).all()
+            
+            # Ecrire dans la base SITE la référence du 1er enregistrement
+            CodeClient_source = doublon_entries[0].CodeClient
+            
+            for entry in doublon_entries:
+                mise_a_jour_site = SITE_ISAFACT.query.filter_by(CodeClient=entry.CodeClient).first()
+                if mise_a_jour_site:
+                    mise_a_jour_site.RefExterneISAFACT = CodeClient_source
+                    SITE_Maj += 1 
+                else:
+                    print(' * Pas de code client ' + entry.CodeClient)
+                
+            if all(entry.FamilleTIERS == 'PARTICULIER pour le SAV' for entry in doublon_entries):
+                premier_enregistrement = doublon_entries[0]
+
+                for doublon in doublon_entries[1:]:
+                    db.session.delete(doublon)
+                    doublons_supprimes += 1
+
+                db.session.commit()
+
+        except NoResultFound:
+            pass
+    
+    print(" *** " + str(doublons_supprimes) + ' doublons ont été supprimés')
+    return doublons_supprimes, SITE_Maj     
 
 def suppression_doublon_by_TEL1():
     doublon_supprime = 0
@@ -102,7 +161,7 @@ def suppression_doublon_by_TEL1():
                 else:
                         # Gérer le cas où aucune correspondance pour CodeClient n'est trouvée dans SITE_ISAFACT
                         # Peut-être imprimer un message d'erreur ou d'avertissement
-                        print('Pas de code client ' + entry.CodeClient)
+                        print(" *** " + 'Pas de code client ' + entry.CodeClient)
                 pass
                 
             # Vérifier la condition pour supprimer les doublons
@@ -119,7 +178,7 @@ def suppression_doublon_by_TEL1():
         except NoResultFound:
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
         
-    print(str(doublons_supprimes) + ' doublons ont été supprimés')
+    print( " *** " +  str(doublons_supprimes) + ' doublons ont été supprimés')
     return doublons_supprimes, SITE_Maj
 
 def suppression_doublon_by_TEL2():
@@ -151,7 +210,7 @@ def suppression_doublon_by_TEL2():
                 else:
                         # Gérer le cas où aucune correspondance pour CodeClient n'est trouvée dans SITE_ISAFACT
                         # Peut-être imprimer un message d'erreur ou d'avertissement
-                        print('Pas de code client ' + entry.CodeClient)
+                        print(" *** " + 'Pas de code client ' + entry.CodeClient)
                 pass
                 
             # Vérifier la condition pour supprimer les doublons
@@ -167,7 +226,7 @@ def suppression_doublon_by_TEL2():
 
         except NoResultFound:
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
-    print(str(doublons_supprimes) + ' doublons ont été supprimés')
+    print(" *** " + str(doublons_supprimes) + ' doublons ont été supprimés')
     return doublons_supprimes, SITE_Maj
 
 def suppression_doublon_by_EMAIL():
@@ -199,7 +258,7 @@ def suppression_doublon_by_EMAIL():
                 else:
                         # Gérer le cas où aucune correspondance pour CodeClient n'est trouvée dans SITE_ISAFACT
                         # Peut-être imprimer un message d'erreur ou d'avertissement
-                        print('Pas de code client ' + entry.CodeClient)
+                        print(" *** " + 'Pas de code client ' + entry.CodeClient)
                 pass
                 
             # Vérifier la condition pour supprimer les doublons
@@ -215,5 +274,5 @@ def suppression_doublon_by_EMAIL():
 
         except NoResultFound:
             pass  # Aucun enregistrement avec Tel1 trouvé, ignorer
-    print(str(doublons_supprimes) + ' doublons ont été supprimés')
+    print( " *** " + str(doublons_supprimes) + ' doublons ont été supprimés')
     return doublons_supprimes, SITE_Maj

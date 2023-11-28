@@ -4,6 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
+
 db = SQLAlchemy()  # Initialisez l'instance SQLAlchemy
 
 def create_app():
@@ -20,6 +21,8 @@ def create_app():
 
     db.init_app(app)  # Liez l'instance SQLAlchemy à votre application Flask
 
+
+
     # Importer les blueprints (routes) ici
     from app.routes import hello_bp, GRC_bp, Client_bp, Geography_bp, Client_ISAFACT_bp, Client_DIVALTO_bp, OperationDB_bp
     app.register_blueprint(hello_bp)
@@ -30,4 +33,5 @@ def create_app():
     app.register_blueprint(Client_DIVALTO_bp)
     app.register_blueprint(OperationDB_bp)
     
+
     return app
