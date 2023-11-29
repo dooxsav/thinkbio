@@ -21,25 +21,25 @@
         "id": 3,
         "code_ISA": "CH",
         "code_Divalto": "C",
-        "libelle_code_rglt": "Chèques"
+        "libelle_code_rglt": "Cheques"
     },
     {
         "id": 4,
         "code_ISA": "ESP",
         "code_Divalto": "E",
-        "libelle_code_rglt": "Espèces"
+        "libelle_code_rglt": "Especes"
     },
     {
         "id": 5,
         "code_ISA": "EXPE",
         "code_Divalto": "",
-        "libelle_code_rglt": "A l'expédition"
+        "libelle_code_rglt": "A l'expedition"
     },
     {
         "id": 6,
         "code_ISA": "PREL",
         "code_Divalto": "P10",
-        "libelle_code_rglt": "A l'expédition"
+        "libelle_code_rglt": "Prelèvement au 10 du mois" 
     },
     {
         "id": 7,

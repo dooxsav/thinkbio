@@ -792,16 +792,16 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
         # Lire le fichier Excel dans un DataFrame
         dataFrame = pd.read_excel(file_path)
         longueur_dataFrame_avant_suppression = len(dataFrame) # longueur initiale du DF
-        print("longueur du DF initiale => " + str(longueur_dataFrame_avant_suppression))
+        print(" * longueur du DF initiale => " + str(longueur_dataFrame_avant_suppression))
         dataFrame.drop_duplicates(subset='CodeClient', keep='first', inplace=True)
         total_rows = len(dataFrame)
-        print("longueur du DF après suppression des doublons  => " + str(total_rows))
+        print(" ** longueur du DF après suppression des doublons  => " + str(total_rows))
         date_now = str(datetime.now())
         
         # Itération sur le DF
     
         # Utilisation de tqdm pour obtenir une barre de progression
-        with tqdm(total=total_rows, desc="Importation en cours", unit=" lignes") as pbar:
+        with tqdm(total=total_rows, desc=" * Importation des données ISAFACT en cours", unit=" lignes") as pbar:
             
             # Avant de commencer l'itération sur le DataFrame, supprimez les doublons basés sur la colonne 'CodeClient'
             # Itération sur le DataFrame
@@ -970,13 +970,13 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                             lignes_ajoutees += 1
                             pbar.update(1)
                         except Exception as e:
-                            print(f"Erreur lors de la création du nouvel enregistrement : {e}")
+                            print(f" * Erreur lors de la création du nouvel enregistrement : {e}")
                             
             db.session.commit()
             return lignes_ajoutees, ligne_modifies, 
  
     except Exception as e:
-        return jsonify({"error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405
+        return jsonify({" * error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405
     
 def lire_donnees_ISAFACT():
     clients = Client_ISAFACT.query.all()  # Récupérer tous les clients depuis la base de données
@@ -1045,7 +1045,7 @@ def lire_ecrire_mettre_a_jour_fichier_csv(file):
 
         db.session.commit()
 
-    return jsonify({"message": f"Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."})
+    return jsonify({" * message": f"Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."})
 
 ## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
 ## -------------------------------------------------------** Table GEOGRAPHY **-------------------------------------------------------------------- ##
@@ -1084,7 +1084,7 @@ def lire_ercrire_mettre_a_jour_table_geography(file_path):
         db.session.commit()
 
         return jsonify({
-            "message": f"Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."
+            "message": f" * Fichier CSV importé avec succès dans la base de données. {lignes_ajoutees} lignes ont été ajoutées, {lignes_modifiees} lignes ont été mises à jour."
         })
     except Exception as e:
         return jsonify({"error": f"Une erreur s'est produite : {str(e)}"}), 405

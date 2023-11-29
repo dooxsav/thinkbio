@@ -25,15 +25,12 @@ def KillAllTable():
     try:
         db.reflect()
         db.drop_all()
-        print("Toutes les tables ont été supprimées avec succès.") 
-            # Trouver le processus associé à l'application Flask
-        for proc in psutil.process_iter(attrs=['pid', 'name']):
-            if 'python.exe' in proc.info['name'] and 'run.py' in ' '.join(proc.cmdline()):
-                pid = proc.info['pid']
-                os.kill(pid, signal.SIGTERM)  # Terminer le processus associé à l'application Flask
+        print(" *** Toutes les tables ont été supprimées avec succès. ***") 
+        print(' *** Reconstruction des tables....')
+        db.create_all()
+        print(" ** La base de données a été reconstruite avec succès. **")
+        return("Job Done")
 
-        # Relancer l'application Flask
-        os.system('python ../run.py')  # Assurez-vous de fournir le chemin relatif correct vers run.py
     except Exception as e:
         return f"Une erreur s'est produite : {e}", 400
     

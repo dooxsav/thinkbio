@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 def exporter_cli_isfact_excel():
-    print("Exporting data to Excel...")
+    print(" * Exporting data to Excel...")
     current_directory = os.path.dirname(os.path.abspath(__file__))
     path_to_output = os.path.join(current_directory, '..', '..', 'ressources', 'output', 'CLI_ISAFACT')
 
@@ -93,3 +93,4 @@ def exporter_cli_isfact_excel():
         ])
 
         df_rib.to_excel(writer, sheet_name='RIB_ISAFACT', index=False)
+        print(' * Data has been exported to Excel successfully.')

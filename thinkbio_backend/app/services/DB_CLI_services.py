@@ -79,7 +79,7 @@ def numerotation_client():
     Données_client = CLI_ISFACT.query.all()
     longueur_table = len(Données_client)
     compteur_site = 0
-    for client in tqdm(Données_client, desc="Numerating client", unit="site/s", total=longueur_table):
+    for client in tqdm(Données_client, desc=" * Numerating client", unit="site/s", total=longueur_table):
         client.Client_id = f'C{compteur_site:010d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
@@ -101,7 +101,7 @@ def suppression_doublon_by_TEL1_ET_TEL2():
     )
 
     # Parcourir les doublons de Tel1 et Tel2 regroupés
-    for tel1, tel2 in tqdm(clients_tel1_tel2, desc="Removing Tel1 and Tel2 duplicates", unit="Tel1 & Tel2"):
+    for tel1, tel2 in tqdm(clients_tel1_tel2, desc=" * Removing Tel1 and Tel2 duplicates", unit="Tel1 & Tel2"):
         try:
             # Récupérer tous les enregistrements avec les numéros de téléphone donnés
             doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel1, Tel2=tel2).all()
@@ -145,7 +145,7 @@ def suppression_doublon_by_TEL1():
         .all()
     )
     # Parcourir les numéros de téléphone avec doublons
-    for tel1, in tqdm(clients_tel1, desc="Removing Tel1 duplicates", unit="Tel1"):
+    for tel1, in tqdm(clients_tel1, desc=" * Removing Tel1 duplicates", unit="Tel1"):
         try:
             # Récupérer tous les enregistrements avec le numéro de téléphone donné
             doublon_entries = CLI_ISFACT.query.filter_by(Tel1=tel1).all()
@@ -194,7 +194,7 @@ def suppression_doublon_by_TEL2():
         .all()
     )
     # Parcourir les numéros de téléphone avec doublons
-    for tel2, in tqdm(clients_tel2, desc="Removing Tel2 duplicates", unit="Tel2"):
+    for tel2, in tqdm(clients_tel2, desc=" * Removing Tel2 duplicates", unit="Tel2"):
         try:
             # Récupérer tous les enregistrements avec le numéro de téléphone donné
             doublon_entries = CLI_ISFACT.query.filter_by(Tel2=tel2).all()
@@ -242,7 +242,7 @@ def suppression_doublon_by_EMAIL():
         .all()
     )
     # Parcourir les numéros de téléphone avec doublons
-    for EmailTIERS, in tqdm(clients_EMAIL, desc="Removing Email duplicates", unit="Email"):
+    for EmailTIERS, in tqdm(clients_EMAIL, desc=" * Removing Email duplicates", unit="Email"):
         try:
             # Récupérer tous les enregistrements avec le numéro de téléphone donné
             doublon_entries = CLI_ISFACT.query.filter_by(EmailTIERS=EmailTIERS).all()

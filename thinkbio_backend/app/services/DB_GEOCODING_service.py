@@ -34,7 +34,7 @@ def geocodage_site(site):
                     if len(coordinates) >= 2:
                         latitude = float(coordinates[1])  # Latitude est à l'index 1
                         longitude = float(coordinates[0])  # Longitude est à l'index 0
-                        print("latitude : " + str(latitude), "longitude : " +  str(longitude))
+
                         if latitude is not None and longitude is not None:
                             return {"latitude": latitude, "longitude": longitude}
                     else:
@@ -51,34 +51,37 @@ def geocodage_site(site):
         return None  # Requête échouée, coordonnées non disponibles
 
 def Ecrire_base_GEOCODAGE():
-    print('GEOCODAGE DES SITES...')
-    ligne_ajoutees = 0 
+    print(' * GEOCODAGE DES SITES...')
+    ligne_ajoutees = 0
+    longueur_data = 0
     sites = SITE_ISAFACT.query.all()
     nbre_site = len(sites)
-    
-    for site in tqdm(sites, total=nbre_site, desc="Geocodage en cours"):
+
+    for site in sites:
         try:
             site_geocode_entry = SITE_GEOCODAGE.query.filter_by(Site_id=site.Site_id).one()
         except NoResultFound:
             location_site = SITE_ISAFACT.query.filter_by(Site_id=site.Site_id).first()
             if location_site:
-                print("location recherché : " + location_site.CPSite + " " + location_site.VilleSite)
                 location = geocodage_site(location_site.CPSite)
                 if location:
-                    # Accéder aux valeurs de latitude et longitude du dictionnaire location
-                    latitude = location["latitude"]
-                    longitude = location["longitude"]
+                    latitude = location.get("latitude")
+                    longitude = location.get("longitude")
+                    try:
+                        new_entry_geocodage = SITE_GEOCODAGE(
+                            Site_id=site.Site_id,
+                            Client_id=site.Client_id,
+                            CodeClient=site.CodeClient,
+                            latitude=latitude,
+                            longitude=longitude,
+                        )
+                        db.session.add(new_entry_geocodage)
+                        ligne_ajoutees += 1
+                        print(f" * Recherche de localisation en cours pour : {location_site.CPSite} {location_site.VilleSite} correspondance longitude: {longitude}, latitude : {latitude} ({ligne_ajoutees}/{nbre_site})", end="\r")
+                    except Exception as exception:
+                        print(f"*** Problème lors du géocodage de {location_site.CPSite} {location_site.VilleSite}: {exception}")
 
-                    new_entry_geocodage = SITE_GEOCODAGE(
-                        Site_id=site.Site_id,
-                        Client_id=site.Client_id,
-                        CodeClient=site.CodeClient,
-                        latitude=latitude,
-                        longitude=longitude,
-                    )
-                    db.session.add(new_entry_geocodage)
-                    ligne_ajoutees += 1
-                    time.sleep(1)
+
     db.session.commit()
 
     
