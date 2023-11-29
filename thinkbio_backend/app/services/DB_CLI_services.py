@@ -84,7 +84,29 @@ def numerotation_client():
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
     return compteur_site
-   
+
+# // a faire
+def CodeStatisitique_CLI():
+    # mise en place des axes statistique sur les CLI 
+    # Cette fonction numérote les site avec 10 chiffres NON significatif
+    print(' * Etablishing Statitistics Axes for clients....')
+    Données_client = CLI_ISFACT.query.all()
+    longueur_table = len(Données_client)
+    compteur_client = 0
+    for client in tqdm(Données_client, desc=" * Attributing statistique Axes", total=longueur_table):
+        if client.FamilleTIERS == 'PARTICULIER pour le SAV':
+            client.Axe_stat_1 = "PARTICUL"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = "PART"
+        elif client.FamilleTIERS == 'NEGOCE':
+            client.Axe_stat_1 = "REVENDEU"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = "NEGOCE"
+            compteur_client +=1
+    
+    db.session.commit()
+    return compteur_client
+
 def suppression_doublon_by_TEL1_ET_TEL2():
     doublons_supprimes = 0
     SITE_Maj = 0

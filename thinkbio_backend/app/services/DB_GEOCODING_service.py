@@ -64,7 +64,7 @@ def Ecrire_base_GEOCODAGE():
             location_site = SITE_ISAFACT.query.filter_by(Site_id=site.Site_id).first()
             if location_site:
                 location = geocodage_site(location_site.CPSite)
-                if location:
+                if location is not None:  # Vérification de la géolocalisation non nulle
                     latitude = location.get("latitude")
                     longitude = location.get("longitude")
                     try:
@@ -80,8 +80,12 @@ def Ecrire_base_GEOCODAGE():
                         print(f" * Recherche de localisation en cours pour : {location_site.CPSite} {location_site.VilleSite} correspondance longitude: {longitude}, latitude : {latitude} ({ligne_ajoutees}/{nbre_site})", end="\r")
                     except Exception as exception:
                         print(f"*** Problème lors du géocodage de {location_site.CPSite} {location_site.VilleSite}: {exception}")
-
-
+                else:
+                    # Gérer le cas où la géolocalisation n'est pas possible
+                    print(f"*** La géolocalisation pour {location_site.CPSite} {location_site.VilleSite} n'a pas été trouvée.")
+            else:
+                # Gérer le cas où l'emplacement du site n'est pas trouvé dans la base de données
+                print(f"*** Emplacement non trouvé pour le site ID {site.Site_id}.")
     db.session.commit()
 
     

@@ -10,13 +10,13 @@ from sqlalchemy.orm.exc import NoResultFound
 def Transfert_donnes_CLIENT_ISAFACT_SITES():
     # Récupération des informations depuis table ISFACT
     # La table ISFACT reflète TOUS les sites des PARTICULIERS
-    print('Ecriture de la base SITE...')
+    print(' * Ecriture de la base SITE...')
     Donnes_depuis_CLIENT_ISAFACT =  Client_ISAFACT.query.filter_by(FamilleTIERS='PARTICULIER pour le SAV').all()
     lignes_ajouté = 0
     ligne_modifie = 0
     total_site = len(Donnes_depuis_CLIENT_ISAFACT)
 
-    for site in tqdm(Donnes_depuis_CLIENT_ISAFACT, total=total_site, desc='Processing SITES from Table ISAFACT', unit="site/s"):
+    for site in tqdm(Donnes_depuis_CLIENT_ISAFACT, total=total_site, desc=' * Processing SITES from Table ISAFACT', unit="site/s"):
         # Recherche d'un correspondance. Si la correspondance est trouvée => UPDATE sinon CREATE
         try:
             entrée_site = SITE_ISAFACT.query.filter_by(CodeClient = site.CodeClient).one()
@@ -55,7 +55,7 @@ def numerotation_sites():
     Données_site = SITE_ISAFACT.query.all()
     longueur_table = len(Données_site)
     compteur_site = 0
-    for site in tqdm(Données_site, desc="Numerating site", unit="site/s", total=longueur_table):
+    for site in tqdm(Données_site, desc=" * Numerating site", unit="site/s", total=longueur_table):
         site.Site_id = f'S{compteur_site:010d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
@@ -72,5 +72,5 @@ def correspondance_clientID_siteID():
             site.Client_id = equivalence_no_cli
             nbre_equivalence += 1
     db.session.commit()
-    print(str(nbre_equivalence) + " correspondance trouvées")
+    print(" *  " + str(nbre_equivalence) + " correspondance trouvées")
     return nbre_equivalence

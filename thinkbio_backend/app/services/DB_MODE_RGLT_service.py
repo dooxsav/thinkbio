@@ -12,8 +12,7 @@ def initialisation_mode_paiement():
         print(' * Application is Ready...')
     except Exception as error:  # Ajout du type d'exception et utilisation de 'Exception'
         print(' ** Erreur lors de l\'initialisation de la table PAIEMENT:', error)
-    
-    
+      
 def load_data_from_json():
     file_path = "../../ressources/input/MODE_RGLT/equiv_mde_rglt.json"
     basedir = os.path.abspath(os.path.dirname(__file__))

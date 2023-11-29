@@ -11,7 +11,7 @@ def Ecrire_Table_RIB_from_ISAFACT():
     cli = CLI_ISFACT.query.all()
     total_cli = len(cli)
 
-    for client in tqdm(cli, desc="Processing RIB", unit='client/s', total=total_cli):
+    for client in tqdm(cli, desc=" * Processing RIB", unit='client/s', total=total_cli):
         client_ISAFACT = Client_ISAFACT.query.filter_by(CodeClient=client.CodeClient).first()
         
         if client_ISAFACT:
