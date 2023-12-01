@@ -1,0 +1,164 @@
+[
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "ECO1",
+        "LIGNE": 1,
+        "REFERENCE": 10481,
+        "DESIGNATION": "CONTRAT ECONOMIE 1 A 9 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "EA149"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "ECO2",
+        "LIGNE": 1,
+        "REFERENCE": 10483,
+        "DESIGNATION": "CONTRAT ECONOMIE 10 A 20 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "EA199"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "ECO3",
+        "LIGNE": 1,
+        "REFERENCE": 10492,
+        "DESIGNATION": "CONTRAT ENTRETIEN ANC",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "EA125"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "ECO3",
+        "LIGNE": 1,
+        "REFERENCE": 10492,
+        "DESIGNATION": "CONTRAT ENTRETIEN ANC",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "EA135"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "TRANQ1",
+        "LIGNE": 1,
+        "REFERENCE": 10482,
+        "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH MONOCUVE",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "TRUNI"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "TRANQ2",
+        "LIGNE": 1,
+        "REFERENCE": 10479,
+        "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "TRAN5"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "TRANQ2",
+        "LIGNE": 1,
+        "REFERENCE": 10479,
+        "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "TRAN7"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "TRANQ3",
+        "LIGNE": 1,
+        "REFERENCE": 10476,
+        "DESIGNATION": "CONTRAT TRANQUILITE 10 A 20 EH Bi-CUVES",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "TRA10"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "TRANQ3",
+        "LIGNE": 1,
+        "REFERENCE": 10476,
+        "DESIGNATION": "CONTRAT TRANQUILITE 10 A 20 EH Bi-CUVES",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": "TRA15"
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC1",
+        "LIGNE": 1,
+        "REFERENCE": 10480,
+        "DESIGNATION": "CONTRAT ENTRTIEN SEMICO 21 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC2",
+        "LIGNE": 1,
+        "REFERENCE": 10484,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 22 A 30 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC3",
+        "LIGNE": 1,
+        "REFERENCE": 10485,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 31 A 50 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC4",
+        "LIGNE": 1,
+        "REFERENCE": 10486,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 51 A 60 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC5",
+        "LIGNE": 1,
+        "REFERENCE": 10487,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 61 A 80 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC6",
+        "LIGNE": 1,
+        "REFERENCE": 10488,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 81 A 100 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC7",
+        "LIGNE": 1,
+        "REFERENCE": 10489,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 101 A 110 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC8",
+        "LIGNE": 1,
+        "REFERENCE": 10490,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 111 A 125 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    },
+    {
+        "DOSSIER": "BIONEST",
+        "CODECONTRAT": "SC9",
+        "LIGNE": 1,
+        "REFERENCE": 10491,
+        "DESIGNATION": "CONTRAT ENTRETIEN SEMICO > A 125 EH",
+        "POURCENT": "100,00",
+        "EQUIV_ISAFACT": null
+    }
+]

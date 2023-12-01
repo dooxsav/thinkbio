@@ -1,0 +1,67 @@
+[
+    {
+        "CATCLICOD": "AUTRES",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "AUTRES",
+        "EQUIV_ISAFACT": "Autres activités"
+    },
+    {
+        "CATCLICOD": "BE",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "BUREAUX D'ETUDES",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "CONSTRUC",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "CONSTRUCTEURS",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "FOURNISS",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "FOURNISSEURS",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "INSTALLA",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "INSTALLATEURS",
+        "EQUIV_ISAFACT": "ENTREPRISES DE POSE"
+    },
+    {
+        "CATCLICOD": "MOPRIVEE",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "MAITRISE D'OUVRAGE PRIVEES",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "MOPUBLIQ",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "MAITRISE D'OUVRAGE PUBLIQUES",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "PARTICUL",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "PARTICULIERS",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "REVENDEU",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "REVENDEURS",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "SCI",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "SOCIETES CIVILES IMMOBILIERES",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "SOUSTRAI",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "SOUS TRAITANTS",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "SPANC",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "SPANC",
+        "EQUIV_ISAFACT": ""
+    },
+    {
+        "CATCLICOD": "VIDANGEU",
+        "LIBELLE_TABLE_CATEGORIECLIENT":  "VIDANGEURS",
+        "EQUIV_ISAFACT": ""
+    }
+]

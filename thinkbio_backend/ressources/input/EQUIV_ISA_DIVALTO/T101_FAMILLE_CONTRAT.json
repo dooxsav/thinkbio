@@ -1,0 +1,72 @@
+[
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "ENT-ANC",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "ENTRETIEN SYSTEMES NON COLLECTIF",
+        "CONTRATTYP": 3,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "ENT-SC",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "ENTRETIEN SYSTEMES SEMI-COLLECTIF",
+        "CONTRATTYP": 3,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "GARANTIE",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "Extension contrat de garantie",
+        "CONTRATTYP": 1,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "LICENCE",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "Abonnement licence",
+        "CONTRATTYP": 6,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "MAINT",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "Maintenance",
+        "CONTRATTYP": 3,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "PERIODIQ",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "Entretien périodique",
+        "CONTRATTYP": 1,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "SAVMAT",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "Service après vente sur matériel",
+        "CONTRATTYP": 3,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    }
+]

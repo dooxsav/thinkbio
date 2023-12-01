@@ -5,11 +5,11 @@ from app.models import EQUIV_MODE_RGLT_ISA_DIV  # Importez votre modèle de donn
 import os
 
 def initialisation_mode_paiement():
-    print(' * Initialisation des modes de paiement...')
+    print('\033[34m * Initialisation des modes de paiement...\033[0m')
     try:
         data = load_data_from_json()
         insert_data_to_db(data)
-        print(' * Application is Ready...')
+        print('\033[32m * Mode de paiement synchronisée\033[0m')
     except Exception as error:  # Ajout du type d'exception et utilisation de 'Exception'
         print(' ** Erreur lors de l\'initialisation de la table PAIEMENT:', error)
       
