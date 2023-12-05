@@ -1,6 +1,6 @@
 import pandas as pd
 import os 
-from app.models import CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT
+from app.models import CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT, CLIENT_CONTRAT_ISAFACT
 from datetime import datetime
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -94,6 +94,32 @@ def exporter_cli_isfact_excel():
             }
             for entry in rib_isfact_data
         ])
-
         df_rib.to_excel(writer, sheet_name='RIB_ISAFACT', index=False)
+        
+        # Extraction table CONTRAT
+        contrat_ISAFACT_DIVALTO = CLIENT_CONTRAT_ISAFACT.query.all()
+        
+        df_contrat = pd.DataFrame([
+            {
+                'id': entry.id,
+                'CodeClient': entry.CodeClient,
+                'AdresseSite': entry.AdresseSite,
+                'VilleSite': entry.VilleSite,
+                'CPSite': entry.CPSite,
+                'CodeTypeCONTRAT': entry.CodeTypeCONTRAT,
+                'CodeCONTRAT': entry.CodeCONTRAT,
+                'DateMEPContrat': entry.DateMEPContrat,
+                'CodeClient_DIVALTO': entry.CodeClient_DIVALTO,
+                'CodeSite_DIVALTO': entry.CodeSite_DIVALTO,
+                'FAMILLE_CONTRAT_DIVALTO': entry.FAMILLE_CONTRAT_DIVALTO,
+                'CODE_CONTRAT_DIVALTO': entry.CODE_CONTRAT_DIVALTO,
+                'created_at': entry.created_at,
+                'updated_at': entry.updated_at
+            }
+            for entry in contrat_ISAFACT_DIVALTO
+
+        ])
+        df_contrat.to_excel(writer, sheet_name='CONTRAT_ISAFACT', index=False)
+
+        
         print(' * Data has been exported to Excel successfully.')

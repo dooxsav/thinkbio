@@ -1,6 +1,6 @@
 # run.py
 from app import create_app, db
-from app.services import initialisation_mode_paiement, initialisation_T119, initialisation_Article_facturation_contrat, initialisation_mode_paiement, initialisation_T119, initialisation_typemodel
+from app.services import initialisation_mode_paiement, initialisation_T119, initialisation_Article_facturation_contrat, initialisation_mode_paiement, initialisation_T119, initialisation_T111, initialisation_typemodel
 
 app = create_app()
 
@@ -12,7 +12,7 @@ with app.app_context():
     initialisation_T119()
     initialisation_Article_facturation_contrat()
     initialisation_mode_paiement()
-    initialisation_T119()
+    initialisation_T111()
     initialisation_typemodel()
 
 if __name__ == '__main__':

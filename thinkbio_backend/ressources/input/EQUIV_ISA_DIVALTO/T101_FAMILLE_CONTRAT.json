@@ -2,6 +2,18 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "ENT-ANC",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "OUI.E",
+        "NUMERONOTE": "",
+        "LIBELLE_TABLE_FAMILLECONTRAT": "ENTRETIEN SYSTEMES NON COLLECTIF",
+        "CONTRATTYP": 3,
+        "DATEFINVALID": null,
+        "STRUCTUREREFERENCECONTRAT": "",
+        "CRMUPDATEDH": null
+    },
+    {
+        "DOSSIER": 999,
+        "FAMILLECONTRAT": "ENT-ANC",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "OUI.T",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "ENTRETIEN SYSTEMES NON COLLECTIF",
         "CONTRATTYP": 3,
@@ -12,6 +24,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "ENT-SC",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "OUI.S",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "ENTRETIEN SYSTEMES SEMI-COLLECTIF",
         "CONTRATTYP": 3,
@@ -22,6 +35,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "GARANTIE",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "Extension contrat de garantie",
         "CONTRATTYP": 1,
@@ -32,6 +46,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "LICENCE",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "Abonnement licence",
         "CONTRATTYP": 6,
@@ -42,6 +57,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "MAINT",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "Maintenance",
         "CONTRATTYP": 3,
@@ -52,6 +68,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "PERIODIQ",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "Entretien périodique",
         "CONTRATTYP": 1,
@@ -62,6 +79,7 @@
     {
         "DOSSIER": 999,
         "FAMILLECONTRAT": "SAVMAT",
+        "EQUIV_ISFACT_CodeTypeCONTRAT": "",
         "NUMERONOTE": "",
         "LIBELLE_TABLE_FAMILLECONTRAT": "Service après vente sur matériel",
         "CONTRATTYP": 3,

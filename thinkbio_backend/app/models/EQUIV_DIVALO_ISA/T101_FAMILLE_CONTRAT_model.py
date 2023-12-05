@@ -1,9 +1,10 @@
 from app import db
 
-class Contrat(db.Model):
+class T111_FAMILLE_CONTRAT_DIVALTO(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     DOSSIER = db.Column(db.Integer)
     FAMILLECONTRAT = db.Column(db.String)
+    EQUIV_ISFACT_CodeTypeCONTRAT = db.Column(db.String)
     NUMERONOTE = db.Column(db.String)
     LIBELLE_TABLE_FAMILLECONTRAT = db.Column(db.String)
     CONTRATTYP = db.Column(db.Integer)
@@ -19,6 +20,7 @@ class Contrat(db.Model):
             'id': self.id,
             'DOSSIER': self.DOSSIER,
             'FAMILLECONTRAT': self.FAMILLECONTRAT,
+            'EQUIV_ISFACT_CodeTypeCONTRAT': self.EQUIV_ISFACT,
             'NUMERONOTE': self.NUMERONOTE,
             'LIBELLE_TABLE_FAMILLECONTRAT': self.LIBELLE_TABLE_FAMILLECONTRAT,
             'CONTRATTYP': self.CONTRATTYP,

@@ -10,6 +10,7 @@ from .DB_RIB_service import Ecrire_Table_RIB_from_ISAFACT
 from .DB_GEOCODING_service import Ecrire_base_GEOCODAGE, lire_base_site_geocodage
 from .DB_MODE_RGLT_service import initialisation_mode_paiement
 from .DB_T119_CATEG_CLIENT_service import initialisation_T119
+from .DB_T111_FAMILLE_CONTRAT_service import initialisation_T111
 from .DB_ARTICLE_FACTURATION_CONTRAT_service import initialisation_Article_facturation_contrat
 from .DB_CONTRAT_MODEL_service import initialisation_mode_paiement
 from .DB_TYPE_MODEL_service import initialisation_typemodel
