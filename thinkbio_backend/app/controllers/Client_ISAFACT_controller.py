@@ -1,7 +1,7 @@
 # controller/Client_ISAFACT_controller.py
 import os
 from datetime import datetime
-from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT, MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT, lire_donnes_SITE_ISFACT, lire_donnes_RIB_ISFACT, Transfert_donnes_CLIENT_ISAFACT_SITES, numerotation_sites, Transfert_donnes_CLIENT_ISAFACT_CLI, suppression_doublon_by_TEL1, suppression_doublon_by_TEL2, suppression_doublon_by_EMAIL, correspondance_clientID_siteID, numerotation_client, exporter_cli_isfact_excel, Ecrire_Table_RIB_from_ISAFACT, Ecrire_base_GEOCODAGE, suppression_doublon_by_TEL1_ET_TEL2, KillAllTable, CodeStatisitique_CLI, ecrire_table_base_client_contrat_isafact, initialisation_mode_paiement, initialisation_T119, initialisation_Article_facturation_contrat,    initialisation_mode_paiement, initialisation_T111, initialisation_typemodel
+from app.services import Ecrire_MAJ_Clients_ISFACT, lire_donnees_ISAFACT, MaJ_Table_CLI_BY_ISAFACT, lire_donnees_CLI_ISAFACT, lire_donnes_SITE_ISFACT, lire_donnes_RIB_ISFACT, Transfert_donnes_CLIENT_ISAFACT_SITES, numerotation_sites, Transfert_donnes_CLIENT_ISAFACT_CLI, suppression_doublon_by_TEL1, suppression_doublon_by_TEL2, suppression_doublon_by_EMAIL, correspondance_clientID_siteID, numerotation_client, exporter_cli_isfact_excel, Ecrire_Table_RIB_from_ISAFACT, Ecrire_base_GEOCODAGE, suppression_doublon_by_TEL1_ET_TEL2, KillAllTable, CodeStatisitique_CLI, ecrire_table_base_client_contrat_isafact, initialisation_mode_paiement, initialisation_T119, initialisation_Article_facturation_contrat,    initialisation_mode_paiement, initialisation_T111, initialisation_typemodel, initialisation_model_contrat
 
 def dosomeMagical(file):
     # Etape 1 - Récupérer les informations dans le fichier Excel et peupler la base CLIENT_ISAFACT
@@ -41,6 +41,7 @@ def preparation_import():
     KillAllTable()
     # Reconstruction des données en dur
     print('\033[33m ** Synchronisation des modèles: **\033[0m ')
+    initialisation_model_contrat()
     initialisation_mode_paiement()
     initialisation_T119()
     initialisation_Article_facturation_contrat()

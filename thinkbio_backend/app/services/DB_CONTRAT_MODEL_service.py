@@ -4,7 +4,7 @@ from datetime import datetime
 from app.models import CONTRAT_MODEL  # Importez votre modèle de données
 import os
 
-def initialisation_mode_paiement():
+def initialisation_model_contrat():
     print('\033[34m * Initialisation de la table CONTRAT MODELE...\033[0m')
     try:
         data = load_data_from_json()

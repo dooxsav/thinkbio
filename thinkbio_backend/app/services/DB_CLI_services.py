@@ -22,10 +22,7 @@ def Transfert_donnes_CLIENT_ISAFACT_CLI():
 
         # Correspondances des moyens de paiement
         equiv_mde_reglement = EQUIV_MODE_RGLT_ISA_DIV.query.filter_by(code_ISA=client.Code_Rglt).first()
-        if equiv_mde_reglement:
-            Mode_rglt_Code = equiv_mde_reglement.code_Divalto
-        else:
-            Mode_rglt_Code = "N/C"
+        Mode_rglt_Code = equiv_mde_reglement.code_Divalto if equiv_mde_reglement else "N/C"
 
         # Ecriture dans la BD
         try:

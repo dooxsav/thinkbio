@@ -16,6 +16,8 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
     CodeSite_DIVALTO = db.Column(db.String(30))
     FAMILLE_CONTRAT_DIVALTO = db.Column(db.String)
     CODE_CONTRAT_DIVALTO = db.Column(db.String)
+    MODE_RGLT = db.Column(db.String)
+    LIBELLE_CONTRATCEA = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -36,6 +38,8 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
             'CodeSite_DIVALTO': self.CodeSite_DIVALTO,
             'FAMILLE_CONTRAT_DIVALTO': self.FAMILLE_CONTRAT_DIVALTO,
             'CODE_CONTRAT_DIVALTO': self.CODE_CONTRAT_DIVALTO,
+            'MODE_RGLT': self.MODE_RGLT,
+            'LIBELLE_CONTRATCEA' : self.LIBELLE_CONTRATCEA,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
         }

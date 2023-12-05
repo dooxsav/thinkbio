@@ -113,6 +113,8 @@ def exporter_cli_isfact_excel():
                 'CodeSite_DIVALTO': entry.CodeSite_DIVALTO,
                 'FAMILLE_CONTRAT_DIVALTO': entry.FAMILLE_CONTRAT_DIVALTO,
                 'CODE_CONTRAT_DIVALTO': entry.CODE_CONTRAT_DIVALTO,
+                'MODE_RGLT': entry.MODE_RGLT,
+                'LIBELLE_CONTRATCEA': entry.LIBELLE_CONTRATCEA,
                 'created_at': entry.created_at,
                 'updated_at': entry.updated_at
             }
