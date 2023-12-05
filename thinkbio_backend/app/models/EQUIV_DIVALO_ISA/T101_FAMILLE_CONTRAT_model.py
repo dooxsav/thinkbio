@@ -25,5 +25,4 @@ class Contrat(db.Model):
             'DATEFINVALID': self.DATEFINVALID.strftime("%Y-%m-%d") if self.DATEFINVALID else None,
             'STRUCTUREREFERENCECONTRAT': self.STRUCTUREREFERENCECONTRAT,
             'CRMUPDATEDH': self.CRMUPDATEDH.strftime("%Y-%m-%d %H:%M:%S") if self.CRMUPDATEDH else None
-
             }

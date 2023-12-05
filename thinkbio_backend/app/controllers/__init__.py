@@ -10,3 +10,4 @@ from .Client_ISAFACT_controller import importISAFACTDataFromExcel, lireDonnesCli
 from .Client_DIVALTO_controller import process_and_store_data, importDIVALTODataFromExcel, lireBDDDIVALTO
 from .Operation_BD_controller import HelloOperationDB, KillSwitch
 from .Geolocation_site_controller import lire_donnes_table_geolocation
+from .Client_CONTRAT_controller import lireBaseCLientContrat

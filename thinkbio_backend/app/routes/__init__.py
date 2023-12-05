@@ -13,3 +13,4 @@ from .client_ISAFACT_routes import Client_ISAFACT_bp
 from .client_DIVALTO_routes import Client_DIVALTO_bp
 from .operations_BD_routes import OperationDB_bp
 from .geolocation_site_routes import Geolocation_bp
+from .clients_CONTRAT_routes import ClientContrat_bp

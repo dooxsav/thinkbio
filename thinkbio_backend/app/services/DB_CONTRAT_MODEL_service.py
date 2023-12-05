@@ -11,7 +11,7 @@ def initialisation_mode_paiement():
         insert_data_to_db(data)
         print('\033[32m * CONTRAT MODELE synchronisée\033[0m')
     except Exception as error:  # Ajout du type d'exception et utilisation de 'Exception'
-        print(' ** Erreur lors de l\'initialisation de la table CONTRAT MODELE:', error)
+        print('\033[91m ** Erreur lors de l\'initialisation de la table CONTRAT MODELE:\033[0m', error)
       
 def load_data_from_json():
     file_path = "../../ressources/input/EQUIV_ISA_DIVALTO/CONTRAT_MODEL.json"

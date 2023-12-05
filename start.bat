@@ -11,7 +11,7 @@ REM Attente pour laisser le backend démarrer avant de lancer le frontend
 timeout /t 5
 
 REM Lancement du frontend
-cd thinkbio_frontend
-npm start
+cd /D "%~dp0thinkbio_frontend"
+start cmd /k "npm start"
 
 pause

@@ -10,7 +10,7 @@ def initialisation_typemodel():
         insert_data_to_db(data)
         print('\033[32m * table TYPE MODEL synchronisée\033[0m')
     except Exception as error:  # Ajout du type d'exception et utilisation de 'Exception'
-        print(' ** Erreur lors de l\'initialisation de la table TYPE MODEL:', error)
+        print('\033[91m ** Erreur lors de l\'initialisation de la table TYPE MODEL:\033[0m', error)
     
 def load_data_from_json():
     file_path = "../../ressources/input/EQUIV_ISA_DIVALTO/TYPE_MATERIEL_RESSOURCE.json"

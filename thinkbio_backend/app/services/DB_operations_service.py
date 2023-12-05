@@ -23,6 +23,7 @@ import psutil
 
 def KillAllTable():
     try:
+        print('\033[91m *** PURGE DES BASES DE DONNEES ***\033[0m"')
         db.reflect()
         db.drop_all()
         print(" *** Toutes les tables ont été supprimées avec succès. ***") 
