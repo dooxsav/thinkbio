@@ -26,6 +26,7 @@ def insert_data_to_db(data):
         new_entry = ARTICLE_FACTURATION_CONTRAT(
                 CODECONTRAT=item['CODECONTRAT'],
                 LIGNE=item['LIGNE'],
+                MONTANT_HT=item['MONTANT_HT'],
                 REFERENCE=item['REFERENCE'],
                 DESIGNATION=item['DESIGNATION'],
                 POURCENT=item['POURCENT'],

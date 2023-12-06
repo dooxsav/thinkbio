@@ -2,6 +2,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "ECO1",
+        "MONTANT_HT": 135.45,
         "LIGNE": 1,
         "REFERENCE": 10481,
         "DESIGNATION": "CONTRAT ECONOMIE 1 A 9 EH",
@@ -11,6 +12,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "ECO2",
+        "MONTANT_HT": 180.91,
         "LIGNE": 1,
         "REFERENCE": 10483,
         "DESIGNATION": "CONTRAT ECONOMIE 10 A 20 EH",
@@ -20,6 +22,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "ECO3",
+        "MONTANT_HT": 113.64,
         "LIGNE": 1,
         "REFERENCE": 10492,
         "DESIGNATION": "CONTRAT ENTRETIEN ANC",
@@ -28,7 +31,8 @@
     },
     {
         "DOSSIER": "BIONEST",
-        "CODECONTRAT": "ECO3",
+        "CODECONTRAT": "ECO4",
+        "MONTANT_HT": 122.73,
         "LIGNE": 1,
         "REFERENCE": 10492,
         "DESIGNATION": "CONTRAT ENTRETIEN ANC",
@@ -38,6 +42,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ1",
+        "MONTANT_HT": 299.40,
         "LIGNE": 1,
         "REFERENCE": 10482,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH MONOCUVE",
@@ -47,6 +52,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ2",
+        "MONTANT_HT": 359.40,
         "LIGNE": 1,
         "REFERENCE": 10479,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",
@@ -56,6 +62,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ2",
+        "MONTANT_HT": 359.40,
         "LIGNE": 1,
         "REFERENCE": 10479,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",
@@ -65,6 +72,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ3",
+        "MONTANT_HT": 479.40,
         "LIGNE": 1,
         "REFERENCE": 10476,
         "DESIGNATION": "CONTRAT TRANQUILITE 10 A 20 EH Bi-CUVES",
@@ -74,6 +82,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ3",
+        "MONTANT_HT": 479.4,
         "LIGNE": 1,
         "REFERENCE": 10476,
         "DESIGNATION": "CONTRAT TRANQUILITE 10 A 20 EH Bi-CUVES",
@@ -83,6 +92,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC1",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10480,
         "DESIGNATION": "CONTRAT ENTRTIEN SEMICO 21 EH",
@@ -92,6 +102,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC2",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10484,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 22 A 30 EH",
@@ -101,6 +112,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC3",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10485,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 31 A 50 EH",
@@ -110,6 +122,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC4",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10486,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 51 A 60 EH",
@@ -119,6 +132,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC5",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10487,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 61 A 80 EH",
@@ -128,6 +142,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC6",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10488,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 81 A 100 EH",
@@ -137,6 +152,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC7",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10489,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 101 A 110 EH",
@@ -146,6 +162,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC8",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10490,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO 111 A 125 EH",
@@ -155,6 +172,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "SC9",
+        "MONTANT_HT": 1000,
         "LIGNE": 1,
         "REFERENCE": 10491,
         "DESIGNATION": "CONTRAT ENTRETIEN SEMICO > A 125 EH",

@@ -1,5 +1,5 @@
 from app import db
-from app.models import CLIENT_CONTRAT_ISAFACT, Client_ISAFACT, SITE_ISAFACT, T111_FAMILLE_CONTRAT_DIVALTO, CONTRAT_MODEL, CLI_ISFACT
+from app.models import CLIENT_CONTRAT_ISAFACT, Client_ISAFACT, SITE_ISAFACT, T111_FAMILLE_CONTRAT_DIVALTO, CONTRAT_MODEL, CLI_ISFACT, ARTICLE_FACTURATION_CONTRAT
 import os
 from tqdm import tqdm 
 import json
@@ -40,17 +40,36 @@ def ecrire_table_base_client_contrat_isafact():
                 result_contrat = CONTRAT_MODEL.query.filter_by(EQUIV_ISAFACT=client.CodeCONTRAT).first()
                 if result_contrat:
                     code_contrat_divalto = result_contrat.CODECONTRAT
+                    if code_contrat_divalto:
+                        article_facturation = ARTICLE_FACTURATION_CONTRAT.query.filter_by(CODECONTRAT=code_contrat_divalto).first()
+                        if article_facturation:
+                            montant_ht_contrat = article_facturation.MONTANT_HT
+                            if montant_ht_contrat is None:
+                                print(f'\033[91m **** ATTENTION : pas de montant HT pour {client.CodeClient} ****\033[0m')
+                        else:
+                            print(f'\033[91m **** ATTENTION : aucun enregistrement d\'article de facturation trouvé pour {client.CodeClient} ****\033[0m')
                     libellé_contrat = result_contrat.LIBELLE_CONTRAT_MODELE
             except NoResultFound:
                 print("\033[91m **** ERREUR! Aucune correspondance trouvée pour le CODE CONTRAT: {}\033[0m".format(client.CodeClient))
             
-            try:
-                result_cli = CLI_ISFACT.query.filter_by(CodeClient=client.CodeClient).first()
-                if result_cli:
-                    mode_rglt = result_cli.Mode_RGLT
-                    
+            # *** MODE de REGLEMENT ***
+            try: 
+                site_isafact = SITE_ISAFACT.query.filter_by(CodeClient=client.CodeClient).first()
+                if site_isafact:
+                    result_client_id = site_isafact.Client_id
+                    if result_client_id:
+                        cli_isafact = CLI_ISFACT.query.filter_by(Client_id=result_client_id).first()
+                        if cli_isafact:
+                            mode_rglt = cli_isafact.Mode_RGLT
+                        else:
+                            print("\033[91m **** ERREUR! Pas de MODE de REGLEMENT pour le client_id: {}\033[0m".format(result_client_id))
+                    else:
+                        print("\033[91m **** ERREUR! Aucun résultat trouvé pour le Client_id pour le CodeClient: {}\033[0m".format(client.CodeClient))
+                else:
+                    print("\033[91m **** ERREUR! Aucun enregistrement trouvé pour le CodeClient: {}\033[0m".format(client.CodeClient))
+
             except NoResultFound:
-                print("\033[91m **** ERREUR! Pas de MODE de REGLEMENT: {}\033[0m".format(client.CodeClient))
+                print("\033[91m **** ERREUR! Pas de MODE de REGLEMENT pour le CodeClient: {}\033[0m".format(client.CodeClient))
                 
             try:
                 result_client_isafact = Client_ISAFACT.query.filter_by(CodeClient=client.CodeClient).first()
@@ -63,7 +82,7 @@ def ecrire_table_base_client_contrat_isafact():
                     print("\033[91m **** ATTENTION! Aucun résultat trouvé pour le contrat de: {}\033[0m".format(client.CodeClient))
             except NoResultFound:
                 print("\033[91m **** ERREUR! Pas de Nom pour le contrat de: {}\033[0m".format(client.CodeClient))
-                    
+                                   
             if contrat_exist and famille_contrat_divalto:
                 # Si un enregistrement existe, mettre à jour les attributs
                 contrat_exist.CodeClient = client.CodeClient
@@ -76,6 +95,7 @@ def ecrire_table_base_client_contrat_isafact():
                 contrat_exist.CODE_CONTRAT_DIVALTO = code_contrat_divalto
                 contrat_exist.MODE_RGLT = mode_rglt
                 contrat_exist.LIBELLE_CONTRATCEA = libellé_contrat
+                contrat_exist.MONTANT_HT = montant_ht_contrat
                 contrat_exist.DateMEPContrat = client.DateMEPContrat
                 lignes_modifiees += 1
             else:
@@ -104,6 +124,7 @@ def ecrire_table_base_client_contrat_isafact():
                     CODE_CONTRAT_DIVALTO=code_contrat_divalto,
                     MODE_RGLT=mode_rglt,
                     LIBELLE_CONTRATCEA = libellé_contrat,
+                    MONTANT_HT = montant_ht_contrat,
                     DateMEPContrat=client.DateMEPContrat
                 )
                 db.session.add(nouveau_contrat)
@@ -112,3 +133,19 @@ def ecrire_table_base_client_contrat_isafact():
     db.session.commit()
 
     return lignes_ajoutees, lignes_modifiees
+
+def numerotation_contrat():
+    print(' *** Numérotation des contrats...')
+    compteur_contrat = 10000000
+    
+    contrats = CLIENT_CONTRAT_ISAFACT.query.all()
+    nbre_contrat = len(contrats)
+    
+    for contrat in tqdm(contrats, desc=' * Numérotation des contrats', total=nbre_contrat):
+        contrat.NUMERO_CONTRAT = compteur_contrat
+        compteur_contrat += 1
+    
+    db.session.commit()
+    
+    
+    print(' *** Numérotation des contrats terminée')

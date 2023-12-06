@@ -101,7 +101,7 @@ def exporter_cli_isfact_excel():
         
         df_contrat = pd.DataFrame([
             {
-                'id': entry.id,
+                'NUMERO_CONTRAT': entry.NUMERO_CONTRAT,
                 'CodeClient': entry.CodeClient,
                 'AdresseSite': entry.AdresseSite,
                 'VilleSite': entry.VilleSite,
@@ -115,6 +115,7 @@ def exporter_cli_isfact_excel():
                 'CODE_CONTRAT_DIVALTO': entry.CODE_CONTRAT_DIVALTO,
                 'MODE_RGLT': entry.MODE_RGLT,
                 'LIBELLE_CONTRATCEA': entry.LIBELLE_CONTRATCEA,
+                'MONTANT_HT': entry.MONTANT_HT,
                 'created_at': entry.created_at,
                 'updated_at': entry.updated_at
             }

@@ -5,6 +5,7 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
     __tablename__ = 'CLIENT_CONTRAT_ISAFACT'
 
     id = db.Column(db.Integer, primary_key=True)
+    NUMERO_CONTRAT = db.Column(db.Integer)
     CodeClient = db.Column(db.String(7))
     AdresseSite = db.Column(db.String(30))
     VilleSite = db.Column(db.String(30))
@@ -18,6 +19,7 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
     CODE_CONTRAT_DIVALTO = db.Column(db.String)
     MODE_RGLT = db.Column(db.String)
     LIBELLE_CONTRATCEA = db.Column(db.String)
+    MONTANT_HT = db.Column(db.Float)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -27,6 +29,7 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'NUMERO_CONTRAT': self.NUMERO_CONTRAT,
             'CodeClient': self.CodeClient,
             'AdresseSite': self.AdresseSite,
             'VilleSite': self.VilleSite,
@@ -40,6 +43,7 @@ class CLIENT_CONTRAT_ISAFACT(db.Model):
             'CODE_CONTRAT_DIVALTO': self.CODE_CONTRAT_DIVALTO,
             'MODE_RGLT': self.MODE_RGLT,
             'LIBELLE_CONTRATCEA' : self.LIBELLE_CONTRATCEA,
+            'MONTANT_HT': self.MONTANT_HT,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S')
         }
