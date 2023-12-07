@@ -1,6 +1,6 @@
 import pandas as pd
 import os 
-from app.models import CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT, CLIENT_CONTRAT_ISAFACT
+from app.models import CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT, CLIENT_CONTRAT_ISAFACT, RESSOURCE_MATERIEL_DIVALTO
 from datetime import datetime
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -123,6 +123,25 @@ def exporter_cli_isfact_excel():
 
         ])
         df_contrat.to_excel(writer, sheet_name='CONTRAT_ISAFACT', index=False)
-
+        
+        # Extraction table RESSOURCES MATERIEL
+        ressource_materiel = RESSOURCE_MATERIEL_DIVALTO.query.all()
+        df_ressource_materiel = pd.DataFrame([
+            {
+                'DOSSIER': entry.DOSSIER,
+                'CODEMATERIEL': entry.CODEMATERIEL,
+                'ETABLISSEMENT': entry.ETABLISSEMENT,
+                'CODEGENRE': entry.CODEGENRE,
+                'CODETYPERESSOURCEMATERIEL': entry.CODETYPERESSOURCEMATERIEL,
+                'DESIGNATIONMATERIEL': entry.DESIGNATIONMATERIEL,
+                'CODELOCALISATION': entry.CODELOCALISATION,
+                'MARQUE': entry.MARQUE,
+                'TIERSINDIVIDU': entry.TIERSINDIVIDU,
+                'NUMEROSERIEBIEN': entry.NUMEROSERIEBIEN,
+                'CODE_CONTRAT_DIVALTO': entry.CODE_CONTRAT_DIVALTO
+            }
+            for entry in ressource_materiel
+        ])
+        df_ressource_materiel.to_excel(writer, sheet_name='RESSOURCES MATERIEL', index=False)
         
         print(' * Data has been exported to Excel successfully.')

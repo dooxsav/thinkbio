@@ -12,6 +12,7 @@ class RESSOURCE_MATERIEL_DIVALTO(db.Model):
     MARQUE = db.Column(db.String(50))
     TIERSINDIVIDU = db.Column(db.String(50)) # Code CLIENT DIVALTO
     NUMEROSERIEBIEN = db.Column(db.String(50)) # code ISAFACT
+    CODE_CONTRAT_DIVALTO = db.Column(db.String(50))
     
     def to_dict(self):
         return {
@@ -25,7 +26,8 @@ class RESSOURCE_MATERIEL_DIVALTO(db.Model):
             'CODELOCALISATION' : self.CODELOCALISATION,
             'MARQUE': self.MARQUE,
             'TIERSINDIVIDU': self.TIERSINDIVIDU,
-            'NUMEROSERIEBIEN': self.NUMEROSERIEBIEN
+            'NUMEROSERIEBIEN': self.NUMEROSERIEBIEN,
+            'CODE_CONTRAT_DIVALTO': self.CODE_CONTRAT_DIVALTO
         }
 
 
