@@ -28,7 +28,7 @@ class Client_ISAFACT(db.Model):
     Livrer_adresse_facturation = db.Column(db.String(4))  # Correction ici
     CodeTVA = db.Column(db.String(4))
     TVA = db.Column(db.String(30))
-    CodeTypeCONTRAT = db.Column(db.String(5))
+    CodeTypeCONTRAT = db.Column(db.String(5)) # ex : OUI.E, OUI.T, NON, etc.
     CodeCONTRAT = db.Column(db.String(5))
     CategTARIF = db.Column(db.String(30))
     Code_Rglt = db.Column(db.String(30))

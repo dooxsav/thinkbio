@@ -22,6 +22,7 @@ def initialisation_table_materiel():
 
     # Maintenant, utilisez file_path dans votre code pour charger le fichier Excel
     dataFrame = pd.read_excel(file_path)
+    longueur_df = len(dataFrame)
 
     for index, row in dataFrame.iterrows():
         station_existante = MATERIEL_ISAFACT.query.filter_by(CodeClient=row['CodeClient']).first()
@@ -45,8 +46,9 @@ def initialisation_table_materiel():
             )
             db.session.add(new_station)
             ligne_ajoutee += 1
+        print(f"\r * Progression : {((ligne_ajoutee+ligne_modifie)/longueur_df) * 100}%", end='', flush=True)
 
-    
+    print('\033[0;32m * DONE ! => ECRITURE EN BD')
     db.session.commit()
     print(f'\033[38;2;0;255;0m * Données matériels synchronisée {ligne_ajoutee} ligne(s) ont été ajoutée(s) et {ligne_modifie} ligne(s) ont été modifiée(s)\033[0m')
     return ligne_ajoutee, ligne_modifie
