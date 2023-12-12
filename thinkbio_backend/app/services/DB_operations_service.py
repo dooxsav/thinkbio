@@ -10,7 +10,7 @@
 #
 
 from app import db
-from app.models import Geography, Client_ISAFACT, CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT
+from app.models import Geography, Client_ISAFACT, CLI_ISFACT, SITE_ISAFACT, RIB_ISAFACT, SITE_GEOCODAGE
 from app.services import exporter_cli_isfact_excel
 from flask import jsonify
 from datetime import datetime
@@ -26,12 +26,26 @@ def KillAllTable():
     try:
         print('\033[91m *** PURGE DES BASES DE DONNEES ***\033[0m"')
         db.reflect()
+
+        # Sauvegarder les données de la table que vous souhaitez conserver
+        # Supposons que la table à conserver s'appelle 'table_to_keep'
+        table_to_keep_data = SITE_GEOCODAGE.query.all()
+
+        # Supprimer toutes les tables sauf celle que vous souhaitez conserver
         db.drop_all()
-        print(" *** Toutes les tables ont été supprimées avec succès. ***") 
-        print(' *** Reconstruction des tables....')
+        print(" *** Toutes les tables ont été supprimées avec succès sauf la table '{}' ***".format(SITE_GEOCODAGE.__tablename__))
+
+        # Recréer les tables
         db.create_all()
-        print(" ** La base de données a été reconstruite avec succès. **")
-        return("Job Done")
+        print(" *** La base de données a été reconstruite avec succès. ***")
+
+        # Restaurer les données dans la table conservée
+        for row in table_to_keep_data:
+            db.session.add(row)
+        db.session.commit()
+        print(" *** Données restaurées dans la table '{}' avec succès. ***".format(SITE_GEOCODAGE.__tablename__))
+        
+        return "Job Done"
 
     except Exception as e:
         return f"Une erreur s'est produite : {e}", 400

@@ -5,11 +5,16 @@ from tqdm import tqdm
 import json
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import func
+from datetime import datetime
 
 def lire_table_base_client_contrat_isafact():
         # Cette fonction récupère tous les enregistrements de la table CLIENT_CONTRAT_ISAFACT
     records = CLIENT_CONTRAT_ISAFACT.query.all()
     return [record.to_dict() for record in records]  # Convertir les objets en dictionnaires
+
+def nbre_enregistrement_table_client_contrat():
+    nbre_contrat = len(CLIENT_CONTRAT_ISAFACT.query.all())
+    return nbre_contrat
 
 def ecrire_table_base_client_contrat_isafact():
     lignes_ajoutees = 0
@@ -102,7 +107,9 @@ def ecrire_table_base_client_contrat_isafact():
                 else:
                     print(f'\033[1;33m INFORMATION : pas de code article ENTRETIEN pour {client.CodeClient} \033[0m')
             else:
-                oldest_date = client.DateMEPContrat.strftime('%d/%m/%Y')
+                # Conversion de la chaîne en objet de date
+                date_obj = datetime.strptime(client.DateMEPContrat, '%Y-%m-%d')
+                oldest_date = date_obj.strftime('%d/%m/%Y')
                 
                                    
             if contrat_exist and famille_contrat_divalto:

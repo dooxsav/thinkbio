@@ -984,6 +984,9 @@ def lire_donnees_ISAFACT():
 
     return jsonify(clients_json)  # Retourner les données au format JSON
       
+def nbre_entrée_ISAFACT():
+    nbre_client_isafact = len(Client_ISAFACT.query.all())
+    return nbre_client_isafact
 
 ## ------------------------------------------------------------------------------------------------------------------------------------------------ ##
 ## ---------------------------------------------------------** Table Client **--------------------------------------------------------------------- ##

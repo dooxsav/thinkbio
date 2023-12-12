@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 class SITE_GEOCODAGE(db.Model):
+    
     id = db.Column(db.Integer, primary_key=True)
     Site_id = db.Column(db.String(20))
     Client_id = db.Column(db.String(20))
