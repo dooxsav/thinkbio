@@ -1,7 +1,7 @@
 from app import db
 
 class MATERIEL_ISAFACT(db.Model):
-    __tablename__ = 'Matériels'
+    #__tablename__ = 'Matériels'
 
     id = db.Column(db.Integer, primary_key=True)
     NO_SERIE_BIONEST = db.Column(db.String(50))

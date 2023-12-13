@@ -11,3 +11,4 @@ from .Client_DIVALTO_controller import process_and_store_data, importDIVALTOData
 from .Operation_BD_controller import HelloOperationDB, KillSwitch
 from .Geolocation_site_controller import lire_donnes_table_geolocation
 from .Client_CONTRAT_controller import lireBaseCLientContrat
+from .MAINTENANCE_controller import lire_nbre_enregistrement_par_table

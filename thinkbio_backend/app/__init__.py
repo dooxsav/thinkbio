@@ -25,7 +25,7 @@ def create_app():
 
 
     # Importer les blueprints (routes) ici
-    from app.routes import hello_bp, GRC_bp, Client_bp, Geography_bp, Client_ISAFACT_bp, Client_DIVALTO_bp, OperationDB_bp, Geolocation_bp, ClientContrat_bp
+    from app.routes import hello_bp, GRC_bp, Client_bp, Geography_bp, Client_ISAFACT_bp, Client_DIVALTO_bp, OperationDB_bp, Geolocation_bp, ClientContrat_bp, OperationDB_bp, MaintenanceDB_bp
     app.register_blueprint(hello_bp)
     app.register_blueprint(GRC_bp)
     app.register_blueprint(Client_bp)
@@ -35,6 +35,6 @@ def create_app():
     app.register_blueprint(OperationDB_bp)
     app.register_blueprint(Geolocation_bp)
     app.register_blueprint(ClientContrat_bp)
-    
+    app.register_blueprint(MaintenanceDB_bp)
 
     return app
