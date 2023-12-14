@@ -1,0 +1,10 @@
+.lateralbar-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lateralbar-logo > img {
+    max-width: 300px;
+}

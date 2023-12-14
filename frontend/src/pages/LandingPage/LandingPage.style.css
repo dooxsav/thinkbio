@@ -1,0 +1,32 @@
+.landing-page-container {
+    height: 100vh;
+    background-image: url("../../ressources//img/water-texture-background-transparent-liquid.jpg");
+    background-size: cover;
+    background-position: center;
+    display: grid;
+    grid-template-columns: 0.1fr 1fr 0.5fr 1fr 0.1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.logo-app {
+    grid-area: 1 / 2 / 2 / 3;
+    padding-top: 30px;
+}
+
+.logo-app > img {
+    width: 400px;
+}
+
+.container-app {
+    grid-area: 3 / 4 / 5 / 5;
+    background-color: #fff;
+    width: 40rem;
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}

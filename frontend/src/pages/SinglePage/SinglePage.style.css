@@ -1,0 +1,20 @@
+.main-container {
+    display: grid;
+    grid-template-columns: 0.15fr 1fr;
+    grid-template-rows: 0.2fr repeat(4, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.navbar {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.lateralbar {
+    grid-area: 1 / 1 / 6 / 2;
+    height: 100vh;
+}
+
+.content {
+    grid-area: 2 / 2 / 6 / 3;
+}
