@@ -1,10 +1,5 @@
 .content-container {
     height: 100%;
-    padding: 15px;
-    flex-wrap: wrap;
-    justify-content: space-between; /* Pour répartir les éléments au maximum */
-    align-content: flex-start; /* Pour aligner les éléments en haut */
-    height: 300px; /* Hauteur du conteneur parent (à ajuster selon vos besoins) */
-    gap: 15px;
+    display: flex;
   }
 

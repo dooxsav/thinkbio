@@ -6,10 +6,10 @@ import MaJTables from '../AcceuilComponent/MaJComponent/MaJTables.component'
 
 const Content = () => {
     return(
-        <div className="content-container container-fluid">
-            <CartographieClient className='w-auto h-auto'/>
-            < EtatTables className='w-auto h-auto'/>
-            < MaJTables className='w-auto h-auto'/>
+        <div className="content-container">
+            <div className="content-carte"><CartographieClient/></div>
+            <div className="content-etattable"><EtatTables/></div>
+            <div className="content-majtable"><MaJTables/></div>
         </div>
     )
 }

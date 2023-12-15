@@ -41,7 +41,8 @@ from .DB_CLI_services import (
 from .DB_RIB_service import Ecrire_Table_RIB_from_ISAFACT
 from .DB_GEOCODING_service import (
     Ecrire_base_GEOCODAGE,
-    lire_base_site_geocodage
+    lire_base_site_geocodage,
+    lire_base_site_geocodage_avec_contrats
 )
 
 from .DB_matériels_service import initialisation_table_materiel, lire_BD_materiel

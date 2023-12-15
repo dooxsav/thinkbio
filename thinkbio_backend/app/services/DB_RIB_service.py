@@ -20,9 +20,9 @@ def Ecrire_Table_RIB_from_ISAFACT():
             if IBAN is not None:
                 IBAN_BIC = client_ISAFACT.RIB_CodeBIC
 
-                try:
-                    # UPDATE
-                    entree_RIB = RIB_ISAFACT.query.filter_by(CodeClient=client.CodeClient).one()
+                entree_RIB = RIB_ISAFACT.query.filter_by(CodeClient=client.CodeClient).first()
+                # UPDATE
+                if entree_RIB:
                     entree_RIB.Client_id = client.Client_id
                     entree_RIB.FamilleTIERS = client.FamilleTIERS
                     entree_RIB.IBANPAYS = IBAN[:2]
@@ -32,7 +32,7 @@ def Ecrire_Table_RIB_from_ISAFACT():
                     entree_RIB.RIBDO = client_ISAFACT.RIB_Domic
                     lignes_modifiees += 1
 
-                except NoResultFound:
+                else:
                     # CREATE
                     new_entry_RIB = RIB_ISAFACT(
                         Client_id=client.Client_id,

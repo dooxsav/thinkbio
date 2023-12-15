@@ -14,7 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from tqdm import tqdm
 import requests
 from app import db
-from app.models import SITE_ISAFACT, SITE_GEOCODAGE
+from app.models import SITE_ISAFACT, SITE_GEOCODAGE, CLIENT_CONTRAT_ISAFACT
 
 def geocodage_site(site):
     url = "https://api-adresse.data.gouv.fr/search/?q=" + site
@@ -105,6 +105,39 @@ def lire_base_site_geocodage():
     sites = SITE_GEOCODAGE.query.all()
     sites_json = [site.to_dict() for site in sites]
     return jsonify(sites_json)
+
+def lire_base_site_geocodage_avec_contrats():
+    # Récupération des sites de SITE_GEOCODAGE
+    sites = SITE_GEOCODAGE.query.all()
+
+    # Liste pour stocker les données finales
+    sites_with_contrats = []
+
+    # Récupération des informations pour chaque site
+    for site in sites:
+        # Récupération des informations du site
+        site_info = site.to_dict()
+
+        # Récupération des informations de contrat correspondant au CodeClient du site
+        contrat_info = CLIENT_CONTRAT_ISAFACT.query.filter_by(CodeClient=site.CodeClient).first()
+
+        # Création d'un dictionnaire combinant les informations du site et du contrat
+        combined_info = {
+            'Site_Info': site_info,
+            'Contrat_Info': {
+                'CodeTypeCONTRAT': contrat_info.CodeTypeCONTRAT if contrat_info else None,
+                'CodeCONTRAT': contrat_info.CodeCONTRAT if contrat_info else None,
+                'FAMILLE_CONTRAT_DIVALTO': contrat_info.FAMILLE_CONTRAT_DIVALTO if contrat_info else None,
+                'CODE_CONTRAT_DIVALTO': contrat_info.CODE_CONTRAT_DIVALTO if contrat_info else None,
+                'MODE_RGLT': contrat_info.MODE_RGLT if contrat_info else None
+            }
+        }
+
+        # Ajout du dictionnaire combiné à la liste des sites avec contrats
+        sites_with_contrats.append(combined_info)
+
+    return jsonify(sites_with_contrats)
+    
     
 
     
