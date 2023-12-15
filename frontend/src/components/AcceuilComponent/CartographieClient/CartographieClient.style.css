@@ -1,4 +1,14 @@
-.CartographieClient-container {
-    height: 300px; /* Hauteur souhaitée */
-  }
-  
+.card-body-custom {
+  height: 100%;
+  width: 100%;
+}
+
+.card-map-custom {
+  height: 70%;
+  width: 100%;
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}

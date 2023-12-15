@@ -1,5 +1,18 @@
 .content-container {
     height: 100%;
     display: flex;
+    gap: 15px;
+    padding: 15px;
   }
 
+.content-carte {
+  flex-grow: 1.3;
+}
+
+.content-etattable {
+  flex-grow: 1;
+}
+
+.content-majtable {
+  flex-grow: 1;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./EtatTables.style.css";
-import { apiService } from "../../../service/API_think.service";
+import { apiService } from "../../../services/API_think.service";
 
 const EtatTables = () => {
   const [sortedData, setSortedData] = useState([]);
@@ -22,7 +22,7 @@ const EtatTables = () => {
         // Trier le tableau en fonction des valeurs (de manière décroissante)
         dataArray.sort((a, b) => b[1] - a[1]);
         setSortedData(dataArray);
-        console.log("Données récupérées avec succès:", dataArray);
+        // console.log("Données récupérées avec succès:", dataArray);
         // Faites quelque chose avec les données ici
       } catch (error) {
         // Gérez l'erreur ici
@@ -30,7 +30,7 @@ const EtatTables = () => {
         setComposantError(true);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -46,7 +46,8 @@ const EtatTables = () => {
         <h5 className="card-title">Etat des tables de la base de données</h5>
         <hr />
         <p className="card-text">
-          Ce widget permet de connaitre l'état des tables de la base de données :
+          Ce widget permet de connaitre l'état des tables de la base de données
+          :
         </p>
 
         <ul>
