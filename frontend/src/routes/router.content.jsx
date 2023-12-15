@@ -1,10 +1,11 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Content from "../components/Content/content.component";
 
 const RouterContent = () => {
   return (
     <Routes>
-      <Route path="/test" element={<Navigate to="/welcome" />} />
+      <Route path="/" element={< Content />} />
     </Routes>
   );
 };

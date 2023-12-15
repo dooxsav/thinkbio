@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import "./LandingPage.style.css"; // Assurez-vous que le chemin du fichier CSS est correct
 
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,10 @@ import logo from "../../ressources/img/images-removebg-preview.png"; // Importez
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    // Modifier le titre de la page lorsque le composant est monté
+    document.title = "BIENVENUE";
+  }, []);
 
   return (
     <div className="landing-page-container container-fluid">
@@ -14,7 +19,7 @@ const LandingPage = () => {
         {/* Utilisez l'image importée dans la balise <img> */}
         <img src={logo} alt="Logo" />
       </div>
-      <div className="container-app">
+      <div className="container-app card">
         <div className="container-title">
           <h2>Bienvenue !</h2>
         </div>

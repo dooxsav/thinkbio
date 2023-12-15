@@ -1,6 +1,6 @@
 .main-container {
     display: grid;
-    grid-template-columns: 0.15fr 1fr;
+    grid-template-columns: 0.1fr 1fr;
     grid-template-rows: 0.2fr repeat(4, 1fr);
     grid-column-gap: 0px;
     grid-row-gap: 0px;
@@ -17,4 +17,7 @@
 
 .content {
     grid-area: 2 / 2 / 6 / 3;
+    background-image: url("../../ressources//img/water-texture-background-transparent-liquid.jpg");
+    background-size: cover;
+    background-position: center;
 }
