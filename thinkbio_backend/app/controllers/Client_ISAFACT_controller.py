@@ -71,9 +71,9 @@ def importISAFACTDataFromExcel(file):
     file.save(file_path)
     
     # Traitement du fichier excel
-    result = Ecrire_MAJ_Clients_ISFACT(file_path)
+    lignes_ajoutees, ligne_modifies = Ecrire_MAJ_Clients_ISFACT(file_path)
     
-    return result
+    return lignes_ajoutees, ligne_modifies
 
 def extraire_CLI_from_DATA_brut_ISFACT():
     result = MaJ_Table_CLI_BY_ISAFACT()

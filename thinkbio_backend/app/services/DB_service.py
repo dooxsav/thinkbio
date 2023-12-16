@@ -792,10 +792,9 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
         # Lire le fichier Excel dans un DataFrame
         dataFrame = pd.read_excel(file_path)
         longueur_dataFrame_avant_suppression = len(dataFrame) # longueur initiale du DF
-        print(" * longueur du DF initiale => " + str(longueur_dataFrame_avant_suppression))
         dataFrame.drop_duplicates(subset='CodeClient', keep='first', inplace=True)
         total_rows = len(dataFrame)
-        print(" ** longueur du DF après suppression des doublons  => " + str(total_rows))
+        print(f" ** Réduction du DF après suppression des doublons {str(longueur_dataFrame_avant_suppression)}  => " + str(total_rows))
         date_now = str(datetime.now())
         
         # Itération sur le DF
@@ -973,7 +972,12 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                             print(f" * Erreur lors de la création du nouvel enregistrement : {e}")
                             
             db.session.commit()
-            return lignes_ajoutees, ligne_modifies, 
+            return jsonify({
+                        "message": "Mise à jour des clients ISAFACT réussie",
+                        "lignes_ajoutees": lignes_ajoutees,
+                        "ligne_modifies": ligne_modifies
+                    }), 200
+
  
     except Exception as e:
         return jsonify({" * error": f"Une erreur s'est produite : {str(e)}, ceci dit {lignes_ajoutees} ont été ajoutées et {ligne_modifies} ont été modifiées"}), 405

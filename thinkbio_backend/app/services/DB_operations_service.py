@@ -24,7 +24,7 @@ import psutil
 
 def KillAllTable():
     try:
-        print('\033[91m *** PURGE DES BASES DE DONNEES ***\033[0m"')
+        print('\033[91m *** PURGE DES BASES DE DONNEES ***\033[0m')
         db.reflect()
 
         # Sauvegarder les données de la table que vous souhaitez conserver

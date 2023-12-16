@@ -28,7 +28,7 @@ const LandingPage = () => {
         </div>
         <button
           type="button"
-          class="btn btn-outline-primary btn-lg"
+          className="btn btn-outline-primary btn-lg"
           onClick={() => {
             navigate("../home");
           }}

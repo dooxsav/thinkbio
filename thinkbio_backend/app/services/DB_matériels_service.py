@@ -46,7 +46,7 @@ def initialisation_table_materiel():
             )
             db.session.add(new_station)
             ligne_ajoutee += 1
-        print(f"\r * Progression : {((ligne_ajoutee+ligne_modifie)/longueur_df) * 100}%", end='', flush=True)
+        print(f"\r * Progression : {round(((ligne_ajoutee+ligne_modifie)/longueur_df) * 100,1)}%", end='', flush=True)
 
     print('\033[0;32m * DONE ! => ECRITURE EN BD')
     db.session.commit()

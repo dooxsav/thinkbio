@@ -52,7 +52,7 @@ def intialisation_BD_SITUATION_ISFACT():
             ligne_ajoute += 1
         else:
             ligne_ignore += 1
-        print(f"\r * Progression : {((ligne_ajoute+ligne_ignore)/longueur_df) * 100}%", end='', flush=True)
+        print(f"\r * Progression : {round(((ligne_ajoute + ligne_ignore) / longueur_df) * 100, 1)}%", end='', flush=True)
     print('\033[0;32m * DONE ! => ECRITURE EN BD')
     db.session.commit()
     print(f'\033[92m * Base de données SITUATION écrite. {ligne_ajoute} ligne(s) ont été ajoutée(s), {ligne_ignore} ligne(s) ont été ignorée(s)\033[0m')

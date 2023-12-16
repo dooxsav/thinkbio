@@ -91,7 +91,7 @@ def Ecrire_base_GEOCODAGE():
                         db.session.add(new_entry_geocodage)
                         db.session.commit()
                         ligne_ajoutees += 1
-                        print(f" * Recherche de localisation en cours pour : {location_site.CPSite} {location_site.VilleSite} => longitude: {longitude}, latitude : {latitude} ({ligne_ajoutees}/{nbre_site})", end="\r")
+                        print(f" * Recherche de localisation en cours ({ligne_ajoutees}/{nbre_site}) pour longitude: {longitude}, latitude : {latitude} => {location_site.CPSite} {location_site.VilleSite}", end="\r")
                     except Exception as exception:
                         print(f"*** Problème lors du géocodage de {location_site.CPSite} {location_site.VilleSite}: {exception}")
                 else:
