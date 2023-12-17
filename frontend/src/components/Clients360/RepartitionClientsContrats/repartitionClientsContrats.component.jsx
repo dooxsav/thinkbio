@@ -92,20 +92,17 @@ const RepartitionClientsContrats = () => {
 
   /** RENDER */
   return (
-    <div
-      className="repartitionClientsContrats-container"
-      style={{ width: "100%", height: "100%" }}
-    >
+    <div className="repartitionClientsContrats-container">
       <div className="card-body">
-        {error && (
-          <div className="alert alert-danger">
-            <strong>Erreur de composant: </strong> {error}
-          </div>
-        )}{" "}
         <div className="card-graphique">
-          <h5 class="card-title text-center bg-light p-1">
+          <h5 className="card-title text-center bg-light p-1">
             Répartition clients contrats
           </h5>
+          {error && (
+            <div className="alert alert-danger">
+              <strong>Erreur de composant: </strong> {error}
+            </div>
+          )}{" "}
           <Doughnut
             data={doughnutData}
             options={options}
