@@ -1,6 +1,6 @@
 import "./repartitionSystemesClients.style.css";
 
-const repartitionSystemesClients = (data) => {
+const RepartitionSystemesClients = (data) => {
   return (
     <div className="repartitionSystemesClients-container">
       <p>it's work</p>
@@ -8,4 +8,4 @@ const repartitionSystemesClients = (data) => {
   );
 };
 
-export default repartitionSystemesClients;
+export default RepartitionSystemesClients;

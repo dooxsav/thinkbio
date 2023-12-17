@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Content from "../components/Content/content.component";
-import Clients360 from "../components/Clients/client360.component"; // Nom corrigé ici
+import Clients360 from "../components/Clients360/client360.component"; // Nom corrigé ici
 
 const RouterContent = () => {
   return (

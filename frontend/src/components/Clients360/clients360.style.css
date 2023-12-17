@@ -2,3 +2,15 @@
     border: solid 2px grey;
     width: 40%;
 }
+
+.client360-subcontainer {
+    display: flex;
+}
+
+.equal-height {
+    flex: 1;
+    /* Ajuste la taille des éléments enfants pour qu'ils occupent le même espace */
+    display: flex;
+    flex-direction: column;
+    /* Si vous souhaitez empiler les composants verticalement */
+}
