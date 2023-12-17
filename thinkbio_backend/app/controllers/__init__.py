@@ -12,3 +12,4 @@ from .Operation_BD_controller import HelloOperationDB, KillSwitch
 from .Geolocation_site_controller import lire_donnes_table_geolocation, lire_donnes_contrat_et_site
 from .Client_CONTRAT_controller import lireBaseCLientContrat
 from .MAINTENANCE_controller import lire_nbre_enregistrement_par_table
+from .Ressource_matériel_divalto_controller import lire_donnes_ressources_materiel
