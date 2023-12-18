@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./HistoriqueClient.style.css";
 import { useForm } from "react-hook-form";
 import { apiService } from "../../services/API_think.service";
@@ -13,13 +13,13 @@ const HistoriqueClient = () => {
   } = useForm();
 
   /** STATES LOCAL */
-  const [error, setError] = useState()
+  const [error, setError] = useState();
   const [data, setData] = useState([]);
-  const [disabledButton, setDisabledButton] = useState(false)
+  const [disabledButton, setDisabledButton] = useState(false);
 
   /** Methodes */
   const onSubmit = async (data) => {
-    setDisabledButton(true)
+    setDisabledButton(true);
     try {
       const response = await apiService.get(
         `/situation/?codeclient=${data.CodeClient}`
@@ -27,16 +27,27 @@ const HistoriqueClient = () => {
       setData(response);
       console.log("Données récupérées avec succès:", response);
     } catch (error) {
-      console.log(
-        "Erreur lors de la récupération des données:",
-        error.message
-      );
+      console.log("Erreur lors de la récupération des données:", error.message);
       setError(
         "Une erreur s'est produite lors de la récupération des données."
       );
     }
-    setDisabledButton(false)
+    setDisabledButton(false);
   };
+
+  // Regroupement des données par 'numero_document'
+  const groupedData = data.reduce((acc, item) => {
+    if (!acc[item.numero_document]) {
+      acc[item.numero_document] = [];
+    }
+    acc[item.numero_document].push(item);
+    return acc;
+  }, {});
+
+  // Conversion de l'objet regroupé en tableau
+  const groupedArray = Object.values(groupedData);                                                                                          
+
+  console.log(groupedArray);
 
   // Fonction pour mettre à jour la valeur en majuscules à chaque changement
   const handleInputChange = (e) => {
@@ -65,18 +76,22 @@ const HistoriqueClient = () => {
               id="inputField"
               className="form-control p-1 m-1"
               maxLength={7}
-              {...register('CodeClient')}
+              {...register("CodeClient")}
               onChange={handleInputChange} // Écoute les changements et met à jour en majuscules
             />
           </div>
           <div className="col-sm-3">
-            <button type="submit" className="btn btn-primary btn-lg" disabled={disabledButton}>
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              disabled={disabledButton}
+            >
               Accéder
             </button>
           </div>
         </form>
       </div>
-      <div className="card-body">resultats</div>
+      <div className="card-body"></div>
     </div>
   );
 };
