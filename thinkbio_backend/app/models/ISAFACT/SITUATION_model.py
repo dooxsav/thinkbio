@@ -36,7 +36,7 @@ class SITUATION_ISAFACT(db.Model):
             'numero_document': self.numero_document,
             'nom': self.nom,
             'prenom': self.prenom,
-            'CodeClient': self.code,
+            'CodeClient': self.CodeClient,
             'libelle_famille_tiers': self.libelle_famille_tiers,
             'code_postal': self.code_postal,
             'nom_representant': self.nom_representant,

@@ -23,7 +23,7 @@ const RepartitionSystemesClients = () => {
           "/RessourcesMaterielDivalto/allmateriels"
         );
         setData(response);
-        console.log("Données récupérées avec succès:", response);
+        // console.log("Données récupérées avec succès:", response);
       } catch (error) {
         console.log(
           "Erreur lors de la récupération des données:",
@@ -55,6 +55,29 @@ const RepartitionSystemesClients = () => {
     return acc;
   }, {});
 
+  const countByGenreAndBrand = data.reduce((acc, currentValue) => {
+    const { CODEGENRE, MARQUE } = currentValue;
+  
+    // Si le CODEGENRE existe déjà dans l'accumulateur
+    if (acc[CODEGENRE]) {
+      // Si la marque existe déjà pour ce CODEGENRE
+      if (acc[CODEGENRE][MARQUE]) {
+        acc[CODEGENRE][MARQUE]++;
+      } else {
+        acc[CODEGENRE][MARQUE] = 1;
+      }
+    } else {
+      // Si le CODEGENRE n'existe pas, l'initialise avec la marque à 1
+      acc[CODEGENRE] = {
+        [MARQUE]: 1,
+      };
+    }
+  
+    return acc;
+  }, {});
+  
+ // console.log(countByGenreAndBrand);
+
   const doughnutData = {
     labels: [], // Initialisez un tableau vide pour les labels
     datasets: [
@@ -67,10 +90,10 @@ const RepartitionSystemesClients = () => {
   };
 
   // Utilisation de Object.keys pour récupérer les clés de countByGenre
-  const keys = Object.keys(countByGenre);
+  const keysCODEGENRE = Object.keys(countByGenre);
 
   // Parcourir les clés et récupérer les valeurs associées à chaque clé
-  keys.forEach((key) => {
+  keysCODEGENRE.forEach((key) => {
     const value = countByGenre[key];
 
     // Ajouter les clés aux labels
@@ -79,6 +102,7 @@ const RepartitionSystemesClients = () => {
     // Ajouter les valeurs correspondantes aux données
     doughnutData.datasets[0].data.push(value.count);
   });
+  
   const options = {
     plugins: {
       datalabels: {
@@ -119,7 +143,7 @@ const RepartitionSystemesClients = () => {
             style={{ height: "100%", width: "100%" }}
           />
           <h6>
-            <strong>(TOTAL ENREGISTREMENT : {data.length} )</strong>
+            <strong>(TOTAL ENREGISTREMENTS : {data.length} )</strong>
           </h6>
         </div>
       </div>

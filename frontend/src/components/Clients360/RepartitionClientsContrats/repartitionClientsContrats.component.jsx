@@ -21,7 +21,7 @@ const RepartitionClientsContrats = () => {
       try {
         const response = await apiService.get("/geolocation/sitecontrats");
         setData(response);
-        console.log("Données récupérées avec succès:", response);
+        // console.log("Données récupérées avec succès:", response);
       } catch (error) {
         console.log(
           "Erreur lors de la récupération des données:",
@@ -110,7 +110,7 @@ const RepartitionClientsContrats = () => {
             style={{ height: "100%", width: "100%" }}
           />
           <h6>
-            <strong>(TOTAL CLIENT : {totalContract} )</strong>
+            <strong>(TOTAL CLIENTS : {totalContract} )</strong>
           </h6>
         </div>
         {/* Affichage de l'erreur */}

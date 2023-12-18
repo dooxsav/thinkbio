@@ -13,3 +13,4 @@ from .Geolocation_site_controller import lire_donnes_table_geolocation, lire_don
 from .Client_CONTRAT_controller import lireBaseCLientContrat
 from .MAINTENANCE_controller import lire_nbre_enregistrement_par_table
 from .Ressource_matériel_divalto_controller import lire_donnes_ressources_materiel
+from .Situation_ISAFACT_controller import lire_historique_client_par_CodeClient

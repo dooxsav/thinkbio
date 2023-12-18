@@ -16,3 +16,4 @@ from .geolocation_site_routes import Geolocation_bp
 from .clients_CONTRAT_routes import ClientContrat_bp
 from .MAINTENANCE_routes import MaintenanceDB_bp
 from .ressource_materiel_divalto_routes import RessourcesMaterielDivalto_bp
+from .situation_ISAFACT_routes import Situation_bp

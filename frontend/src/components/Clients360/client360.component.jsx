@@ -2,6 +2,8 @@ import "./clients360.style.css";
 
 import RepartitionClientsContrats from "./RepartitionClientsContrats/repartitionClientsContrats.component";
 import RepartitionSystemesClients from "./RepartitionSystemesClients/repartitionSystemesClients.component";
+import RepartitionMoyensPaiement from "./RepartitionMoyensPaiement/repartitionMoyensPaiement.component";
+
 const Clients360 = () => {
   /** Render */
   return (
@@ -15,6 +17,9 @@ const Clients360 = () => {
         </div>
         <div className="equal-height">
           <RepartitionSystemesClients />
+        </div>
+        <div className="equal-height">
+          <RepartitionMoyensPaiement />
         </div>
       </div>
     </div>

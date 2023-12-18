@@ -5,12 +5,15 @@
 
 .client360-subcontainer {
     display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
 }
 
 .equal-height {
-    flex: 1;
     /* Ajuste la taille des éléments enfants pour qu'ils occupent le même espace */
     display: flex;
     flex-direction: column;
+    flex: 1;
     /* Si vous souhaitez empiler les composants verticalement */
 }

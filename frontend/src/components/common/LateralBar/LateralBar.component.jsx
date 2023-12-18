@@ -28,7 +28,15 @@ const LateralBar = () => {
             }}
           >
             {" "}
-            ✔️ Clients 360
+            ✔️ Infographie Clients
+          </h6>
+          <h6
+            onClick={() => {
+              navigate("./historiqueclient");
+            }}
+          >
+            {" "}
+            ✔️ Historique Client
           </h6>
         </div>
       </div>

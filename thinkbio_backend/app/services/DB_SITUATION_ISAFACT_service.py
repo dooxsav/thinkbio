@@ -8,6 +8,10 @@ def lire_BD_SITUATION_ISFACT():
     records = SITUATION_ISAFACT.query.all()
     return [record.to_dict() for record in records]  # Convertir les objets en dictionnaires
 
+def lire_BD_SITUATION_ISAFACT_ByCodeClient(Code_Client):
+    records = SITUATION_ISAFACT.query.filter_by(CodeClient=Code_Client).order_by(SITUATION_ISAFACT.date_document.desc()).all()
+    return [record.to_dict() for record in records]
+
 def intialisation_BD_SITUATION_ISFACT():
     print('\033[33m * Import de la base SITUATION via fichier Excel... \033[0m')
     ligne_ajoute = 0
