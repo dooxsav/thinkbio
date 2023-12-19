@@ -1,0 +1,34 @@
+/* HistoriqueClient.style.css */
+
+.historiqueClient-container {
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 10px; /* Réduction de la taille de la police */
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 6px; /* Ajustement du padding */
+    border: 1px solid #ddd;
+    text-align: left;
+    overflow: hidden; /* Masquer le débordement du contenu */
+    text-overflow: ellipsis; /* Afficher "..." pour le contenu dépassant */
+  }
+  
+  .custom-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .card-entete {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
