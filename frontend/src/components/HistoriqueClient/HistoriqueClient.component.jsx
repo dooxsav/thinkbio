@@ -13,6 +13,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const HistoriqueClient = () => {
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
+
   const [nomclient, setnomclient] = useState();
   const [prenomclient, setprenomclient] = useState();
   const [codepostal, setcodepostal] = useState();
@@ -111,63 +112,72 @@ const HistoriqueClient = () => {
       );
     }
   }
-      // Création d'un objet pour stocker les montants sommés par code_famille_article
-      const montantsParFamille = {};
+  // Création d'un objet pour stocker les montants sommés par code_famille_article
+  const montantsParFamille = {};
 
-      // Parcours des lignes existantes
-      rows.forEach((row) => {
-        const codeFamille = row.code_famille_article;
-        const montant = parseFloat(row.montant_HT.replace(" €", "")); // Convertir la chaîne de montant en nombre
-  
-        // Vérifier si le code_famille_article existe déjà dans l'objet
-        if (montantsParFamille[codeFamille]) {
-          // Si oui, ajouter le montant actuel
-          montantsParFamille[codeFamille] += montant;
-        } else {
-          // Si non, initialiser avec le montant actuel
-          montantsParFamille[codeFamille] = montant;
-        }
-      });
-  
-      const doughnutData = {
-        labels: [], // Initialisez un tableau vide pour les labels
-        datasets: [
-          {
-            label: "Repartition des montant par famille",
-            data: [], // Initialisez un tableau vide pour les données
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
-          },
-        ],
-      };
-      // Utilisation de Object.keys pour récupérer les clés de countByGenre
-      const keysMODE_RGLT = Object.keys(montantsParFamille);
-  
-      // Parcourir les clés et récupérer les valeurs associées à chaque clé
-      keysMODE_RGLT.forEach((key) => {
-        const value = montantsParFamille[key];
-  
-        // Ajouter les clés aux labels
-        doughnutData.labels.push(key);
-  
-        // Ajouter les valeurs correspondantes aux données
-        doughnutData.datasets[0].data.push(value.count);
-      });
+  // Parcours des lignes existantes
+  rows.forEach((row) => {
+    const codeFamille = row.code_famille_article;
+    const montant = parseFloat(row.montant_HT.replace(" €", "")); // Convertir la chaîne de montant en nombre
+
+    // Vérifier si le code_famille_article existe déjà dans l'objet
+    if (montantsParFamille[codeFamille]) {
+      // Si oui, ajouter le montant actuel
+      montantsParFamille[codeFamille] += montant;
+    } else {
+      // Si non, initialiser avec le montant actuel
+      montantsParFamille[codeFamille] = montant;
+    }
+  });
+
+  const doughnutData = {
+    labels: [], // Initialisez un tableau vide pour les labels
+    datasets: [
+      {
+        label: "Repartition des montant par famille",
+        data: [], // Initialisez un tableau vide pour les données
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+      },
+    ],
+    plugins: [ChartDataLabels], // Ajout du plugin pour les labels sur le graphique
+  };
+
+  // Utilisation de Object.keys pour récupérer les clés de montantsParFamille
+  const keysMontantFamilleHT = Object.keys(montantsParFamille);
+
+  // Parcourir les clés et récupérer les valeurs associées à chaque clé
+  keysMontantFamilleHT.forEach((key) => {
+    const value = montantsParFamille[key];
+
+    // Ajouter les clés aux labels
+    doughnutData.labels.push(key);
+
+    // Ajouter les valeurs correspondantes aux données
+    doughnutData.datasets[0].data.push(value); // Utiliser directement la valeur du montant
+  });
   const options = {
-        
     plugins: {
       datalabels: {
-        color: "white",
+        color: "black",
         font: {
           weight: "bold",
         },
         formatter: (value, context) => {
-          const percentage = ((value / data.length) * 100).toFixed(1); // Formatage du pourcentage à un chiffre après la virgule
+          const dataset = context.chart.data.datasets[context.datasetIndex];
+          const sumOfAbsoluteValues = dataset.data.reduce(
+            (acc, current) => acc + Math.abs(current),
+            0
+          );
+          const percentage = (
+            (Math.abs(value) / sumOfAbsoluteValues) *
+            100
+          ).toFixed(1);
           return (
             context.chart.data.labels[context.dataIndex] +
             ": " +
             percentage +
             " %"
-          ); // Afficher le label et la valeur
+          );
         },
       },
     },
@@ -258,18 +268,23 @@ const HistoriqueClient = () => {
       </div>
       <hr />
       <div className="row">
-        <div className="col-12">
-          {/** ICI LES GRAPHIQUES */}
-
+        {error ? (
+          <div className="alert alert-warning container" role="alert">
+            INFORMATION : Aucune valeur disponible
           </div>
+        ) : null}
+        <div className="col-12 montantfamilleHT-graph">
+          {/** ICI LES GRAPHIQUES */}
+          <Doughnut
+            data={doughnutData}
+            options={options}
+            plugins={[ChartDataLabels]}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </div>
       </div>
       <div className="row overflow-auto">
         <div className="col-12 historique-content">
-          {error ? (
-            <div className="alert alert-warning" role="alert">
-              ERREUR : Aucune informations disponible
-            </div>
-          ) : null}
           {/** Historique*/}
           <div className="row">
             <table className="custom-table overflow-auto">

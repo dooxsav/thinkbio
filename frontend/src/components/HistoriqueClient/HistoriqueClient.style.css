@@ -31,3 +31,10 @@ td {
   padding: 5px;
 }
 
+.montantfamilleHT-graph {
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
