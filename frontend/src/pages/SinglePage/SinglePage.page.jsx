@@ -11,7 +11,7 @@ const SinglePage = () => {
   }, []);
   return (
     <div className="main-container">
-      <div className="navbar bg-light">
+      <div className="navbar bg-light container-fluid">
         <Navbar />
       </div>
       <div className="lateralbar bg-dark container-fluid text-light">

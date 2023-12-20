@@ -9,6 +9,7 @@
   .navbar {
     grid-area: 1 / 2 / 2 / 3;
     height: 5vh;
+    padding: 0;
   }
   
   .lateralbar {
@@ -22,5 +23,6 @@
     background-size: cover;
     background-position: center;
     height: 95vh;
+    padding: 10px;
   }
   

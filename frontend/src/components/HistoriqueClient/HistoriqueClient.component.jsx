@@ -7,7 +7,9 @@ import "./HistoriqueClient.style.css";
 const HistoriqueClient = () => {
   const [error, setError] = useState();
   const [data, setData] = useState([]);
-  const [nomclient, setnomclient] = useState()
+  const [nomclient, setnomclient] = useState();
+  const [prenomclient, setprenomclient] = useState();
+  const [codepostal, setcodepostal] = useState();
   const [disabledButton, setDisabledButton] = useState(false);
 
   const {
@@ -24,7 +26,10 @@ const HistoriqueClient = () => {
         `/situation/?codeclient=${data.CodeClient}`
       );
       setData(response);
-      setnomclient(response.nom) ; // Récupérer le nom depuis la réponse
+      //console.log(response)
+      setnomclient(response[0].nom); // Récupérer le nom depuis la réponse
+      setprenomclient(response[0].prenom);
+      setcodepostal(response[0].code_postal);
     } catch (error) {
       console.log("Erreur lors de la récupération des données:", error.message);
       setError(
@@ -65,7 +70,9 @@ const HistoriqueClient = () => {
           key !== "id" &&
           key !== "volume" &&
           key !== "code_postal" &&
-          key !== "quantite_unit"
+          key !== "quantite_unit" &&
+          key !== "prenom" &&
+          key !== "nom"
       );
 
       columns = filteredKeys.map((key) => {
@@ -76,93 +83,136 @@ const HistoriqueClient = () => {
       });
 
       rows = groupedArray.flatMap((group) =>
-        group.documents.map((doc) => {
-          const { code_lot_facture, date_livraison_document, ...rest } = doc; // Exclure code_lot_facture et date_livraison_document
-          const sanitizedRow = {};
-
-          Object.entries(rest).forEach(([key, value]) => {
-            if (value !== "nan") {
-              sanitizedRow[key] = value;
-            }
-          });
-
-          return sanitizedRow;
-        })
-      );
+      group.documents.map((doc) => {
+        const { code_lot_facture, date_livraison_document, montant_HT, ...rest } = doc; // Exclure certaines clés, y compris montant_HT
+    
+        // Arrondir la valeur de montant_HT à deux chiffres significatifs
+        const roundedMontantHT = parseFloat(montant_HT).toFixed(2);
+    
+        const sanitizedRow = {
+          ...rest,
+          montant_HT: roundedMontantHT + " €", // Remplacer la valeur initiale de montant_HT par la version arrondie
+        };
+    
+        // Remplacer les 'nan' par une chaîne vide
+        Object.entries(sanitizedRow).forEach(([key, value]) => {
+          if (value === 'nan') {
+            sanitizedRow[key] = '';
+          }
+        });
+    
+        return sanitizedRow;
+      })
+    );
     }
   }
+  // Définir l'ordre des colonnes souhaitées
+  const desiredColumnOrder = [
+    "date_document",
+    "numero_document",
+    "libelle_famille_tiers",
+    "code_divers",
+    "libelle_lot_facture",
+    "code_famille_article",
+    "libelle_famille_article",
+    "code_article",
+    "code_lot_articles",
+    "nom_representant",
+    "montant_HT",
+  ];
+
+  // Réorganiser les colonnes dans l'ordre souhaité
+  columns = columns
+    .filter((column) => desiredColumnOrder.includes(column.accessor))
+    .sort(
+      (a, b) =>
+        desiredColumnOrder.indexOf(a.accessor) -
+        desiredColumnOrder.indexOf(b.accessor)
+    );
 
   const handleInputChange = (e) => {
     const value = e.target.value.toUpperCase();
     setValue("CodeClient", value);
   };
 
-
   return (
-    <div className="historiqueClient-container container card p-1">
-      <div className="card-header">
-        <h4>Historique & Récapitulatif Client</h4>
-      </div>
-      <div className="card-entete">
-        <div className="card-body">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="form-group row align-items-center"
-          >
-            <label htmlFor="" className="col-form-label">
-              Numéro de Client :
-            </label>
-            <div className="col-sm-3">
+    <div className="Historiqueclient-container container card overflow-hidden">
+      <div className="row border-right">
+        <div className="col-3 text-center border-right">
+          {/** Formulaire */}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="row form-group m-1">
               <input
                 type="text"
                 id="inputField"
-                className="form-control p-1 m-1"
+                className="col-6 form-control text-center"
                 maxLength={7}
                 {...register("CodeClient")}
                 onChange={handleInputChange}
+                placeholder="@CodeClient (ex: 5A12345)"
               />
-            </div>
-            <div className="col">
               <button
                 type="submit"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary mt-1"
                 disabled={disabledButton}
               >
-                Accéder
+                Obtenir informations
               </button>
             </div>
           </form>
         </div>
-        <div className="card-client">
-          <div className="card-client-label">
-            <strong>Prénom : </strong> 
+        <div className="col-9 text-center">
+          {/** Carte du client */}
+          <div className="row">
+            <div className="row m-1 mt-2">
+              <h6>
+                <u>
+                  <strong>INFORMATIONS CLIENT :</strong>
+                </u>
+              </h6>
+            </div>
+            <div className="row">
+              <div className="col-1 text-end">
+                <strong>NOM : </strong>
+              </div>
+              <div className="col-2 text-center border overflow-hidden">
+                {nomclient}{" "}
+              </div>
+              <div className="col-2 text-end">
+                <strong>PRENOM : </strong>
+              </div>
+              <div className="col-2 text-center border">{prenomclient} </div>
+              <div className="col-2 text-end">
+                <strong>CODE POSTAL : </strong>
+              </div>
+              <div className="col-2 text-center border">{codepostal} </div>
+            </div>
           </div>
-          <div className="card-client-label">
-          <strong>Nom : {nomclient || "vide"} </strong> 
-          </div>
-          
         </div>
       </div>
-
-      <div className="card-body">
-        <table className="custom-table">
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.accessor}>{column.Header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
+      <hr />
+      <div className="row overflow-auto">
+        <div className="col-12 historique-content">
+          {/** Historique*/}
+          <table className="custom-table table-striped">
+            <thead>
+              <tr>
                 {columns.map((column) => (
-                  <td key={column.accessor}>{row[column.accessor]}</td>
+                  <th key={column.accessor}>{column.Header}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={index}>
+                  {columns.map((column) => (
+                    <td key={column.accessor}>{row[column.accessor]}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
