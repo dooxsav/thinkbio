@@ -11,7 +11,12 @@
 .custom-table {
   font-size: 0.7rem;
   width: 100%;
-  overflow: hidden;
+}
+
+.custom-table.overflow-auto {
+  width: 100%;
+  max-height: 300px; /* ou la hauteur souhaitée */
+  overflow: auto;
 }
 
 th { /* header cell */

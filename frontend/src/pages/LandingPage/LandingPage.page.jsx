@@ -21,10 +21,11 @@ const LandingPage = () => {
       </div>
       <div className="container-app card">
         <div className="container-title">
-          <h2>Bienvenue !</h2>
+          <h2 className="display-5 fw-bold">#THINK</h2>
         </div>
         <div className="container-message">
-          <h5>#think</h5>
+          <h5>par BIONEST</h5>
+          <p>- Application de suivi - </p>
         </div>
         <button
           type="button"
