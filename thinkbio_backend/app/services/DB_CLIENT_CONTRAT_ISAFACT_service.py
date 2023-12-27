@@ -80,10 +80,13 @@ def ecrire_table_base_client_contrat_isafact():
             try:
                 result_client_isafact = Client_ISAFACT.query.filter_by(CodeClient=client.CodeClient).first()
                 if result_client_isafact:
-                    if result_client_isafact.NomFACT:  # Vérifiez si NomFACT n'est pas None
-                        libellé_contrat += f' pour Mr. ou Mne {result_client_isafact.NomFACT}'
+                    if client.CodeTypeCONTRAT == "OUI.S":
+                        libellé_contrat += f' Contrat SEMICO de {result_client_isafact.NomFACT}'
                     else:
-                        print("\033[91m **** ATTENTION! NomFACT est vide pour le contrat de: {}\033[0m".format(client.CodeClient))
+                        if result_client_isafact.NomFACT:  # Vérifiez si NomFACT n'est pas None
+                            libellé_contrat += f' pour Mr. ou Mne {result_client_isafact.NomFACT}'
+                        else:
+                            print("\033[91m **** ATTENTION! NomFACT est vide pour le contrat de: {}\033[0m".format(client.CodeClient))
                 else:
                     print("\033[91m **** ATTENTION! Aucun résultat trouvé pour le contrat de: {}\033[0m".format(client.CodeClient))
             except NoResultFound:
