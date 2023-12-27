@@ -811,7 +811,7 @@ def Ecrire_MAJ_Clients_ISFACT(file_path):
                 PrenomFACT = sanitarise_donnes_niveau1(row['PrenomFACT'])
                 AdresseFACT = sanitarise_donnes_niveau1(row['AdresseFACT'])
                 CPFACT = row['CPFACT']
-                VilleFACT = row['VilleFACT']
+                VilleFACT = sanitarise_donnes_niveau1(row['VilleFACT'])
                 PaysFACT = row['PaysFACT']
                 EmailTIERS = extract_email(row['EmailTIERS'])
                 NomLOC = sanitarise_donnes_niveau1(row['NomLOC'])

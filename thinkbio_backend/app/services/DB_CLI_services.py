@@ -6,6 +6,7 @@ from app.models import Client_ISAFACT, CLI_ISFACT, SITE_ISAFACT, EQUIV_MODE_RGLT
 from tqdm import tqdm
 from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
+import re
 
 def Transfert_donnes_CLIENT_ISAFACT_CLI():
     print(' * Ecriture de la base CLI...')
@@ -84,23 +85,57 @@ def numerotation_client():
 
 # // a faire
 def CodeStatisitique_CLI():
-    # mise en place des axes statistique sur les CLI 
-    # Cette fonction numérote les site avec 10 chiffres NON significatif
-    print(' * Etablishing Statitistics Axes for clients....')
-    Données_client = CLI_ISFACT.query.all()
-    longueur_table = len(Données_client)
+    # Mise en place des axes statistiques sur les CLI
+    # Cette fonction numérote les sites avec 10 chiffres NON significatifs
+    print(' * Establishing Statistics Axes for clients....')
+    Donnees_client = CLI_ISFACT.query.all()
+    longueur_table = len(Donnees_client)
     compteur_client = 0
-    for client in tqdm(Données_client, desc=" * Attributing statistique Axes", total=longueur_table):
-        if client.FamilleTIERS == 'PARTICULIER pour le SAV':
-            client.Axe_stat_1 = "PARTICUL"
+
+    for client in tqdm(Donnees_client, desc=" * Attributing statistic Axes", total=longueur_table):
+        if re.search(r'\b' + re.escape("SARL") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
             client.Axe_stat_2 = ""
-            client.Axe_stat_3 = "PART"
+            client.Axe_stat_3 = ""
+        elif re.search(r'\b' + re.escape("SAS") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        elif client.FamilleTIERS == 'PARTICULIER pour le SAV':
+            if client.NomFACT.startswith("SCI"):
+                client.Axe_stat_1 = "SCI"
+                client.Axe_stat_2 = ""
+                client.Axe_stat_3 = ""
+            elif client.NomFACT.startswith("MAIRIE"):
+                client.Axe_stat_1 = "MOPUBLIQ"
+                client.Axe_stat_2 = ""
+                client.Axe_stat_3 = ""
+            elif client.NomFACT.startswith("COMMUN"):
+                client.Axe_stat_1 = "MOPUBLIQ"
+                client.Axe_stat_2 = ""
+                client.Axe_stat_3 = ""
+            else:
+                client.Axe_stat_1 = "PARTICUL"
+                client.Axe_stat_2 = ""
+                client.Axe_stat_3 = ""
         elif client.FamilleTIERS == 'NEGOCE':
             client.Axe_stat_1 = "REVENDEU"
             client.Axe_stat_2 = ""
-            client.Axe_stat_3 = "NEGOCE"
-            compteur_client +=1
-    
+            client.Axe_stat_3 = ""
+        elif client.FamilleTIERS == 'CONCESSIONAIRE':
+            client.Axe_stat_1 = "REVENDEU"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        elif client.FamilleTIERS == 'ENTREPRISES DE POSE':
+            client.Axe_stat_1 = "INSTALLA"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        else:
+            client.Axe_stat_1 = "AUTRES"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+            
+    compteur_client += 1
     db.session.commit()
     return compteur_client
 

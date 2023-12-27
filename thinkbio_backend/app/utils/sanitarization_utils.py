@@ -17,8 +17,10 @@ def mettre_en_majuscules(chaine):
 def retirer_caracteres_speciaux(chaine):
     # Retirer les accents
     chaine_sans_accents = unidecode(chaine)
-    # Remplacer les caractères séparatifs par des espaces
-    chaine_traitee = re.sub(r'[-_]', ' ', chaine_sans_accents)
+    # Remplacer le tiret par un espace
+    chaine_traitee = chaine_sans_accents.replace('-', ' ')
+    # Retirer tout sauf lettres, chiffres, espaces
+    chaine_traitee = re.sub(r'[^a-zA-Z0-9\s]', '', chaine_traitee)
     # Remplacer les espaces multiples par un seul espace
     chaine_traitee = re.sub(r'\s+', ' ', chaine_traitee)
     # Supprimer les espaces au début et à la fin de la chaîne

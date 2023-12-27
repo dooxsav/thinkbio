@@ -24,32 +24,38 @@ def exporter_cli_isfact_excel():
     # Gestion des cli
     cli_isfact_data = CLI_ISFACT.query.all()
 
-    df_cli = pd.DataFrame([
-        {
-            'CodeClient': entry.CodeClient,
-            'Client_id': entry.Client_id,
-            'FamilleTIERS': entry.FamilleTIERS,
-            'NomFACT': entry.NomFACT,
-            'PrenomFACT': entry.PrenomFACT,
-            'AdresseFACT': entry.AdresseFACT,
-            'CPFACT': entry.CPFACT,
-            'VilleFACT': entry.VilleFACT,
-            'PaysFACT': entry.PaysFACT,
-            'EmailTIERS': entry.EmailTIERS,
-            'Tel1': entry.Tel1,
-            'Tel2': entry.Tel2,
-            'Tel3': entry.Tel3,
-            'Axe_stat_1': entry.Axe_stat_1,
-            'Axe_stat_2': entry.Axe_stat_2,
-            'Axe_stat_3': entry.Axe_stat_3,
-            'Mode_RGLT': entry.Mode_RGLT,
-            'createdAt': entry.createdAt,
-            'createdBy': entry.createdBy,
-            'updatedAt': entry.updatedAt,
-            'lastUpdatedBy': entry.lastUpdatedBy
-        }
-        for entry in cli_isfact_data
-    ])
+    data = []
+    for client in cli_isfact_data:
+        if client.PrenomFACT == "NAN":
+            client.PrenomFACT = ""
+
+        prenom_formatted = ' '.join(word.capitalize() for word in client.PrenomFACT.lower().split())
+        nom_prenom_combined = f"{client.NomFACT} {prenom_formatted}"
+
+        data.append({
+            'CodeClient': client.CodeClient,
+            'Client_id': client.Client_id,
+            'FamilleTIERS': client.FamilleTIERS,
+            'NOMPrenom': nom_prenom_combined,
+            'AdresseFACT': client.AdresseFACT,
+            'CPFACT': client.CPFACT,
+            'VilleFACT': client.VilleFACT,
+            'PaysFACT': client.PaysFACT,
+            'EmailTIERS': client.EmailTIERS,
+            'Tel1': client.Tel1,
+            'Tel2': client.Tel2,
+            'Tel3': client.Tel3,
+            'Axe_stat_1': client.Axe_stat_1,
+            'Axe_stat_2': client.Axe_stat_2,
+            'Axe_stat_3': client.Axe_stat_3,
+            'Mode_RGLT': client.Mode_RGLT,
+            'createdAt': client.createdAt,
+            'createdBy': client.createdBy,
+            'updatedAt': client.updatedAt,
+            'lastUpdatedBy': client.lastUpdatedBy
+        })
+
+    df_cli = pd.DataFrame(data)
 
     # Exporter le DataFrame df_cli vers un fichier Excel
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
