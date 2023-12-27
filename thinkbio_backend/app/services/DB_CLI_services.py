@@ -76,7 +76,7 @@ def numerotation_client():
     print(' * Numérating clients....')
     Données_client = CLI_ISFACT.query.all()
     longueur_table = len(Données_client)
-    compteur_site = 0
+    compteur_site = 1
     for client in tqdm(Données_client, desc=" * Numerating client", unit="site/s", total=longueur_table):
         client.Client_id = f'C{compteur_site:010d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site

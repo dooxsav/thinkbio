@@ -54,7 +54,7 @@ def numerotation_sites():
     print('Numérotation des sites....')
     Données_site = SITE_ISAFACT.query.all()
     longueur_table = len(Données_site)
-    compteur_site = 0
+    compteur_site = 1
     for site in tqdm(Données_site, desc=" * Numerating site", unit="site/s", total=longueur_table):
         site.Site_id = f'S{compteur_site:010d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site
