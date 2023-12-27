@@ -101,6 +101,22 @@ def CodeStatisitique_CLI():
             client.Axe_stat_1 = "MOPRIVEE"
             client.Axe_stat_2 = ""
             client.Axe_stat_3 = ""
+        elif re.search(r'\b' + re.escape("SASU") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        elif re.search(r'\b' + re.escape("EARL") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        elif re.search(r'\b' + re.escape("SCEA") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
+        elif re.search(r'\b' + re.escape("CHATEAU") + r'\b', client.NomFACT):
+            client.Axe_stat_1 = "MOPRIVEE"
+            client.Axe_stat_2 = ""
+            client.Axe_stat_3 = ""
         elif client.FamilleTIERS == 'PARTICULIER pour le SAV':
             if client.NomFACT.startswith("SCI"):
                 client.Axe_stat_1 = "SCI"
