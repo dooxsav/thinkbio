@@ -42,7 +42,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ1",
-        "MONTANT_HT": 299.40,
+        "MONTANT_HT": 359.4,
         "LIGNE": 1,
         "REFERENCE": 10482,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH MONOCUVE",
@@ -52,7 +52,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ2",
-        "MONTANT_HT": 359.40,
+        "MONTANT_HT": 299.4,
         "LIGNE": 1,
         "REFERENCE": 10479,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",
@@ -62,7 +62,7 @@
     {
         "DOSSIER": "BIONEST",
         "CODECONTRAT": "TRANQ2",
-        "MONTANT_HT": 359.40,
+        "MONTANT_HT": 299.4,
         "LIGNE": 1,
         "REFERENCE": 10479,
         "DESIGNATION": "CONTRAT TRANQUILITE 1 A 9 EH BI-CUVES",

@@ -28,7 +28,7 @@ const LateralBar = () => {
             }}
           >
             {" "}
-            ✔️ Infographie Clients
+            📂 Infographie Clients
           </h6>
           <h6
             onClick={() => {
@@ -36,7 +36,14 @@ const LateralBar = () => {
             }}
           >
             {" "}
-            ✔️ Historique Client
+            📊 Historique Client
+          </h6>
+          <h6
+            onClick={() => {
+              navigate("./suivicontrats");
+            }}
+          >
+            🧾 Suivi des contrats
           </h6>
         </div>
       </div>
