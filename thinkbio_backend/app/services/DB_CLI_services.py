@@ -78,7 +78,7 @@ def numerotation_client():
     longueur_table = len(Données_client)
     compteur_site = 1
     for client in tqdm(Données_client, desc=" * Numerating client", unit="site/s", total=longueur_table):
-        client.Client_id = f'C{compteur_site:010d}'
+        client.Client_id = f'C{compteur_site:09d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
     return compteur_site

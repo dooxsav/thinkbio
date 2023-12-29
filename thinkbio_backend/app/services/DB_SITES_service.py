@@ -56,7 +56,7 @@ def numerotation_sites():
     longueur_table = len(Données_site)
     compteur_site = 1
     for site in tqdm(Données_site, desc=" * Numerating site", unit="site/s", total=longueur_table):
-        site.Site_id = f'S{compteur_site:010d}'
+        site.Site_id = f'S{compteur_site:07d}'
         compteur_site += 1  # Incrémente compteur_site pour chaque site
     db.session.commit()
     return compteur_site
