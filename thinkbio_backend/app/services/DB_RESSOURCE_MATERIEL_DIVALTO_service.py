@@ -23,10 +23,10 @@ def ecrire_BD_RESSOURCE_MATERIEL_DIVALTO():
         if systeme.MATERIAUX == "BETON":
             compteur_beton += 1
             CODEMATERIEL = f'SYSBET{compteur_beton:06d}'
-        elif systeme.MATERIAUX == "PLASTIQUE":
+        elif systeme.MATERIAUX == "PLASTIQU":
             compteur_plastique += 1
             CODEMATERIEL = f'SYSPLAT{compteur_plastique:06d}'
-        elif systeme.MATERIAUX == "S":
+        elif systeme.MATERIAUX == "POLYESTER":
             compteur_s += 1
             CODEMATERIEL = f'SYSSC{compteur_s:06d}'
         else:
