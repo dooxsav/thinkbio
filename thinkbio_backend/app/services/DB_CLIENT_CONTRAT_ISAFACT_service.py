@@ -168,7 +168,7 @@ def ecrire_table_base_client_contrat_isafact():
 
 def numerotation_contrat():
     print(' *** Numérotation des contrats...')
-    compteur_contrat = 1000000
+    compteur_contrat = 1000000001
     
     contrats = CLIENT_CONTRAT_ISAFACT.query.all()
     nbre_contrat = len(contrats)
