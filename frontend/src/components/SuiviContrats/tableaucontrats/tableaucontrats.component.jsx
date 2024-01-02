@@ -43,8 +43,6 @@ const TableauContrat = ({ data }) => {
     });
   }
 
-  console.log(transformedData);
-
   // Collecte de toutes les clés uniques de typeContrat
   const allKeys = transformedData.reduce((acc, item) => {
     Object.keys(item.typeContrat).forEach((key) => {
@@ -54,6 +52,7 @@ const TableauContrat = ({ data }) => {
     });
     return acc;
   }, []);
+  allKeys.sort(); // Tri des clés par ordre alphabétique
 
   return (
 <div className="tableaucontrat-container">

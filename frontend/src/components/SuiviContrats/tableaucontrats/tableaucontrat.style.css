@@ -1,7 +1,8 @@
-.align-left {
-    text-align: left;
-  }
-  
-  .align-right {
-    text-align: right;
-  }
+.tableaucontrat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  font-size: small;
+  width: 45%;
+}

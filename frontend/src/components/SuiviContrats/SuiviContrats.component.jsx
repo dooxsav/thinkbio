@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { apiService } from "../../services/API_think.service";
 
 import TableauContrat from "./tableaucontrats/tableaucontrats.component";
+import GraphiqueContrats from "./graphiqueContrats/graphiqueContrats.component";
 
 const SuiviContrats = () => {
   //** STATE LOCALE */
@@ -33,16 +34,23 @@ const SuiviContrats = () => {
   }, []);
   /** METHODES */
 
-
   /** Render */
   return (
     <div className="suivicontrat-container container card">
       {loading ? (
-        <div className="spinner-grow" role="status">
-          <span className="sr-only"></span>
-        </div>
+        <>
+          <div className="spinner-grow" role="status">
+            <span className="sr-only"></span>
+          </div>
+          <span>
+            <small>Chargement... </small>
+          </span>
+        </>
       ) : (
-        <TableauContrat data={Data} />
+        <>
+          <GraphiqueContrats data={Data} />
+          <TableauContrat data={Data} />
+        </>
       )}
     </div>
   );
